@@ -29,7 +29,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(jpg|png)$/,
+                test: /\.(jpg|png|mp3)$/,
                 use: ['file-loader']
             }
         ]
@@ -49,6 +49,6 @@ module.exports = {
             title: 'lomaBlog',
             template: './src/index.html'
         }),
-        new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns: ['**/*']})
+        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*'] })
     ]
 };

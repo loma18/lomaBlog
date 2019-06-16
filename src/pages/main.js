@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch, Redirect, withRouter } from "react-router-dom";
+import { BackTop } from 'antd';
 import Header from 'components/Header';
-import LomaBreadcrumb from 'components/common/Breadcrumb'; 
+import Footer from 'components/Footer';
+import LomaBreadcrumb from 'components/common/Breadcrumb';
 import Routers from 'pages/router';
+import LomaAudio from 'components/common/Audio';
 import './style.less';
 
 class Main extends Component {
@@ -21,11 +24,16 @@ class Main extends Component {
     render() {
         let menuList = this.getMenuList();
         return (<div id={'lomaBlog-main'}>
-            <Header menuList={menuList} />
-            <LomaBreadcrumb />
+            <div className={'lomaBlog-header'}>
+                <Header menuList={menuList} />
+                <LomaBreadcrumb />
+            </div>
             <div className={'lomaBlog-body'}>
                 <Routers />
             </div>
+            <Footer />
+            <BackTop />
+            <LomaAudio />
         </div>)
     }
 }

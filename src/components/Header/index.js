@@ -14,6 +14,21 @@ class Header extends Component {
         console.log(value);
     }
 
+    getDefaultSelKey = () => {
+        let pathname = window.location.pathname.split('/');
+        switch (pathname[1]) {
+            case 'home':
+            case 'original':
+            case 'reprint':
+            case 'code':
+                return ['home'];
+            case 'whisper':
+                return ['whisper'];
+            default:
+                return ['home'];
+        }
+    }
+
     render() {
         const { menuList } = this.props;
         return (
@@ -23,7 +38,7 @@ class Header extends Component {
                         <img src={require('assets/logo.jpg')} />
                     </Col>
                     <Col className={'header-menu'}>
-                        <Menu mode="horizontal">
+                        <Menu mode="horizontal" defaultSelectedKeys={this.getDefaultSelKey()}>
                             {
                                 menuList.map(item => {
                                     return (

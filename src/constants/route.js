@@ -1,7 +1,9 @@
 
 const ROUTE_PATH = {
     home: '/home',
-    typeList: '/home/:type',
+    original: '/original',
+    reprint: '/reprint',
+    code: '/code',
     homeDetail: 'home/detail/:id',
     whisper: '/whisper'
 }

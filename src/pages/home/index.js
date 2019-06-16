@@ -121,7 +121,7 @@ class Home extends Component {
                                     articleList.map(item => {
                                         return (
                                             <Menu.Item key={item.typeKey}>
-                                                <Link to={'/home/' + item.typeKey}>
+                                                <Link to={'/' + item.typeKey}>
                                                     {item.typeName}
                                                     <span>{item.count}</span>
                                                 </Link>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Router, withRouter, Link } from "react-router-dom";
 import { Breadcrumb } from 'antd';
+import { breadcrumbItem } from 'constants';
 import './style.less';
 
 @withRouter
@@ -19,6 +20,24 @@ class LomaBreadcrumb extends Component {
             case 'whisper':
                 routes.push({ path: '/' + pathname[1], breadcrumbName: '微语' });
                 break;
+            case 'original':
+                routes.push({
+                    path: '/' + pathname[1],
+                    breadcrumbName: breadcrumbItem[pathname[1]].title
+                })
+                break;
+            case 'reprint':
+                routes.push({
+                    path: '/' + pathname[1],
+                    breadcrumbName: breadcrumbItem[pathname[1]].title
+                })
+                break;
+            case 'code':
+                routes.push({
+                    path: '/' + pathname[1],
+                    breadcrumbName: breadcrumbItem[pathname[1]].title
+                })
+                break;
             default:
                 routes.push({ path: '/' + pathname[1], breadcrumbName: '首页' });
         }
@@ -28,7 +47,7 @@ class LomaBreadcrumb extends Component {
 
     itemRender = (route, params, routes, paths) => {
         const last = routes.indexOf(route) === routes.length - 1;
-        return last ? (
+        return last || !route.path ? (
             <span>{route.breadcrumbName}</span>
         ) : (
                 <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
