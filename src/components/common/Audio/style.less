@@ -1,6 +1,40 @@
+@import '../../../themes/base.less';
+
 #lomaBlog-audio{
-    #musicEngine{
-        width: 300px;
-        height: 200px;
+    .operatePanel{
+        position: fixed;
+        left: -500px;
+        bottom: 0;
+        z-index: 99;
+        width: 500px;
+        height: 120px;
+        background: #000 url('../../../assets/panelBg.gif') repeat;
+        padding: 10px 20px;
+        transition: all 0.2s; 
+        p.arrow{
+            position: absolute;
+            right: -30px;
+            top: 0;
+            width: 30px;
+            height: 120px;
+            line-height: 120px;
+            background: rgba(0,0,0,.5);
+            border-radius: 0 5px 5px 0;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .right{
+            width: 320px;
+            height: 100px;
+            background: #fff;
+            border-radius: 15px;
+        }
+    }
+    #canvasContainer{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background: transparent;
+        text-align: center;
     }
 }
