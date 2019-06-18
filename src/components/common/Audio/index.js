@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Progress } from 'antd';
+import { Row, Col, Icon, Progress, Slider } from 'antd';
 import './style.less';
 
 class Audio extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            fold: true, //播放器是否折叠
+            play: false, //播放/暂停
+            volume: 0.3, //媒体音量
+            muted: false, //静音状态
+        }
     }
 
     initData = () => {
@@ -37,6 +43,12 @@ class Audio extends Component {
             this.dataArray = new Uint8Array(this.bufferLength);
             //new Float32Array(this.bufferLength) 配合 this.analyser.getFloatTimeDomainData(this.dataArray)使用，波动太大
             this.frame = 0;
+        }
+
+        Visualizer.prototype.init = function () {
+            this.audioContext = null;
+            this.analyser = null;
+            this.source = null;
         }
 
         Visualizer.prototype.render = function (data, len, context, WIDTH, HEIGHT) {
@@ -72,51 +84,93 @@ class Audio extends Component {
                 self.draw();
             });
         };
-
-        function init() {
-            let audioNode = document.getElementById('musicEngine');
-            let canvasNode = document.getElementById('canvasContainer');
-            canvasNode.width = document.documentElement.offsetWidth;
-            let visualizer = new Visualizer(audioNode, canvasNode);
-            visualizer.draw();
+        if (!this.visualizer) {
+            let init = () => {
+                let canvasNode = document.getElementById('canvasContainer');
+                canvasNode.width = document.documentElement.offsetWidth;
+                this.visualizer = new Visualizer(this.audioNode, canvasNode);
+                this.visualizer.draw();
+            }
+            init();
+        } else {
+            this.visualizer.draw();
         }
-
-        init();
     }
 
-    listenEvent = () => {
+    //点击上一首/下一首
+    handleStep = (type) => {
+        if (type == 'prev') {
+            this.audioNode.src = require('assets/1.mp3');
+        } else if (type == 'next') {
+            this.audioNode.src = require('assets/2.mp3');
+        }
+        this.setState({ play: true }, () => {
+            this.audioNode.play();
+            if (!this.visualizer) {
+                this.initData();
+            } else {
+                this.visualizer.draw();
+            }
+        })
+    }
 
+    //播放/暂停
+    handlePlay = () => {
+        this.setState({ play: !this.state.play }, () => {
+            if (this.state.play) {
+                this.audioNode.play();
+                this.initData();
+            } else {
+                this.audioNode.pause();
+            }
+        });
     }
 
     //点击展开/缩起播放器
     handleClick = (e) => {
-        let operatePanel = document.querySelector('.operatePanel'),
-            arrow = document.querySelector('.operatePanel .arrow');
-        if (e.target.className == 'arrow') {
-            operatePanel.style.left = 0;
-            arrow.innerHTML = '&lt;';
-            arrow.setAttribute('class', 'arrow unfold');
-        } else {
-            operatePanel.style.left = '-500px';
-            arrow.innerHTML = '&gt;';
-            arrow.setAttribute('class', 'arrow');
+        this.setState({ fold: !this.state.fold });
+    }
+
+    initAudioData = () => {
+        const { volume } = this.state;
+        this.audioNode.volume = volume;
+    }
+
+    listenEvent = () => {
+
+        this.audioNode.onpause = function () {
+            console.log('pause');
+        }
+        this.audioNode.onplay = function () {
+            console.log('play');
+        }
+        document.onkeydown = (e) => {
+            if (!this.state.fold && e.keyCode == 32) {
+                e.preventDefault();
+                this.handlePlay();
+            }
+        }
+        window.onscroll = (e) => {
+            this.setState({ fold: true });
         }
     }
 
     componentDidMount() {
-        this.initData();
+        this.audioNode = document.getElementById('musicEngine');
         this.listenEvent();
+        this.initAudioData()
     }
 
     render() {
+        const { play, fold, volume, muted } = this.state;
         return (<div id={'lomaBlog-audio'}>
-            <div className={'operatePanel'}>
+            <div className={'operatePanel ' + (fold ? '' : 'unfold')}>
                 <Row type="flex" justify="space-between">
                     <Col className={'left'}></Col>
                     <Col className={'center'}>
-                        <h3>就是想你</h3>
-                        <p>loma</p>
-                        <p>type</p>
+                        <h3 className={'songName'}>就是想你就是想你就是想你</h3>
+                        <p className={'singer'}>loma</p>
+                        <p className={'songType'}>type</p>
                         <p>
                             <span>1</span>
                             <span>2</span>
@@ -124,13 +178,32 @@ class Audio extends Component {
                     </Col>
                     <Col className={'right'}>
                         <Row type="flex" justify="space-between">
-                            <Col><Icon type="sound" /></Col>
+                            <Col className={'topLeft ' + (muted ? 'muted' : '')}>
+                                <Icon type="sound"
+                                    onClick={() => this.setState({ muted: !muted }, () => {
+                                        this.audioNode.muted = this.state.muted;
+                                    })}
+                                />
+                                <Slider
+                                    tooltipVisible={false}
+                                    value={muted ? 0 : volume}
+                                    min={0}
+                                    max={1}
+                                    step={0.01}
+                                    className={'volumnSlider'}
+                                    onChange={(val) => this.setState({ volume: val, muted: false }, () => {
+                                        this.audioNode.volume = val;
+                                    })}
+                                />
+                            </Col>
                             <Col><Icon type="retweet" /></Col>
                         </Row>
-                        <Row type="flex" justify="center">
-                            <Col><Icon type="step-backward" /></Col>
-                            <Col><Icon type="pause-circle" /></Col>
-                            <Col><Icon type="step-forward" /></Col>
+                        <Row type="flex" justify="center" gutter={10}>
+                            <Col><Icon type="step-backward" onClick={() => this.handleStep('prev')} /></Col>
+                            <Col>
+                                <Icon type={play ? "pause-circle" : "play-circle"} onClick={this.handlePlay} />
+                            </Col>
+                            <Col><Icon type="step-forward" onClick={() => this.handleStep('next')} /></Col>
                         </Row>
                         <Row>
                             <Progress percent={30} />
@@ -139,13 +212,13 @@ class Audio extends Component {
                     </Col>
                 </Row>
                 <p className={'arrow'} onClick={this.handleClick}>
-                    &gt;
+                    {fold ? '>' : '<'}
                 </p>
             </div>
             <canvas id="canvasContainer" width="1000" height="100">
                 您的浏览器暂不支持canvas，建议切换成谷歌浏览器
             </canvas>
-            <audio id="musicEngine" src={require('assets/1.mp3')} autoPlay="autoplay">
+            <audio id="musicEngine" src={require('assets/1.mp3')}>
                 您的浏览器暂不支持audio，建议切换成谷歌浏览器
             </audio>
         </div>)
