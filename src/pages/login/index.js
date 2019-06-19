@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import LoginForm from 'components/common/LoginForm';
+import './style.less';
 
 class Login extends Component {
     constructor(props) {
@@ -7,7 +9,7 @@ class Login extends Component {
     render() {
         return (
             <div id={'lomaBlog-Login'}>
-                login
+                <LoginForm />
             </div>
         )
     }

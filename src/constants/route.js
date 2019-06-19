@@ -1,5 +1,5 @@
 
-const ROUTE_PATH = {
+export const ROUTE_PATH = {
     home: '/home',
     original: '/original',
     reprint: '/reprint',
@@ -7,4 +7,9 @@ const ROUTE_PATH = {
     homeDetail: 'home/detail/:id',
     whisper: '/whisper'
 }
-module.exports = { ROUTE_PATH }
+
+export const ROUTE_ADMIN_PATH = {
+    admin: '/admin',
+}
+// const 
+// module.exports = { ROUTE_PATH }

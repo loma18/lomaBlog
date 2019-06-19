@@ -3,10 +3,10 @@ import Main from 'pages/main';
 import Login from 'pages/login';
 
 export default () => {
-    let isLogin = true;
-    let Comp = <Login />
-    if (isLogin) {
-        Comp = <Main />
+    let Comp = <Main />;
+    const pathname = window.location.pathname.split('/');
+    if (pathname[1] == 'login') {
+        Comp = <Login />;
     }
-    return (Comp);
+    return Comp;
 }

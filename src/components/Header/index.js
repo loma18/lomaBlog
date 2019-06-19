@@ -1,13 +1,26 @@
 import React, { Component } from 'react';
-import { Row, Col, Menu, Input } from 'antd';
+import { Row, Col, Menu, Input, Button } from 'antd';
 import { Router, withRouter, Link } from "react-router-dom";
+import { ROUTE_ADMIN_PATH } from 'constants/route';
+import { USER_INFO } from 'constants/user';
 import './style.less';
 
 const Search = Input.Search;
 
+@withRouter
 class Header extends Component {
     constructor(props) {
         super(props);
+    }
+
+    //进入后台
+    handleClick = () => {
+        let isLogin = window.localStorage.getItem(USER_INFO.IS_LOGIN);
+        if (!isLogin) {
+            window.location.href = '/login';
+        } else {
+            this.props.history.push('/admin');
+        }
     }
 
     handleSearch = (value) => {
@@ -49,6 +62,11 @@ class Header extends Component {
                                 })
                             }
                         </Menu>
+                    </Col>
+                    <Col>
+                        <Button onClick={this.handleClick}>
+                            后台管理
+                        </Button>
                     </Col>
                     <Col className={'header-right'}>
                         <Search

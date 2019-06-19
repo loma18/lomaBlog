@@ -63,6 +63,10 @@ class Audio extends Component {
             grd.addColorStop(1, "red");
             for (let i = 0; i < len; i++) {
                 barHeight = data[i];
+                // if (barHeight > 0) {
+                //     context.fillStyle = 'red';
+                //     context.fillRect(x, (95 - barHeight / 3) / 1.2, barWidth, 3);
+                // }
                 context.fillStyle = grd;
                 context.fillRect(x, 100 - barHeight / 3, barWidth, barHeight / 3);
                 context.fill();
@@ -86,9 +90,8 @@ class Audio extends Component {
         };
         if (!this.visualizer) {
             let init = () => {
-                let canvasNode = document.getElementById('canvasContainer');
-                canvasNode.width = document.documentElement.offsetWidth;
-                this.visualizer = new Visualizer(this.audioNode, canvasNode);
+                this.canvasNode.width = document.documentElement.offsetWidth;
+                this.visualizer = new Visualizer(this.audioNode, this.canvasNode);
                 this.visualizer.draw();
             }
             init();
@@ -119,7 +122,6 @@ class Audio extends Component {
         this.setState({ play: !this.state.play }, () => {
             if (this.state.play) {
                 this.audioNode.play();
-                this.initData();
             } else {
                 this.audioNode.pause();
             }
@@ -131,9 +133,19 @@ class Audio extends Component {
         this.setState({ fold: !this.state.fold });
     }
 
+    //停止播放
+    handleStop = () => {
+        let canvasContext = this.canvasNode.getContext("2d");
+        canvasContext.clearRect(0, 0, this.canvasNode.width, this.canvasNode.height);
+        this.audioNode.pause();
+        this.audioNode.currentTime = 0;
+        this.setState({ play: false })
+    }
+
     initAudioData = () => {
         const { volume } = this.state;
         this.audioNode.volume = volume;
+        this.audioNode.loop = true;
     }
 
     listenEvent = () => {
@@ -141,8 +153,8 @@ class Audio extends Component {
         this.audioNode.onpause = function () {
             console.log('pause');
         }
-        this.audioNode.onplay = function () {
-            console.log('play');
+        this.audioNode.onplay = () => {
+            this.initData();
         }
         document.onkeydown = (e) => {
             if (!this.state.fold && e.keyCode == 32) {
@@ -157,6 +169,7 @@ class Audio extends Component {
 
     componentDidMount() {
         this.audioNode = document.getElementById('musicEngine');
+        this.canvasNode = document.getElementById('canvasContainer')
         this.listenEvent();
         this.initAudioData()
     }
@@ -199,6 +212,7 @@ class Audio extends Component {
                             <Col><Icon type="retweet" /></Col>
                         </Row>
                         <Row type="flex" justify="center" gutter={10}>
+                            <Col className={'turnOff'}><i onClick={() => this.handleStop()} /></Col>
                             <Col><Icon type="step-backward" onClick={() => this.handleStep('prev')} /></Col>
                             <Col>
                                 <Icon type={play ? "pause-circle" : "play-circle"} onClick={this.handlePlay} />
