@@ -10,6 +10,8 @@ export const ROUTE_PATH = {
 
 export const ROUTE_ADMIN_PATH = {
     admin: '/admin',
+    mine: '/admin/mine',
+    others: '/admin/others',
 }
-// const 
+// const
 // module.exports = { ROUTE_PATH }

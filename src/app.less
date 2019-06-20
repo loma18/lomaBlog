@@ -1,11 +1,14 @@
-@import './themes/base.less';
-*{
-    box-sizing: border-box;
-}
-html,body{
-    color: @mainColor;
+@import './themes/theme.less';
+body{
     font-size: @mFont;
-    background: @bgColor;
+    &.dark{
+        background: @dark_bgColor;
+        color: @dark_color;
+    }
+    &.light{
+        background: @light_bgColor;
+        color: @light_color;
+    }
 }
 h1,h2,h3,h4,h5,h6,p,ul,li{
     margin: 0;

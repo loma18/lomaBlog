@@ -1,27 +1,59 @@
-@import '../../themes/base.less';
-#lomaBlog-header{
-    width: 100vw;
-    min-width: @AppMinWidth;
-    border-bottom: 1px solid @lineColor;
-    background: @bgColor;
-    line-height: 3rem;
-    padding: 0 5rem;
-    .header-logo{
-        width: 150px;
-        text-align: center;
-        img{
-            height: 3rem;
-        }
-    }
-    .header-menu{
+@import '../../themes/theme.less';
+.change(@lineColor,@bgColor,@color,@color2){
+    #lomaBlog-header{
+        width: 100vw;
+        min-width: @AppMinWidth;
+        border-bottom: 1px solid @lineColor;
         background: @bgColor;
-        flex: 1;
-        .ant-menu{
+        line-height: 50px;
+        padding: 0 60px;
+        .header-logo{
+            width: 150px;
+            text-align: center;
+            img{
+                height: 50px;
+            }
+        }
+        .header-menu{
             background: @bgColor;
-            .ant-menu-item-selected{
-                color: @mainColor1;
-                border-bottom: 2px solid @mainColor1;
+            flex: 1;
+            .ant-menu{
+                background: @bgColor;
+                border: none;
+                .ant-menu-item{
+                    &:hover{
+                        border-color: @color2;
+                        >a{
+                            color: @color2;
+                        }
+                    }
+                    >a{
+                        color: @color;
+                    }
+                }
+                .ant-menu-item-selected{
+                    border-bottom: 2px solid @color2;
+                    >a{
+                        color: @color2;
+                    }
+                }
             }
         }
     }
+}
+.dark{
+    .change(
+        @dark_lineColor,
+        @dark_bgColor,
+        @dark_color,
+        @dark_color2
+    )
+}
+.light{
+    .change(
+        @light_lineColor,
+        @light_bgColor,
+        @light_color,
+        @light_color2
+    )
 }

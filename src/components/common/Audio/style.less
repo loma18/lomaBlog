@@ -1,142 +1,163 @@
-@import '../../../themes/base.less';
+@import '../../../themes/theme.less';
 
-#lomaBlog-audio{
-    .operatePanel{
-        position: fixed;
-        left: -540px;
-        bottom: 100px;
-        z-index: 99;
-        width: 540px;
-        height: 100px;
-        background: #000 url('../../../assets/panelBg.gif') repeat;
-        padding: 10px 20px;
-        transition: all 0.2s; 
-        &.unfold{
-            left: 0;
-        }
-        p.arrow{
-            position: absolute;
-            right: -30px;
-            top: 0;
-            width: 30px;
+.change(@dangerColor,@lineColor){
+    #lomaBlog-audio{
+        .operatePanel{
+            position: fixed;
+            left: -540px;
+            bottom: 100px;
+            z-index: 99;
+            width: 540px;
             height: 100px;
-            line-height: 100px;
-            background: rgba(0,0,0,.5);
-            border-radius: 0 5px 5px 0;
-            font-size: 30px;
-            cursor: pointer;
-        }
-        @keyframes rotates{
-            0%   {transform:rotate(0);}
-            100% {transform:rotate(360deg);}
-        }
-        .left{
-            width: 80px;
-            height: 80px;
-            background: url('../../../assets/logo.jpg') no-repeat;
-            background-size: contain;
-            border-radius: 50%;
-            animation: rotates 5s linear infinite;
-            &::after,&::before{
+            background: #000 url('../../../assets/panelBg.gif') repeat;
+            padding: 10px 20px;
+            transition: all 0.2s; 
+            &.unfold{
+                left: 0;
+            }
+            p.arrow{
                 position: absolute;
-                top: 50%;
-                left: 50%;
-                content: '';
-                width: 13px;
-                height: 13px;
-                border: 1px solid #3b423d;
-                border-radius: 50%;
-                transform: translate(-50%,-50%);
-            }
-            &::after{
-                width: 20px;
-                height: 20px;
-            }
-        }
-        .center{
-            width: 100px;
-            padding: 0 5px;
-            .songName{
-                width: 100%;
-                color: #fff;
-                font-size: @mFont;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
-            .singer,.songType{
-                color: #ccc;
-                font-size: @sFont;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
-        }
-        .right{
-            width: 320px;
-            height: 80px;
-            background: #fff;
-            border-radius: 15px;
-            padding: 5px 10px;
-            .anticon{
-                font-size: 18px;
+                right: -30px;
+                top: 0;
+                width: 30px;
+                height: 100px;
+                line-height: 100px;
+                background: rgba(0,0,0,.5);
+                border-radius: 0 5px 5px 0;
+                font-size: 30px;
                 cursor: pointer;
-                &:hover{
-                    color: hsl(80, 50%, 50%);
+            }
+            @keyframes rotates{
+                0%   {transform:rotate(0);}
+                100% {transform:rotate(360deg);}
+            }
+            .left{
+                width: 80px;
+                height: 80px;
+                background: url('../../../assets/logo.jpg') no-repeat;
+                background-size: contain;
+                border-radius: 50%;
+                animation: rotates 5s linear infinite;
+                &::after,&::before{
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    content: '';
+                    width: 13px;
+                    height: 13px;
+                    border: 1px solid #3b423d;
+                    border-radius: 50%;
+                    transform: translate(-50%,-50%);
+                }
+                &::after{
+                    width: 20px;
+                    height: 20px;
                 }
             }
-            >div:nth-child(2){
-                height: 25px;
-                line-height: 25px;
-                .anticon{
-                    font-size: 28px;
-                }
-            }
-            .topLeft.muted{
-                .anticon{
-                    color: @dangerColor;
-                }
-            }
-            .volumnSlider{
-                display: none;
-                // position: absolute;
-                // bottom: 0;
-                // left: 15px;
+            .center{
                 width: 100px;
-                margin: 0 0 0 5px;
-                padding: 0;
-                .ant-slider-rail{
-                    height: 10px;
-                    background: @lineColor;
+                padding: 0 5px;
+                .songName{
+                    width: 100%;
+                    color: #fff;
+                    font-size: @mFont;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
-                .ant-slider-track{
-                    height: 10px;
+                .singer,.songType{
+                    color: #ccc;
+                    font-size: @sFont;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
-                .ant-slider-handle{
+            }
+            .right{
+                width: 320px;
+                height: 80px;
+                background: #fff;
+                border-radius: 15px;
+                padding: 5px 10px;
+                .anticon{
+                    font-size: 18px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.65);
+                    &:hover{
+                        color: hsl(80, 50%, 50%);
+                    }
+                }
+                >div:nth-child(2){
+                    height: 25px;
+                    line-height: 25px;
+                    .anticon{
+                        font-size: 28px;
+                    }
+                }
+                .topLeft.muted{
+                    .anticon{
+                        color: @dangerColor;
+                    }
+                }
+                .volumnSlider{
                     display: none;
+                    // position: absolute;
+                    // bottom: 0;
+                    // left: 15px;
+                    width: 100px;
+                    margin: 0 0 0 5px;
+                    padding: 0;
+                    .ant-slider-rail{
+                        height: 10px;
+                        background: @lineColor;
+                    }
+                    .ant-slider-track{
+                        height: 10px;
+                    }
+                    .ant-slider-handle{
+                        display: none;
+                    }
                 }
-            }
-            .topLeft:hover .volumnSlider{
-                display: inline-block;
-            }
-            .turnOff i{
-                width: 15px;
-                height: 20px;
-                border: 3px solid #4c4545;
-                border-top: none;
-                border-bottom: none;
-                margin-top: 4px;
-                &:hover{
-                    border-color: hsl(80, 50%, 50%);
+                .topLeft:hover .volumnSlider{
+                    display: inline-block;
+                }
+                .turnOff i{
+                    display: inline-block;
+                    width: 15px;
+                    height: 20px;
+                    border: 3px solid #4c4545;
+                    border-top: none;
+                    border-bottom: none;
+                    margin-top: 4px;
+                    cursor: pointer;
+                    &:hover{
+                        border-color: hsl(80, 50%, 50%);
+                    }
                 }
             }
         }
+        .canvasCover{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(0,0,0,.1);
+            z-index: 99;
+        }
+        #canvasContainer{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background: transparent;
+            text-align: center;
+            z-index: 99;
+        }
     }
-    #canvasContainer{
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        background: transparent;
-        text-align: center;
-    }
+}
+.dark{
+    .change(@dark_dangerColor,@dark_lineColor);
+}
+.light{
+    .change(@light_dangerColor,@light_lineColor);
 }

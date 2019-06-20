@@ -7,9 +7,11 @@ import Admin from 'pages/admin';
 export default () => {
 
     return (
-        <Switch>
-            <Route exact path={ROUTE_ADMIN_PATH.admin} component={Admin} />
-            {/* <Redirect from={props.location} to={'/'} /> */}
-        </Switch>
+        <div id={'admin'}>
+            <Switch>
+                <Route exact path={ROUTE_ADMIN_PATH.admin} component={Admin} />
+                {/* <Redirect from={props.location} to={'/'} /> */}
+            </Switch>
+        </div>
     )
 }

@@ -1,30 +1,40 @@
-@import '../../themes/base.less';
-.swiper{
-    position: relative;
-    width: 100%;
-    .carousel-item{
-        img{
-            width: 100%;
+@import '../../themes/theme.less';
+
+.change(@bgColor,@lineColor){
+    .swiper{
+        position: relative;
+        width: 100%;
+        .carousel-item{
+            img{
+                width: 100%;
+            }
         }
-    }
-    .index-container{
-        position: absolute;
-        left: 50%;
-        bottom: 20px;
-        transform: translateX(-50%);
-        ul{
-            li{
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                border: 1px solid @lineColor;
-                background: @bgColor;
-                margin-right: 15px;
-                border-radius: 50%;
-                &.selected{
-                    background: pink;
+        .index-container{
+            position: absolute;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            ul{
+                li{
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    border: 1px solid @lineColor;
+                    background: @bgColor;
+                    margin-right: 15px;
+                    border-radius: 50%;
+                    &.selected{
+                        background: pink;
+                    }
                 }
             }
         }
     }
+}
+
+.dark{
+    .change(@dark_bgColor,@dark_lineColor);
+}
+.light{
+    .change(@light_bgColor,@light_lineColor);
 }

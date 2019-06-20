@@ -8,6 +8,7 @@ class Audio extends Component {
         this.state = {
             fold: true, //播放器是否折叠
             play: false, //播放/暂停
+            stop: true, //停止播放
             volume: 0.3, //媒体音量
             muted: false, //静音状态
         }
@@ -56,21 +57,26 @@ class Audio extends Component {
             context.clearRect(0, 0, WIDTH, HEIGHT);
             let barWidth = (500 / len) * 5;
             let barHeight = 0;
-            let x = WIDTH - len * (barWidth + 4) > 0 ? (WIDTH - len * (barWidth + 2)) / 2 : 0;
+            let x = (WIDTH - 600) / 2,
+                originX = x;
             let grd = context.createLinearGradient(0, 0, 0, HEIGHT);
             grd.addColorStop(0, "white");
-            grd.addColorStop(0.2, "pink");
+            grd.addColorStop(0.2, "red");
+            grd.addColorStop(0.8, "orange");
             grd.addColorStop(1, "red");
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < len; i += 4) {
                 barHeight = data[i];
                 // if (barHeight > 0) {
                 //     context.fillStyle = 'red';
                 //     context.fillRect(x, (95 - barHeight / 3) / 1.2, barWidth, 3);
                 // }
                 context.fillStyle = grd;
-                context.fillRect(x, 100 - barHeight / 3, barWidth, barHeight / 3);
+                context.fillRect(x, 40 - barHeight / 8, barWidth, barHeight / 8);
                 context.fill();
-                x += barWidth + 4;
+                x += barWidth + 8;
+                if (x > originX + 600) {
+                    return;
+                }
             }
         };
 
@@ -137,9 +143,10 @@ class Audio extends Component {
     handleStop = () => {
         let canvasContext = this.canvasNode.getContext("2d");
         canvasContext.clearRect(0, 0, this.canvasNode.width, this.canvasNode.height);
+        this.canvasNode.width = 0;
         this.audioNode.pause();
         this.audioNode.currentTime = 0;
-        this.setState({ play: false })
+        this.setState({ play: false,stop: true })
     }
 
     initAudioData = () => {
@@ -154,6 +161,10 @@ class Audio extends Component {
             console.log('pause');
         }
         this.audioNode.onplay = () => {
+            if (!this.canvasNode.width) {
+                this.canvasNode.width = document.documentElement.offsetWidth;
+            }
+            this.setState({stop: false});
             this.initData();
         }
         document.onkeydown = (e) => {
@@ -175,7 +186,7 @@ class Audio extends Component {
     }
 
     render() {
-        const { play, fold, volume, muted } = this.state;
+        const { play, fold, volume, muted, stop } = this.state;
         return (<div id={'lomaBlog-audio'}>
             <div className={'operatePanel ' + (fold ? '' : 'unfold')}>
                 <Row type="flex" justify="space-between">
@@ -212,12 +223,12 @@ class Audio extends Component {
                             <Col><Icon type="retweet" /></Col>
                         </Row>
                         <Row type="flex" justify="center" gutter={10}>
-                            <Col className={'turnOff'}><i onClick={() => this.handleStop()} /></Col>
-                            <Col><Icon type="step-backward" onClick={() => this.handleStep('prev')} /></Col>
+                            <Col className={'turnOff'}><i onClick={() => this.handleStop()} title={'停止'} /></Col>
+                            <Col><Icon type="step-backward" onClick={() => this.handleStep('prev')} title={'上一首'} /></Col>
                             <Col>
-                                <Icon type={play ? "pause-circle" : "play-circle"} onClick={this.handlePlay} />
+                                <Icon type={play ? "pause-circle" : "play-circle"} onClick={this.handlePlay} title={'播放/暂停'} />
                             </Col>
-                            <Col><Icon type="step-forward" onClick={() => this.handleStep('next')} /></Col>
+                            <Col><Icon type="step-forward" onClick={() => this.handleStep('next')} title={'下一首'} /></Col>
                         </Row>
                         <Row>
                             <Progress percent={30} />
@@ -229,9 +240,11 @@ class Audio extends Component {
                     {fold ? '>' : '<'}
                 </p>
             </div>
-            <canvas id="canvasContainer" width="1000" height="100">
+            <div className={'canvasCover'} style={{ display: (stop ? 'none' : 'block') }}>
+            </div>
+            <canvas id="canvasContainer" width="0" height="40">
                 您的浏览器暂不支持canvas，建议切换成谷歌浏览器
-            </canvas>
+                </canvas>
             <audio id="musicEngine" src={require('assets/1.mp3')}>
                 您的浏览器暂不支持audio，建议切换成谷歌浏览器
             </audio>

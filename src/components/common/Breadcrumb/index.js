@@ -38,6 +38,19 @@ class LomaBreadcrumb extends Component {
                     breadcrumbName: breadcrumbItem[pathname[1]].title
                 })
                 break;
+            case 'admin':
+                if (!pathname[2]) {
+                    routes.push({
+                        path: '/' + pathname[1],
+                        breadcrumbName: breadcrumbItem[pathname[1]].title
+                    })
+                } else {
+                    routes.push({
+                        path: '/' + pathname[1] + '/' + pathname[2],
+                        breadcrumbName: breadcrumbItem[pathname[2]].title
+                    })
+                }
+                break;
             default:
                 routes.push({ path: '/' + pathname[1], breadcrumbName: '首页' });
         }

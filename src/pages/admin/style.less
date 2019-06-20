@@ -1,0 +1,26 @@
+@import '../../themes/theme.less';
+
+.change(@bgColor2){
+    #admin{
+        .adminHome{
+            .left{
+                position: fixed;
+                top: 100px;
+                left: 60px;
+                width: 256px;
+                @diff: 100px;
+                height: calc(~'100vh - @{diff}');
+                background: @bgColor2;
+                .ant-menu{
+                    
+                }
+            }
+            .right{
+                flex: 1;
+            }
+        }
+    }
+}
+.dark{
+    .change(@dark_bgColor2)
+}
