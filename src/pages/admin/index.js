@@ -1,29 +1,44 @@
 import React, { Component } from 'react';
 import { Row, Col, Icon, Menu } from 'antd';
 import { Router, withRouter, Link } from "react-router-dom";
-import { USER_INFO } from 'constants/user';
+import RightCom from './Home/rightCom';
+import { getPathnameByIndex } from 'utils';
 import './style.less';
 
 const { SubMenu } = Menu;
 
-// @withRouter 
+@withRouter
 class AdminHome extends Component {
     constructor(props) {
         super(props);
+        let leftKey = getPathnameByIndex(3);
         this.state = {
-            current: '1',
+            current: leftKey || 'articleManage',
         }
     }
     handleClick = e => {
         this.setState({
             current: e.key,
+        }, () => {
+            this.props.history.push('/admin/home/' + e.key);
         });
     };
+
+    setCurrent = () => {
+        let leftKey = getPathnameByIndex(3);
+        leftKey = leftKey ? leftKey : 'articleManage';
+        this.setState({ current: leftKey });
+    }
+
+    UNSAFE_componentWillReceiveProps() {
+        this.setCurrent();
+    }
 
     componentDidMount() {
     }
 
     render() {
+        const { current } = this.state;
         return (
             <div className={'adminHome'}>
                 <Row type="flex" justify="start">
@@ -36,54 +51,25 @@ class AdminHome extends Component {
                             selectedKeys={[this.state.current]}
                             mode="inline"
                         >
-                        <Menu.Item key="1">写博客</Menu.Item>
+                            <Menu.Item key="edit"><Icon type="edit" />写博客</Menu.Item>
                             <SubMenu
                                 key="sub1"
                                 title={
                                     <span>
                                         <Icon type="mail" />
-                                        <span>Navigation One</span>
+                                        <span>博客管理</span>
                                     </span>
                                 }
                             >
-                                <Menu.Item key="1">Option 1</Menu.Item>
-                                <Menu.Item key="2">Option 2</Menu.Item>
-                                <Menu.Item key="3">Option 3</Menu.Item>
-                                <Menu.Item key="4">Option 4</Menu.Item>
-                            </SubMenu>
-                            <SubMenu
-                                key="sub2"
-                                title={
-                                    <span>
-                                        <Icon type="appstore" />
-                                        <span>Navigtion Two</span>
-                                    </span>
-                                }
-                            >
-                                <Menu.Item key="5">Option 5</Menu.Item>
-                                <Menu.Item key="6">Option 6</Menu.Item>
-                                <SubMenu key="sub3" title="Submenu">
-                                    <Menu.Item key="7">Option 7</Menu.Item>
-                                    <Menu.Item key="8">Option 8</Menu.Item>
-                                </SubMenu>
-                            </SubMenu>
-                            <SubMenu
-                                key="sub4"
-                                title={
-                                    <span>
-                                        <Icon type="setting" />
-                                        <span>Navigation Three</span>
-                                    </span>
-                                }
-                            >
-                                <Menu.Item key="9">Option 9</Menu.Item>
-                                <Menu.Item key="10">Option 10</Menu.Item>
-                                <Menu.Item key="11">Option 11</Menu.Item>
-                                <Menu.Item key="12">Option 12</Menu.Item>
+                                <Menu.Item key="articleManage">文章管理</Menu.Item>
+                                <Menu.Item key="comment">评论管理</Menu.Item>
+                                <Menu.Item key="catalogue">个人分类管理</Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Col>
-                    <Col className={'right'}></Col>
+                    <Col className={'right'}>
+                        <RightCom selectedKeys={current} />
+                    </Col>
                 </Row>
             </div>
         )

@@ -12,6 +12,9 @@ const Search = Input.Search;
 class Header extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedKeys: []
+        }
     }
 
     //进入后台/前台
@@ -38,6 +41,10 @@ class Header extends Component {
         console.log(value);
     }
 
+    onSelect = ({ item, key, keyPath, selectedKeys, domEvent }) => {
+        this.setState({ selectedKeys });
+    }
+
     getDefaultSelKey = () => {
         let pathname = window.location.pathname.split('/');
         let key = null;
@@ -52,7 +59,7 @@ class Header extends Component {
                 key = ['whisper'];
                 break;
             case 'admin':
-                if (!pathname[2]) {
+                if (!pathname[2] || pathname[2] == 'home') {
                     key = ['admin'];
                 } else {
                     key = [pathname[2]];
@@ -61,14 +68,18 @@ class Header extends Component {
             default:
                 key = ['home'];
         }
-        return key;
+        this.setState({ selectedKeys: key });
     }
 
-    UNSAFE_componentWillReceiveProps(props){
-        
+    UNSAFE_componentWillReceiveProps(props) {
+        this.getDefaultSelKey();
+    }
+    componentDidMount() {
+        this.getDefaultSelKey();
     }
 
     render() {
+        const { selectedKeys } = this.state;
         const { menuList } = this.props;
 
         let pathObj = ROUTE_PATH;
@@ -83,7 +94,7 @@ class Header extends Component {
                         <img src={require('assets/logo.jpg')} />
                     </Col>
                     <Col className={'header-menu'}>
-                        <Menu mode="horizontal" defaultSelectedKeys={this.getDefaultSelKey()}>
+                        <Menu mode="horizontal" selectedKeys={selectedKeys} onSelect={this.onSelect}>
                             {
                                 menuList.map(item => {
                                     return (

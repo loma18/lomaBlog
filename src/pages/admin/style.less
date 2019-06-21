@@ -1,26 +1,36 @@
 @import '../../themes/theme.less';
 
-.change(@bgColor2){
+.change(@bgColor2,@bgColor3){
     #admin{
         .adminHome{
             .left{
-                position: fixed;
-                top: 100px;
-                left: 60px;
                 width: 256px;
-                @diff: 100px;
-                height: calc(~'100vh - @{diff}');
-                background: @bgColor2;
-                .ant-menu{
-                    
+                @diff: 120px;
+                min-height: calc(~'100vh - @{diff}');
+                margin-top: 20px;
+                >.ant-menu{
+                    position: fixed;
+                    top: 120px;
+                    left: 60px;
+                    width: 256px;
+                    @diff: 100px;
+                    height: calc(~'100vh - @{diff}');
                 }
             }
             .right{
                 flex: 1;
+                margin: 20px 0 0 20px;
+                padding: 30px 20px;
+                background: @bgColor2;
+            }
+        }
+        .adminHomeArticleManage{
+            >.ant-menu{
+                border-bottom: 2px solid @bgColor3;
             }
         }
     }
 }
 .dark{
-    .change(@dark_bgColor2)
+    .change(@dark_bgColor2,@dark_bgColor3)
 }

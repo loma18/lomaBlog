@@ -8,10 +8,13 @@ import './style.less';
 class LomaBreadcrumb extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            routes: []
+        }
     }
 
     getRoutes = () => {
-        let pathname = this.props.location.pathname.split('/');
+        let pathname = window.location.pathname.split('/');
         let routes = [{ path: '', breadcrumbName: '当前位置' }];
         switch (pathname[1]) {
             case 'home':
@@ -44,18 +47,30 @@ class LomaBreadcrumb extends Component {
                         path: '/' + pathname[1],
                         breadcrumbName: breadcrumbItem[pathname[1]].title
                     })
-                } else {
+                    routes.push({
+                        path: '/' + pathname[1] + '/home/articleManage',
+                        breadcrumbName: breadcrumbItem['articleManage'].title
+                    })
+                } else if (pathname[2] != 'home') {
                     routes.push({
                         path: '/' + pathname[1] + '/' + pathname[2],
                         breadcrumbName: breadcrumbItem[pathname[2]].title
+                    })
+                } else {
+                    routes.push({
+                        path: '/' + pathname[1],
+                        breadcrumbName: breadcrumbItem[pathname[1]].title
+                    })
+                    routes.push({
+                        path: '/' + pathname[1] + '/home/' + pathname[3],
+                        breadcrumbName: breadcrumbItem[pathname[3]].title
                     })
                 }
                 break;
             default:
                 routes.push({ path: '/' + pathname[1], breadcrumbName: '首页' });
         }
-
-        return routes;
+        this.setState({ routes });
     }
 
     itemRender = (route, params, routes, paths) => {
@@ -63,14 +78,22 @@ class LomaBreadcrumb extends Component {
         return last || !route.path ? (
             <span>{route.breadcrumbName}</span>
         ) : (
-                <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+                <Link to={route.path}>{route.breadcrumbName}</Link>
             );
     }
 
+    UNSAFE_componentWillReceiveProps() {
+        this.getRoutes();
+    }
+
+    componentDidMount() {
+        this.getRoutes();
+    }
+
     render() {
-        let routes = this.getRoutes();
+        // const { routes } = this.state;
         return (<div id={'lomaBlog-breadcrumb'}>
-            <Breadcrumb itemRender={this.itemRender} routes={routes} />
+            <Breadcrumb itemRender={this.itemRender} routes={this.state.routes} />
         </div>)
     }
 }
