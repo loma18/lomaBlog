@@ -1,6 +1,14 @@
 @import '../../themes/theme.less';
 
-.change(@bgColor2,@bgColor3){
+.change(
+    @bgColor2,
+    @bgColor3,
+    @lineColor,
+    @color,
+    @color3,
+    @linkColor,
+    @dangerColor
+    ){
     #admin{
         .adminHome{
             .left{
@@ -28,9 +36,97 @@
             >.ant-menu{
                 border-bottom: 2px solid @bgColor3;
             }
+            .filterContainer{
+                margin: 15px 0;
+            }
+            .articleListContainer{
+                .listItem{
+                    border-bottom: 1px dashed @lineColor;
+                    h3{
+                        color: @color;
+                        margin-bottom: 10px;
+                    }
+                    span{
+                        display: inline-block;
+                        line-height: 35px;
+                        margin-right: 15px;
+                        color: @color3;
+                        &.articleTypeName{
+                            margin-right: 30px;
+                        }
+                        &.lookView{
+                            color: @linkColor;
+                        }
+                        &.delete{
+                            color: @dangerColor;
+                        }
+                    }
+                }
+            }
+        }
+        .adminHomeEdit{
+            .bf-container{
+                background: #fff;
+            }
+            form{
+                .ant-form-item{
+                    display: flex;
+                    .ant-form-item-label{
+                        width: 70px;
+                        label{
+                            color: @color;
+                        }
+                    }
+                    .ant-form-item-control-wrapper{
+                        flex: 1;
+                        .addTag{
+                            background: #fff;
+                            border-style: dashed;
+                            margin-left: 8px;
+                            cursor: pointer;
+                            &+span{
+                                color: @color;
+                            }
+                        }
+                    }
+                    &.catalogue{
+                        .ant-row .ant-checkbox-group{
+                            display: flex;
+                            flex-wrap: wrap;
+                            width: 500px;
+                            background: #ddd;
+                            padding: 0 10px;
+                            .ant-checkbox-wrapper{
+                                width: 50%;
+                                margin: 0;
+                                padding: 5px;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
 .dark{
-    .change(@dark_bgColor2,@dark_bgColor3)
+    .change(
+        @dark_bgColor2,
+        @dark_bgColor3,
+        @dark_lineColor,
+        @dark_color,
+        @dark_color3,
+        @dark_linkColor,
+        @dark_dangerColor
+    )
+}
+.light{
+    .change(
+        @light_bgColor2,
+        @light_bgColor3,
+        @light_lineColor,
+        @light_color,
+        @light_color3,
+        @light_linkColor,
+        @light_dangerColor
+    )
 }

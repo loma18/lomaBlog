@@ -1,9 +1,30 @@
 @import '../../../themes/theme.less';
 
-#lomaBlog-breadcrumb{
-    background: #fff;
-    padding: 0 5rem;
-    .ant-breadcrumb{
-        line-height: 3rem;
+.change(
+    @bgColor2,
+    @color
+    ){
+    #lomaBlog-breadcrumb{
+        background: @bgColor2;
+        padding: 0 5rem;
+        .ant-breadcrumb{
+            line-height: 3rem;
+            span,a{
+                color: @color;
+            }
+        }
     }
+}
+
+.dark{
+    .change(
+        @dark_bgColor2,
+        @dark_color
+    )
+}
+.light{
+    .change(
+        @light_bgColor2,
+        @light_color
+    )
 }

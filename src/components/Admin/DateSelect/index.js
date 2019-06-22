@@ -44,6 +44,7 @@ export default (params = {}) => {
 		let items = getItems(type);
 		return (
 			<Select
+				placeholder={type == 'years' ? '年' : '月'}
 				value={params[type]}
 				onChange={val => handleSelectChange(val, type)}
 				className={'lomaBlog-select select-' + type}

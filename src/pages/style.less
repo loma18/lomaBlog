@@ -1,15 +1,50 @@
-#lomaBlog-main{
-    padding-top: 100px;
-    .lomaBlog-header{
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 9;
+@import '../themes/theme.less';
+
+.change(
+    @dangerColor,
+    @linkColor
+    ){
+    #lomaBlog-main{
+        padding-top: 100px;
+        .lomaBlog-header{
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9;
+        }
+        .lomaBlog-body{
+            padding: 0 60px;
+        }
+        .ant-back-top{
+            right: 50px;
+        }
     }
-    .lomaBlog-body{
-        padding: 0 60px;
+    .lomaBlog-select,.ant-btn{
+        width: 110px;
+        margin: 0 15px 15px;
+    } 
+    .dangerColor{
+        color: @dangerColor; 
+        cursor: pointer;
+    } 
+    .linkColor{
+        color: @linkColor; 
+        cursor: pointer;
     }
-    .ant-back-top{
-        right: 50px;
+    input{
+        border-radius: 0;
     }
+}
+
+.dark{
+    .change(
+        @dark_dangerColor,
+        @dark_linkColor,
+    )
+}
+.light{
+    .change(
+        @light_dangerColor,
+        @light_linkColor,
+    )
 }
