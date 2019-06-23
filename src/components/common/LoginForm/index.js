@@ -1,35 +1,60 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Input, Button, Icon, notification } from 'antd';
 import { USER_INFO } from 'constants/user';
+import { inject, observer } from 'mobx-react';
+import { showSuccessMsg } from 'utils';
+import { firePostRequest } from 'service/app';
+import { USER_LOGIN } from 'constants/api';
 import './style.less';
 
 const FormItem = Form.Item;
 const form = Form.create();
 
+@inject('appStore')
 @form
+@observer
 class LoginForm extends Component {
     constructor(props) {
         super(props);
     }
 
     handleSubmit = () => {
+        const { loginSubmit, loading } = this.props.appStore;
         this.props.form.validateFields((err, values) => {
             if (err) {
                 return;
             }
-            if (values.username == 'Loma' && values.password == 'xiange18') {
-                window.localStorage.setItem(USER_INFO.IS_LOGIN, true);
-                window.location.href = '/admin';
-            } else {
-                notification.open({
-                    message: 'error',
-                    description: '登陆名或密码不正确，请重新输入'
-                });
-            }
+            firePostRequest(USER_LOGIN, {
+                uname: values.username,
+                upwd: values.password
+            }).then(function (res) {
+                if (res.code === 200) {
+                    showSuccessMsg(res.msg);
+                    window.localStorage.setItem(USER_INFO.IS_LOGIN, true);
+                    window.location.href = '/admin';
+                    // loginSubmit(res.)
+                } else {
+                    notification.open({
+                        message: 'error',
+                        description: '登陆名或密码不正确，请重新输入'
+                    });
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+            // if (values.username == 'Loma' && values.password == 'xiange18') {
+            //     window.localStorage.setItem(USER_INFO.IS_LOGIN, true);
+            //     window.location.href = '/admin';
+            // } else {
+            //     notification.open({
+            //         message: 'error',
+            //         description: '登陆名或密码不正确，请重新输入'
+            //     });
+            // }
         });
     };
 
-    componentDidMount(){
+    componentDidMount() {
     }
 
     render() {

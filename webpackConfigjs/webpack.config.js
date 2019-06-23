@@ -9,7 +9,7 @@ module.exports = {
     entry: './src/app.js',
     output: {
         path: path.resolve(__dirname, '../build'),
-        filename: "bundle.js",
+        filename: "bundle.[hash].js",
         publicPath: '/'
     },
     module: {
@@ -53,6 +53,6 @@ module.exports = {
             title: 'lomaBlog',
             template: './src/index.html'
         }),
-        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*'] })
+        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['build/bundle.*.js'] })
     ]
 };

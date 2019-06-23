@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { message } from 'antd';
 
 //根据传入字段获取对应url地址栏参数
 export const GetQueryString = name => {
@@ -63,4 +64,12 @@ export const formatTimeStampToString = (date, format = 'YYYY-MM-DD') => {
 		nDate = nDate * 1000;
 	}
 	return formatMomentToString(nDate, format);
+};
+
+const messageConfig = {
+	maxCount: 1
+};
+export const showSuccessMsg = (msg, duration = 4) => {
+	message.config(messageConfig);
+	message.success(msg, duration);
 };
