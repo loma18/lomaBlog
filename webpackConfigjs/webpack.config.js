@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const alias = require('./alias');
 
 module.exports = {
+    mode: 'development',
     devtool: 'eval-source-map',
     entry: './src/app.js',
     output: {

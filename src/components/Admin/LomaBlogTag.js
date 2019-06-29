@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Icon, Input, Tag, Tooltip } from 'antd';
+import './LomaBlogTag.less';
 
 class LomaBlogTag extends Component {
     constructor(props) {
@@ -75,7 +76,7 @@ class LomaBlogTag extends Component {
                         ref={this.saveInputRef}
                         type="text"
                         size="small"
-                        style={{ width: 78 }}
+                        className={'tagInpug'}
                         value={inputValue}
                         onChange={this.handleInputChange}
                         onBlur={this.handleInputConfirm}

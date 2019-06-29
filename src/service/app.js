@@ -12,7 +12,7 @@ export const fireGetRequest = async (api, values = {}, config = {}) => {
 	const resp = await request.get(api, { ...config, params: values });
 
 	appStore.hideLoading();
-	return Promise.resolve(resp);
+	return Promise.resolve(resp.data);
 };
 
 /**

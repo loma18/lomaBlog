@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { message } from 'antd';
+import { message, notification } from 'antd';
 
 //根据传入字段获取对应url地址栏参数
 export const GetQueryString = name => {
@@ -12,13 +12,13 @@ export const GetQueryString = name => {
 	}
 };
 
-export const getPathnameByIndex = (index)=>{
-    const pathname = window.location.pathname.split('/');
-    if(pathname[index]){
-        return pathname[index];
-    }else{
-        return null;
-    }
+export const getPathnameByIndex = (index) => {
+	const pathname = window.location.pathname.split('/');
+	if (pathname[index]) {
+		return pathname[index];
+	} else {
+		return null;
+	}
 }
 
 /**
@@ -72,4 +72,22 @@ const messageConfig = {
 export const showSuccessMsg = (msg, duration = 4) => {
 	message.config(messageConfig);
 	message.success(msg, duration);
+};
+
+/**
+ * 弹出操作结果通知
+ * @no-tests
+ * */
+export const openNotification = (type, title, content, duration = 5) => {
+	notification[type]({
+		key: title, //相同内容不会增加显示框
+		message: title,
+		description: <div style={{ padding: 3, wordBreak: 'break-all' }}>{content}</div>,
+		duration: duration //自动计算持续时间
+		/*	style: {
+					width: 350,
+					paddingRight: '12px',
+
+				}*/
+	});
 };

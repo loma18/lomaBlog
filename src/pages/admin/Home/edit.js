@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import { Row, Col, Icon, Form, Input, Tag, Tooltip, Checkbox, Select, Button } from 'antd';
 import { Router, withRouter, Link } from "react-router-dom";
+import { fireGetRequest, firePostRequest } from 'service/app';
+import {
+    SAVE_BLOG,
+    GET_CATALOGUE_LIST
+} from 'constants/api';
+import { openNotification, showSuccessMsg, GetQueryString } from 'utils';
 import LomaBlogTag from 'components/Admin/LomaBlogTag';
 import BraftEditor from 'braft-editor';
+import { articleTypeList } from 'constants';
 import 'braft-editor/dist/index.css';
 
 const form = Form.create();
@@ -15,24 +22,20 @@ class AdminHomeEdit extends Component {
         this.state = {
             resData: {},
             article: [],
-            catalogue: [],
-            hasSelCatalogue: [],
-            catalogueList: ['前端学习笔记', '服务器相关', '实用网站记录', '前端工具使用'],
-            articleTypeList: [
-                { key: 'original', name: '原创', id: 1 },
-                { key: 'reprint', name: '转载', id: 2 },
-                { key: 'code', name: '代码', id: 3 },
-            ], //文章类型
+            catalogue: [], //最终个人分类
+            hasSelCatalogue: [], //选中之前已有分类
+            catalogueList: [], //[{id:1,name:'前端'}],
+            compareList: [],
             articleType: ''
         }
     }
 
     //tag标签确认回调
     handleInputConfirm = (tags, type, inputValue) => {
-        const { catalogueList, hasSelCatalogue } = this.state;
+        const { compareList, hasSelCatalogue } = this.state;
         let tempList = JSON.parse(JSON.stringify(hasSelCatalogue))
         if (type == 'catalogue') {
-            if (catalogueList.indexOf(inputValue) > -1) {
+            if (compareList.indexOf(inputValue) > -1) {
                 tempList.push(inputValue);
             }
         }
@@ -54,9 +57,9 @@ class AdminHomeEdit extends Component {
 
     //修改个人分类选取
     onChange = (val) => {
-        let { catalogue, catalogueList } = this.state;
+        let { catalogue, compareList } = this.state;
         catalogue = catalogue.filter(item => {
-            return !(val.indexOf(item) < 0 && catalogueList.indexOf(item) > -1);
+            return !(val.indexOf(item) < 0 && compareList.indexOf(item) > -1);
         })
         if (catalogue.length <= 4) {
             val.map(item => {
@@ -68,17 +71,39 @@ class AdminHomeEdit extends Component {
         this.setState({ hasSelCatalogue: val, catalogue });
     }
 
-    //改变文章类型
-    handleChangeType = (val) => {
-        this.setState({ articleType: val });
+    getTransData = () => {
+        const { catalogue, catalogueList, compareList } = this.state;
+        let list = catalogue.map(item => {
+            if (compareList.indexOf(item) > -1) {
+                for (let i = 0; i < catalogueList.length; i++) {
+                    if (item == catalogueList[i].label) {
+                        return catalogueList[i];
+                    }
+                }
+            } else {
+                return { name: item };
+            }
+        })
+        return list;
     }
 
     //发布博客
-    handlePublish = () => {
+    handlePublish = (isPublish = true) => {
+        const { article, resData } = this.state;
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (err) {
                 return;
             }
+            values.id = resData.id;
+            values.status = resData.status != undefined ? resData.status : (isPublish ? 1 : 0);
+            values.catalogue = this.getTransData();
+            values.article = article
+            values.content = values.content.toHTML();
+            firePostRequest(SAVE_BLOG, { ...values }).then(res => {
+                if (res.code === 200) {
+                    showSuccessMsg('保存成功')
+                }
+            }).catch(err => console.log(err))
         })
     }
 
@@ -87,7 +112,30 @@ class AdminHomeEdit extends Component {
 
     }
 
+    //获取个人分类列表
+    getCatalogueList = () => {
+        let compareList = [];
+        fireGetRequest(GET_CATALOGUE_LIST).then(res => {
+            if (res.code === 200) {
+                res.data = res.data.map(item => {
+                    item.value = item.name;
+                    item.label = item.name;
+                    compareList.push(item.name);
+                    return item;
+                });
+                this.setState({ catalogueList: res.data, compareList });
+            } else {
+                openNotification('error', '获取个人分类列表失败', res.message);
+            }
+        }).catch(err => console.log(err))
+    }
+
     fetchData = () => {
+        let articleId = GetQueryString('articleId');
+        this.getCatalogueList();
+        if (!articleId) {
+            return;
+        }
         this.editorInstance.setValue(BraftEditor.createEditorState('内容'));
     }
 
@@ -96,7 +144,7 @@ class AdminHomeEdit extends Component {
     }
 
     render() {
-        const { resData, article, catalogue, hasSelCatalogue, catalogueList, articleTypeList, articleType } = this.state;
+        const { resData, article, catalogue, hasSelCatalogue, catalogueList, articleType } = this.state;
         const { getFieldDecorator } = this.props.form;
         return (
             <div className={'adminHomeEdit'}>
@@ -147,8 +195,6 @@ class AdminHomeEdit extends Component {
                             initialValue: resData.articleType || articleTypeList[0] && articleTypeList[0].key
                         })(
                             <Select
-                                value={articleType}
-                                onChange={(val) => this.handleChangeType(val)}
                                 className={'lomaBlog-select select-articleType'}
                             >
                                 {articleTypeList.map(item => {

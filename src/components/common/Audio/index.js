@@ -146,7 +146,7 @@ class Audio extends Component {
         this.canvasNode.width = 0;
         this.audioNode.pause();
         this.audioNode.currentTime = 0;
-        this.setState({ play: false,stop: true })
+        this.setState({ play: false, stop: true })
     }
 
     initAudioData = () => {
@@ -164,7 +164,7 @@ class Audio extends Component {
             if (!this.canvasNode.width) {
                 this.canvasNode.width = document.documentElement.offsetWidth;
             }
-            this.setState({stop: false});
+            this.setState({ stop: false });
             this.initData();
         }
         document.onkeydown = (e) => {
@@ -240,7 +240,7 @@ class Audio extends Component {
                     {fold ? '>' : '<'}
                 </p>
             </div>
-            <div className={'canvasCover'} style={{ display: (stop ? 'none' : 'block') }}>
+            <div className={'canvasCover ' + (stop ? 'hide' : '')}>
             </div>
             <canvas id="canvasContainer" width="0" height="40">
                 您的浏览器暂不支持canvas，建议切换成谷歌浏览器

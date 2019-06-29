@@ -10,3 +10,9 @@ export const breadcrumbItem = {
     mine: { value: 'mine', title: '个人中心' },
     others: { value: 'others', title: '其他' },
 }
+
+export const articleTypeList = [
+    { key: 'original', name: '原创', id: 1 },
+    { key: 'reprint', name: '转载', id: 2 },
+    { key: 'code', name: '代码', id: 3 },
+]; //文章类型
