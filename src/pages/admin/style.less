@@ -6,6 +6,7 @@
     @lineColor,
     @color,
     @color3,
+    @color4,
     @linkColor,
     @dangerColor
     ){
@@ -106,6 +107,98 @@
                 }
             }
         }
+        .adminInterface{
+            .left{
+                width: 320px;
+                margin-top: 20px;
+                @diff: 120px;
+                min-height: calc(~'100vh - @{diff}');
+                >.ant-menu{
+                    width: 320px !important;
+                }
+                .ant-menu-item{
+                    h4{
+                        color: @color4;
+                        line-height: 20px;
+                        width: 200px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        word-wrap: none;
+                        word-break: break-all;
+                    }
+                    &.ant-menu-item-selected{
+                        h4{
+                            color: @color;
+                        }
+                    }
+                }
+            }
+            .right{
+                flex: 1;
+                background: @bgColor2;
+                margin: 20px 0 0 20px;
+                padding: 30px 20px;
+                .adminInterfaceEdit{
+                    form{
+                        .ant-form-item-label label{
+                            color: @color;
+                        }
+                        .paramType,.moduleType,.routePath,.title,.methods{
+                            display: flex;
+                        }
+                        .moduleType,.routePath,.title{
+                            .ant-form-item-control-wrapper{
+                                width: 300px;
+                            }
+                        }
+                        .ant-btn{
+                            margin-top: 4px;
+                        }
+                    }
+                    .columnHeader{
+                        text-align: center;
+                    }
+                    .columnHeader,.columnBody{
+                        color: @color;
+                        >.ant-col{
+                            &.col10{
+                                width: 10%;
+                            }
+                            &.col15{
+                                width: 15%;
+                            }
+                            &.col20{
+                                width: 20%;
+                            }
+                            &.col35{
+                                width: 35%;
+                            }    
+                        }
+                        .ant-form-item-children{
+                            color: @color;
+                        }
+                    }
+                }
+                .adminInterfaceGroupEdit{
+                    .columnHeader,.columnBody{
+                        .ant-form-item-children{
+                            color: @color;
+                        }
+                        .col40{
+                            width: 40%;
+                            color: @color;
+                        }
+                        .col35{
+                            width: 35%;
+                            color: @color;
+                        }
+                        .ant-btn{
+                            margin-top: 4px;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 .dark{
@@ -115,6 +208,7 @@
         @dark_lineColor,
         @dark_color,
         @dark_color3,
+        @dark_color4,
         @dark_linkColor,
         @dark_dangerColor
     )
@@ -126,6 +220,7 @@
         @light_lineColor,
         @light_color,
         @light_color3,
+        @light_color4,
         @light_linkColor,
         @light_dangerColor
     )

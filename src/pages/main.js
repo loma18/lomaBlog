@@ -33,6 +33,7 @@ class Main extends Component {
             list = [
                 { title: '首页', key: 'admin' },
                 { title: '个人中心', key: 'mine' },
+                { title: '后台接口', key: 'interface' },
                 { title: '其他', key: 'others' },
             ]
         }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Form, Input, Tag, Tooltip, Checkbox, Select, Button } from 'antd';
+import { Row, Col, Icon, Form, Input, Spin, Tooltip, Checkbox, Select, Button } from 'antd';
 import { Router, withRouter, Link } from "react-router-dom";
 import { fireGetRequest, firePostRequest } from 'service/app';
 import {
@@ -14,7 +14,8 @@ import 'braft-editor/dist/index.css';
 
 const form = Form.create();
 const FormItem = Form.Item;
-// @withRouter 
+
+@withRouter
 @form
 class AdminHomeEdit extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class AdminHomeEdit extends Component {
             hasSelCatalogue: [], //选中之前已有分类
             catalogueList: [], //[{id:1,name:'前端'}],
             compareList: [],
-            articleType: ''
+            spinLoading: false
         }
     }
 
@@ -99,10 +100,13 @@ class AdminHomeEdit extends Component {
             values.catalogue = this.getTransData();
             values.article = article
             values.content = values.content.toHTML();
+            this.setState({ spinLoading: true });
             firePostRequest(SAVE_BLOG, { ...values }).then(res => {
                 if (res.code === 200) {
                     showSuccessMsg('保存成功')
+                    this.props.history.push('/admin/home/articleManage');
                 }
+                this.setState({ spinLoading: false });
             }).catch(err => console.log(err))
         })
     }
@@ -144,78 +148,80 @@ class AdminHomeEdit extends Component {
     }
 
     render() {
-        const { resData, article, catalogue, hasSelCatalogue, catalogueList, articleType } = this.state;
+        const { resData, article, catalogue, hasSelCatalogue, catalogueList, spinLoading } = this.state;
         const { getFieldDecorator } = this.props.form;
         return (
             <div className={'adminHomeEdit'}>
-                <Form>
-                    <FormItem label="">
-                        {getFieldDecorator('title', {
-                            rules: [{ required: true, message: '请输入文章标题！' }],
-                            initialValue: resData.title || ''
-                        })(<Input placeholder={'请输入文章标题'} />)}
-                    </FormItem>
-                    <FormItem label="">
-                        {getFieldDecorator('content', {
-                            rules: [{ required: true, message: '请输入文章内容！' }]
-                        })(
-                            <BraftEditor
-                                ref={instance => (this.editorInstance = instance)}
-                                excludeControls={['media']}
+                <Spin spinning={spinLoading}>
+                    <Form>
+                        <FormItem label="">
+                            {getFieldDecorator('title', {
+                                rules: [{ required: true, message: '请输入文章标题！' }],
+                                initialValue: resData.title || ''
+                            })(<Input placeholder={'请输入文章标题'} />)}
+                        </FormItem>
+                        <FormItem label="">
+                            {getFieldDecorator('content', {
+                                rules: [{ required: true, message: '请输入文章内容！' }]
+                            })(
+                                <BraftEditor
+                                    ref={instance => (this.editorInstance = instance)}
+                                    excludeControls={['media']}
+                                />
+                            )}
+                        </FormItem>
+                        <FormItem label="文章标签">
+                            <LomaBlogTag
+                                tags={article}
+                                handleInputConfirm={this.handleInputConfirm}
+                                tagName={'article'}
+                                handleClose={this.handleClose}
                             />
-                        )}
-                    </FormItem>
-                    <FormItem label="文章标签">
-                        <LomaBlogTag
-                            tags={article}
-                            handleInputConfirm={this.handleInputConfirm}
-                            tagName={'article'}
-                            handleClose={this.handleClose}
-                        />
-                    </FormItem>
-                    <FormItem label="个人分类" className={'catalogue'}>
-                        <LomaBlogTag
-                            tags={catalogue}
-                            handleInputConfirm={this.handleInputConfirm}
-                            tagName={'catalogue'}
-                            handleClose={this.handleClose}
-                        />
-                        <Row>
-                            <Checkbox.Group
-                                disabled={catalogue.length >= 5}
-                                options={catalogueList}
-                                value={hasSelCatalogue}
-                                onChange={this.onChange}
+                        </FormItem>
+                        <FormItem label="个人分类" className={'catalogue'}>
+                            <LomaBlogTag
+                                tags={catalogue}
+                                handleInputConfirm={this.handleInputConfirm}
+                                tagName={'catalogue'}
+                                handleClose={this.handleClose}
                             />
+                            <Row>
+                                <Checkbox.Group
+                                    disabled={catalogue.length >= 5}
+                                    options={catalogueList}
+                                    value={hasSelCatalogue}
+                                    onChange={this.onChange}
+                                />
+                            </Row>
+                        </FormItem>
+                        <FormItem label="文章类型" className={'article'}>
+                            {getFieldDecorator('articleType', {
+                                rules: [{ required: true, message: '请选择文章类型！' }],
+                                initialValue: resData.articleType || articleTypeList[0] && articleTypeList[0].key
+                            })(
+                                <Select
+                                    className={'lomaBlog-select select-articleType'}
+                                >
+                                    {articleTypeList.map(item => {
+                                        return (
+                                            <Option key={item.id} value={item.key}>
+                                                {item.name}
+                                            </Option>
+                                        );
+                                    })}
+                                </Select>
+                            )}
+                        </FormItem>
+                        <Row type="flex" gutter={10}>
+                            <Col>
+                                <Button type="primary" onClick={this.handlePublish}>发布</Button>
+                            </Col>
+                            <Col>
+                                <Button onClick={this.saveDraft}>存草稿</Button>
+                            </Col>
                         </Row>
-                    </FormItem>
-                    <FormItem label="文章类型" className={'article'}>
-                        {getFieldDecorator('articleType', {
-                            rules: [{ required: true, message: '请选择文章类型！' }],
-                            initialValue: resData.articleType || articleTypeList[0] && articleTypeList[0].key
-                        })(
-                            <Select
-                                className={'lomaBlog-select select-articleType'}
-                            >
-                                {articleTypeList.map(item => {
-                                    return (
-                                        <Option key={item.id} value={item.key}>
-                                            {item.name}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        )}
-                    </FormItem>
-                    <Row type="flex" gutter={10}>
-                        <Col>
-                            <Button type="primary" onClick={this.handlePublish}>发布</Button>
-                        </Col>
-                        <Col>
-                            <Button onClick={this.saveDraft}>存草稿</Button>
-                        </Col>
-                    </Row>
-                </Form>
+                    </Form>
+                </Spin>
             </div>
         )
     }
