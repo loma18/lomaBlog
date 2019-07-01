@@ -22,3 +22,9 @@ export const DELETE_INTERFACE_MODULE = '/interface/module/delete'; //删除模�
 export const SAVE_INTERFACE = '/interface/save'; //保存/修改接口
 
 export const GET_INTERFACE_LIST = '/interface/getList'; //获取模块及接口
+
+export const GET_INTERFACE_DETAILE_BY_ID = '/interface/getDetailById'; //获取接口详情
+
+export const DELETE_INTERFACE_BY_ID = '/interface/delete'; //删除接口
+
+
