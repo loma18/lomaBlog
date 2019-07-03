@@ -5,6 +5,7 @@ import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from 'components/App';
 import { Provider } from 'mobx-react';
+import ErrorBoundary from 'components/common/Errors/ErrorBoundary';
 import * as stores from 'stores';
 import './app.less';
 
@@ -15,7 +16,9 @@ class Index extends Component {
                 <LocaleProvider locale={zhCN}>
                     <Provider {...stores}>
                         <BrowserRouter>
-                            <App />
+                            <ErrorBoundary>
+                                <App />
+                            </ErrorBoundary>
                         </BrowserRouter>
                     </Provider>
                 </LocaleProvider>

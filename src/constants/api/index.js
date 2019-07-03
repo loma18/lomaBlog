@@ -6,9 +6,15 @@ export const USER_LOGIN = '/login';
 /**
  * 博客增删改查
  */
-export const SAVE_BLOG = '/save/blog'; //保存修改博客
+export const SAVE_BLOG = '/blog/save'; //保存修改博客
 
 export const GET_CATALOGUE_LIST = '/getCatalogueList'; //获取个人分类
+
+export const SAVE_CATALOGUE = '/catalogue/save'; //保存修改个人分类
+
+export const DELETE_CATALOGUE = '/catalogue/delete'; //删除个人分类
+
+export const GET_FILTER_LIST = '/blog/getFilterList'; //根据条件筛选获取博客列表
 
 /**
  * 后台接口

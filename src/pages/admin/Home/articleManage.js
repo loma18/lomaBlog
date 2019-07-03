@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { Row, Col, Icon, Menu, Select, Input, Button } from 'antd';
 import { Router, withRouter, Link } from "react-router-dom";
 import DateSelect from 'components/Admin/DateSelect';
-import { getPathnameByIndex, GetQueryString, formatMomentToString } from 'utils';
+import { fireGetRequest, firePostRequest } from 'service/app';
+import {
+    GET_CATALOGUE_LIST,
+    GET_FILTER_LIST
+} from 'constants/api';
+import { articleTypeList } from 'constants';
+import { openNotification, showSuccessMsg, getPathnameByIndex, GetQueryString, formatMomentToString } from 'utils';
+
 
 const Search = Input.Search;
 
@@ -11,10 +18,10 @@ class AdminHomeArticleManage extends Component {
     constructor(props) {
         super(props);
         let key = getPathnameByIndex(4),
-            years = GetQueryString('years'),
-            months = GetQueryString('months'),
-            articleType = GetQueryString('type'),
-            catalogueType = GetQueryString('catalogue'),
+            years = GetQueryString('year'),
+            months = GetQueryString('month'),
+            articleType = GetQueryString('articleType'),
+            catalogueType = GetQueryString('catalogueType'),
             searchVal = GetQueryString('searchVal'),
             currentDate = new Date(),
             currentYear = currentDate.getFullYear(),
@@ -23,11 +30,13 @@ class AdminHomeArticleManage extends Component {
         months = months ? months : currentMonth;
         searchVal = searchVal ? decodeURI(searchVal) : '';
         this.state = {
+            tableData: [],
             current: key || 'all',
             years: years + '年',
             months: months + '月',
             articleType: articleType || 'all',
             catalogueType: catalogueType || 'all',
+            catalogueList: [],
             searchVal
         }
     }
@@ -67,7 +76,46 @@ class AdminHomeArticleManage extends Component {
         this.props.history.push('/admin/home/articleManage/all?year=' +
             year + '&month=' + month + '&searchVal=' + searchVal +
             '&articleType=' + articleType + '&catalogueType=' + catalogueType);
+        this.fetchData();
+    }
 
+    getCatalogueList = () => {
+        fireGetRequest(GET_CATALOGUE_LIST).then(res => {
+            if (res.code === 200) {
+                this.setState({ catalogueList: res.data });
+            } else {
+                openNotification('error', '获取个人分类失败', res.msg);
+            }
+        }).catch(err => console.log(err))
+    }
+
+    //获取文章类型名称
+    getArticleTypeName = (key) => {
+        switch (key) {
+            case 'original':
+                return '原创';
+            case 'rePrint':
+                return '转载';
+            case 'code':
+                return '代码';
+        }
+    }
+
+    fetchData = () => {
+        const { current, years, months, articleType, catalogueType, searchVal } = this.state;
+        let year = years.replace('年', ''),
+            month = months.replace('月', ''),
+            params = { status: 0 };
+        if (current == 'all') {
+            params = { status: 1, year, month, articleType, catalogueType, searchVal };
+        }
+        fireGetRequest(GET_FILTER_LIST, { ...params }).then(res => {
+            if (res.code === 200) {
+                this.setState({ tableData: res.data });
+            } else {
+                openNotification('error', '获取博客列表失败', res.msg);
+            }
+        }).catch(err => console.log(err))
     }
 
     UNSAFE_componentWillReceiveProps() {
@@ -75,32 +123,23 @@ class AdminHomeArticleManage extends Component {
     }
 
     componentDidMount() {
-
+        this.getCatalogueList();
+        this.fetchData()
     }
 
     render() {
-        const { current, years, months, articleType, catalogueType, searchVal } = this.state;
-        let articleTypeList = [
-            { key: 'all', name: '文章类型', id: 0 },
-            { key: 'original', name: '原创', id: 1 },
-            { key: 'reprint', name: '转载', id: 2 },
-            { key: 'code', name: '代码', id: 3 },
-        ];
-        let catalogueList = [
-            { key: 'all', name: '个人分类', id: 0 },
-            { key: 'webStudy', name: '前端学习', id: 1 },
-            { key: 'webTool', name: '前端工具', id: 2 }
-        ];
-        let articleList = [{
-            title: 'reactRouter4',
-            content: 'contentcontentcontentcontent',
-            articleTypeName: '原创',
-            articleTypeId: 1,
-            catalogueTypeName: '前端学习',
-            catalogueTypeId: 1,
-            createTime: new Date('2019-06-20 15:30').getTime(),
-            updateTime: new Date('2019-06-20 18:01').getTime(),
-        }]
+        const {
+            current,
+            years,
+            months,
+            articleType,
+            catalogueType,
+            searchVal,
+            catalogueList,
+            tableData
+        } = this.state;
+        let articleTypeLists = JSON.parse(JSON.stringify(articleTypeList));
+        articleTypeLists.unshift({ key: 'all', name: '文章类型', id: 0 });
         return (
             <div className={'adminHomeArticleManage'}>
                 <Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal" theme={'dark'}>
@@ -111,7 +150,7 @@ class AdminHomeArticleManage extends Component {
                         草稿
                     </Menu.Item>
                 </Menu>
-                <Row type="flex" className={'filterContainer'}>
+                {current == 'all' ? <Row type="flex" className={'filterContainer'}>
                     <Col>筛选：</Col>
                     <Col>
                         <DateSelect years={years} months={months} handleSelectChange={this.handleSelectChange} />
@@ -122,7 +161,7 @@ class AdminHomeArticleManage extends Component {
                             onChange={(val) => this.handleChangeType(val, 'articleType')}
                             className={'lomaBlog-select select-articleType'}
                         >
-                            {articleTypeList.map(item => {
+                            {articleTypeLists.map(item => {
                                 return (
                                     <Option key={item.id} value={item.key}>
                                         {item.name}
@@ -137,9 +176,12 @@ class AdminHomeArticleManage extends Component {
                             onChange={(val) => this.handleChangeType(val, 'catalogueType')}
                             className={'lomaBlog-select select-catalogueType'}
                         >
+                            <Option value={'all'}>
+                                个人分类
+                            </Option>
                             {catalogueList.map(item => {
                                 return (
-                                    <Option key={item.id} value={item.key}>
+                                    <Option key={item.id} value={item.id}>
                                         {item.name}
                                     </Option>
                                 );
@@ -154,24 +196,24 @@ class AdminHomeArticleManage extends Component {
                             搜索
                         </Button>
                     </Col>
-                </Row>
+                </Row> : null}
                 <div className={'articleListContainer'}>
                     <ul>
                         {
-                            articleList.map((item, key) => {
+                            tableData.map((item, key) => {
                                 return (
                                     <li key={key} className={'listItem'}>
                                         <h3>{item.title}</h3>
                                         <Row type="flex" justify="space-between">
                                             <Col>
-                                                <span className={'articleTypeName'}>{item.articleTypeName}</span>
+                                                <span className={'articleTypeName'}>{this.getArticleTypeName(item.articleType)}</span>
                                                 <span className={'updateTime'}>{formatMomentToString(item.updateTime, 'YYYY年MM月DD日 HH:mm:ss')}</span>
                                                 <span className={'icon'}><Icon type="message" /></span>
                                                 <span className={'icon'}><Icon type="eye" /></span>
                                                 <span className={'icon'}><Icon type="heart" /></span>
                                             </Col>
                                             <Col>
-                                                <span className={'lookView linkColor'}>查看1</span>
+                                                <span className={'lookView linkColor'}>查看</span>
                                                 <span className={'delete dangerColor'}>删除</span>
                                             </Col>
                                         </Row>

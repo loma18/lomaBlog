@@ -11,7 +11,7 @@
   "author": "Loma",
   "license": "ISC",
   "dependencies": {
-    "antd": "^3.19.3",
+    "antd": "^3.20.0",
     "axios": "^0.19.0",
     "braft-editor": "^2.3.7",
     "mobx": "^5.10.1",
