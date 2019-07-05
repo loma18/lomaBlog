@@ -32,6 +32,7 @@
     "plugins": [
         "react"
     ],
+    "parser": "babel-eslint",
     /**
     *开启规则和发生错误时报告的等级
     *规则的错误等级有三种：
@@ -181,7 +182,7 @@
         // 禁止使用类似 eval() 的方法
         "no-implied-eval": 2,
         // 禁止 this 关键字出现在类和类对象之外
-        "no-invalid-this": 1,
+        "no-invalid-this": 0,
         // 禁用 __iterator__ 属性
         "no-iterator": 2,
         // 禁用标签语句
@@ -262,7 +263,7 @@
             2,
             "any"
         ],
-        // 要求或禁止 “Yoda” 条件
+        // 要求或禁止 “Yoda” 条件 if ("red" === color) {}yoda  if (color === "red") {非yoda 
         "yoda": [
             2,
             "never"
@@ -349,7 +350,7 @@
             }
         ],
         // 双峰驼命名格式
-        "camelcase": 2,
+        "camelcase": 0,
         // 控制逗号前后的空格
         "comma-spacing": [
             2,
@@ -373,7 +374,7 @@
         // 用于指统一在回调函数中指向this的变量名，箭头函数中的this已经可以指向外层调用者，应该没卵用了
         // e.g [0,"that"] 指定只能 var that = this. that不能指向其他任何值，this也不能赋值给that以外的其他值
         "consistent-this": [
-            1,
+            0,
             "that"
         ],
         // 强制使用命名的 function 表达式
@@ -481,7 +482,7 @@
         // 禁止混合使用不同的操作符
         "no-mixed-operators": 0,
         // 不允许空格和 tab 混合缩进
-        "no-mixed-spaces-and-tabs": 2,
+        "no-mixed-spaces-and-tabs": [0,"smart-tabs"],
         // 不允许多个空行
         "no-multiple-empty-lines": [
             2,
