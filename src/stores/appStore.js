@@ -15,7 +15,7 @@ class AppStore {
 		this.isLogined = true;
 	};
 
-	//全局加载
+	// 全局加载
 	@action
 	showLoading = () => {
 		this.loading = true;

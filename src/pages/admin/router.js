@@ -10,7 +10,7 @@ export default () => (
 		<Switch>
 			<Route exact path={ROUTE_ADMIN_PATH.admin} component={Admin} />
 			<Route path={ROUTE_ADMIN_PATH.adminHomeModule} component={Admin} />
-			<Route path={ROUTE_ADMIN_PATH['interface']} component={Interface} />
+			<Route path={ROUTE_ADMIN_PATH.interface} component={Interface} />
 			{/* <Redirect from={props.location} to={'/'} /> */}
 		</Switch>
 	</div>

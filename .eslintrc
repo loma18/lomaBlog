@@ -106,7 +106,7 @@
         // 定义对象的set存取器属性时，强制定义get
         "accessor-pairs": 2,
         // 强制数组方法的回调函数中有 return 语句
-        "array-callback-return": 2,
+        "array-callback-return": 0,
         // 强制把变量的使用限制在其定义的作用域范围内
         "block-scoped-var": 0,
         // 限制圈复杂度，也就是类似if else能连续接多少个
@@ -137,7 +137,7 @@
         "dot-notation": [
             1,
             {
-                "allowKeywords": false
+                "allowKeywords": true
             }
         ],
         // 使用 === 替代 == allow-null允许null和undefined==
@@ -393,7 +393,7 @@
             2,
             {
                 "beforeColon": false,
-                "afterColon": true
+                "afterColon": false
             }
         ],
         // 强制使用一致的换行风格
@@ -412,13 +412,13 @@
         // declaration: 强制使用方法声明的方式，function f(){} e.g [2, "declaration"]
         // expression：强制使用方法表达式的方式，var f = function() {} e.g [2, "expression"]
         // allowArrowFunctions: declaration风格中允许箭头函数。 e.g [2, "declaration", { "allowArrowFunctions": true }]
-        // "func-style": [
-        //     0,
-        //     "declaration",
-        //     {
-        //         "allowArrowFunctions": true
-        //     }
-        // ],
+        "func-style": [
+            2,
+            "declaration",
+            {
+                "allowArrowFunctions": true
+            }
+        ],
         // 强制回调函数最大嵌套深度 5层
         "max-nested-callbacks": [
             1,
@@ -551,7 +551,7 @@
             "avoid-escape"
         ],
         // 要求使用 JSDoc 注释
-        "require-jsdoc": 1,
+        "require-jsdoc": 0,
         // 要求或禁止使用分号而不是 ASI（这个才是控制行尾部分号的，）
         "semi": [
             2,

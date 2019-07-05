@@ -1,6 +1,6 @@
 @import '../../themes/theme.less';
-.change(@lineColor,@bgColor,@color,@color2){
-    #lomaBlog-header{
+.change(@lineColor,@bgColor,@color,@color2) {
+    #lomaBlog-header {
         width: 100vw;
         min-width: @AppMinWidth;
         border-bottom: 1px solid @lineColor;
@@ -8,33 +8,33 @@
         line-height: 50px;
         padding: 0 60px;
         transition: all 0.1s;
-        .header-logo{
+        .header-logo {
             width: 150px;
             text-align: center;
-            img{
+            img {
                 height: 50px;
             }
         }
-        .header-menu{
+        .header-menu {
             background: @bgColor;
             flex: 1;
-            .ant-menu{
+            .ant-menu {
                 background: @bgColor;
                 border: none;
-                .ant-menu-item{
-                    &:hover{
+                .ant-menu-item {
+                    &:hover {
                         border-color: @color2;
-                        >a{
+                        >a {
                             color: @color2;
                         }
                     }
-                    >a{
+                    >a {
                         color: @color;
                     }
                 }
-                .ant-menu-item-selected{
+                .ant-menu-item-selected {
                     border-bottom: 2px solid @color2;
-                    >a{
+                    >a {
                         color: @color2;
                     }
                 }
@@ -42,19 +42,19 @@
         }
     }
 }
-.dark{
+.dark {
     .change(
         @dark_lineColor,
         @dark_bgColor,
         @dark_color,
         @dark_color2
-    )
-}
-.light{
+    );
+ }
+.light {
     .change(
         @light_lineColor,
         @light_bgColor,
         @light_color,
         @light_color2
-    )
-}
+    );
+ }

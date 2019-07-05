@@ -9,7 +9,7 @@ export const fireGetRequest = async(api, values = {}, config = {}) => {
 	if (config && config.toggleLoading) {
 		appStore.showLoading();
 	}
-	const resp = await request.get(api, { ...config, params: values });
+	const resp = await request.get(api, { ...config, params:values });
 
 	appStore.hideLoading();
 	return Promise.resolve(resp.data);
@@ -34,8 +34,8 @@ export const firePostRequest = async(api, values, config) => {
  * */
 export const firePostJsonRequest = (api, values) => {
 	const config = {
-		headers: {
-			'Content-Type': 'application/json'
+		headers:{
+			'Content-Type':'application/json'
 		}
 	};
 

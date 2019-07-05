@@ -1,21 +1,21 @@
 @import '../../themes/theme.less';
 
-.change(@bgColor,@lineColor){
-    .swiper{
+.change(@bgColor,@lineColor) {
+    .swiper {
         position: relative;
         width: 100%;
-        .carousel-item{
-            img{
+        .carousel-item {
+            img {
                 width: 100%;
             }
         }
-        .index-container{
+        .index-container {
             position: absolute;
             left: 50%;
             bottom: 20px;
             transform: translateX(-50%);
-            ul{
-                li{
+            ul {
+                li {
                     display: inline-block;
                     width: 20px;
                     height: 20px;
@@ -23,7 +23,7 @@
                     background: @bgColor;
                     margin-right: 15px;
                     border-radius: 50%;
-                    &.selected{
+                    &.selected {
                         background: pink;
                     }
                 }
@@ -32,9 +32,9 @@
     }
 }
 
-.dark{
+.dark {
     .change(@dark_bgColor,@dark_lineColor);
 }
-.light{
+.light {
     .change(@light_bgColor,@light_lineColor);
 }

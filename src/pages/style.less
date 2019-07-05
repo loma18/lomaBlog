@@ -3,48 +3,48 @@
 .change(
     @dangerColor,
     @linkColor
-    ){
-    #lomaBlog-main{
+    ) {
+    #lomaBlog-main {
         padding-top: 106px;
-        .lomaBlog-header{
+        .lomaBlog-header {
             position: fixed;
             top: 0;
             left: 0;
             z-index: 9;
         }
-        .lomaBlog-body{
+        .lomaBlog-body {
             padding: 0 60px;
         }
-        .ant-back-top{
+        .ant-back-top {
             right: 50px;
         }
     }
-    .lomaBlog-select,.ant-btn{
+    .lomaBlog-select,.ant-btn {
         width: 110px;
         margin: 0 15px 15px;
-    } 
-    .dangerColor{
-        color: @dangerColor; 
-        cursor: pointer;
-    } 
-    .linkColor{
-        color: @linkColor; 
+    }
+    .dangerColor {
+        color: @dangerColor;
         cursor: pointer;
     }
-    input{
+    .linkColor {
+        color: @linkColor;
+        cursor: pointer;
+    }
+    input {
         border-radius: 0;
     }
 }
 
-.dark{
+.dark {
     .change(
         @dark_dangerColor,
         @dark_linkColor,
-    )
-}
-.light{
+    );
+ }
+.light {
     .change(
         @light_dangerColor,
         @light_linkColor,
-    )
-}
+    );
+ }
