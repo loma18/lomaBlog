@@ -54,6 +54,6 @@ module.exports = {
             title: 'lomaBlog',
             template: './src/index.html'
         }),
-        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['build/bundle.*.js'] })
+        new CleanWebpackPlugin()
     ]
 };

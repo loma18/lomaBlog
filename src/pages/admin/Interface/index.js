@@ -15,7 +15,7 @@ class AdminInterface extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            current: '',
+            current: 'create',
             type: '', //编辑或查看：edit/view
             apiList: [
                 // {
@@ -48,15 +48,15 @@ class AdminInterface extends Component {
         });
     };
 
-    setCurrent = () => {
-        let leftKey = getPathnameByIndex(3);
-        leftKey = leftKey ? leftKey : 'articleManage';
-        this.setState({ current: leftKey });
-    }
+    // setCurrent = () => {
+    //     let leftKey = getPathnameByIndex(3);
+    //     leftKey = leftKey ? leftKey : 'articleManage';
+    //     this.setState({ current: leftKey });
+    // }
 
-    UNSAFE_componentWillReceiveProps() {
-        this.setCurrent();
-    }
+    // UNSAFE_componentWillReceiveProps() {
+    //     this.setCurrent();
+    // }
 
     getMenuList = (data) => {
         return data.map(item => {
@@ -92,7 +92,7 @@ class AdminInterface extends Component {
     fetchData = () => {
         fireGetRequest(GET_INTERFACE_LIST).then(res => {
             if (res.code === 200) {
-                this.setState({ apiList: res.data });
+                this.setState({ apiList: res.data, current: '', type: '' });
             } else {
                 openNotification('error', '获取接口列表失败', res.msg);
             }
@@ -129,9 +129,13 @@ class AdminInterface extends Component {
                         </Menu>
                     </Col>
                     <Col className={'right'}>
-                        {current ? <RightCom selectedKeys={current} type={type} /> : (
-                            <p>请选择查看或编辑接口</p>
-                        )}
+                        {current ? <RightCom
+                            selectedKeys={current}
+                            type={type}
+                            fetchData={this.fetchData}
+                        /> : (
+                                <p>请选择查看或编辑接口</p>
+                            )}
                     </Col>
                 </Row>
             </div>

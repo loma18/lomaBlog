@@ -107,6 +107,24 @@
                 }
             }
         }
+        .adminHomeCatalogue{
+            .columnHeader,.columnBody{
+                .ant-form-item-children{
+                    color: @color;
+                }
+                .col40{
+                    width: 40%;
+                    color: @color;
+                }
+                .col35{
+                    width: 35%;
+                    color: @color;
+                }
+                .ant-btn{
+                    margin-top: 4px;
+                }
+            }
+        }
         .adminInterface{
             .left{
                 width: 320px;
@@ -154,6 +172,11 @@
                         .ant-btn{
                             margin-top: 4px;
                         }
+                        .paramsTitle{
+                            color: @color;
+                            font-size: @lFont;
+                            border-bottom: 1px dashed @color;
+                        }
                     }
                     .columnHeader{
                         text-align: center;
@@ -194,6 +217,29 @@
                         }
                         .ant-btn{
                             margin-top: 4px;
+                        }
+                    }
+                }
+                .adminInterfaceView{
+                    .ant-descriptions{
+                        margin-bottom: 2rem;
+                        .ant-descriptions-title{
+                            color: @color;
+                        }
+                        .ant-descriptions-item-content{
+                            background: @color;
+                        }
+                    }
+                    .requestContainer,.responseContainer{
+                        color: @color;
+                        font-size: @lFont;
+                    }
+                    .ant-table{
+                        margin: 1rem 0 2rem;
+                        .ant-table-row{
+                            td{
+                                background: @color;
+                            }
                         }
                     }
                 }

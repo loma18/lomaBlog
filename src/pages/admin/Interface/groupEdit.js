@@ -30,6 +30,7 @@ class AdminInterfaceGroupEdit extends Component {
     //新增模块
     handleAdd = (id, key) => {
         const { resetFields } = this.props.form;
+        const {fetchData} = this.props;
         let params = {};
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (err) {
@@ -42,6 +43,7 @@ class AdminInterfaceGroupEdit extends Component {
                     showSuccessMsg('保存模块成功');
                     if (!id) {
                         resetFields();
+                        fetchData(); //重新获取左侧接口列表
                         this.fetchData();
                     } else {
                         this.setState({ selKey: undefined });
