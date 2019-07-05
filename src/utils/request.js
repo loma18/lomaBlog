@@ -8,7 +8,7 @@ import axios from 'axios';
 /**
  * 如果登录了，就把token写入header
  * */
-//请求拦截
+// 请求拦截
 
 // axios.interceptors.request.use(
 // 	config => {

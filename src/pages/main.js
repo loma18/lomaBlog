@@ -6,16 +6,16 @@ import Footer from 'components/Footer';
 import LomaBreadcrumb from 'components/common/Breadcrumb';
 import Routers from 'pages/router';
 import LomaAudio from 'components/common/Audio';
-import {changeTheme} from 'utils/functions';
+import { changeTheme } from 'utils/functions';
 import './style.less';
 
 class Main extends Component {
     constructor(props) {
         super(props);
         let isAdmin = window.location.pathname.split('/')[1] == 'admin';
-        if(isAdmin){
+        if (isAdmin) {
             changeTheme('dark');
-        }else{
+        } else {
             changeTheme('light');
         }
         this.state = {
@@ -48,7 +48,7 @@ class Main extends Component {
         let menuList = this.getMenuList();
         return (<div id={'lomaBlog-main'}>
             <div className={'lomaBlog-header'}>
-                <Header menuList={menuList} changeStage={this.changeStage}/>
+                <Header menuList={menuList} changeStage={this.changeStage} />
                 <LomaBreadcrumb />
             </div>
             <div className={'lomaBlog-body'}>

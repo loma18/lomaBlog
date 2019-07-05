@@ -6,19 +6,19 @@ import Comment from './comment';
 import Catalogue from './catalogue';
 
 export default (props) => {
-    const { selectedKeys } = props;
-    switch (selectedKeys) {
-        case 'edit':
-            return <Edit />;
-        case 'draft':
-            return <Draft />;
-        case 'articleManage':
-            return <ArticleManage />;
-        case 'comment':
-            return <Comment />;
-        case 'catalogue':
-            return <Catalogue />;
-        default:
-            return <ArticleManage />;
-    }
-}
+	const { selectedKeys } = props;
+	switch (selectedKeys) {
+		case 'edit':
+			return <Edit />;
+		case 'draft':
+			return <Draft />;
+		case 'articleManage':
+			return <ArticleManage />;
+		case 'comment':
+			return <Comment />;
+		case 'catalogue':
+			return <Catalogue />;
+		default:
+			return <ArticleManage />;
+	}
+};

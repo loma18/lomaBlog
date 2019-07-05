@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import { Row, Col, Icon } from 'antd';
-import { Router, withRouter, Link } from "react-router-dom";
+import { Router, withRouter, Link } from 'react-router-dom';
 
 
-// @withRouter 
+// @withRouter
 class AdminHomeCatalogue extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+	constructor(props) {
+		super(props);
+		this.state = {
 
-        }
-    }
+		};
+	}
 
-    componentDidMount() {
-    }
+	componentDidMount() {
+	}
 
-    render() {
-        return (
-            <div className={'adminHomeCatalogue'}>
+	render() {
+		return (
+			<div className={'adminHomeCatalogue'}>
                 adminHomeCatalogue
-            </div>
-        )
-    }
+			</div>
+		);
+	}
 }
 export default AdminHomeCatalogue;

@@ -35,7 +35,7 @@ class LomaBlogTag extends Component {
         if (inputValue && tags.indexOf(inputValue) === -1 && tags.length <= 4) {
             tags = [...tags, inputValue];
         }
-        handleInputConfirm(tags, tagName,inputValue);
+        handleInputConfirm(tags, tagName, inputValue);
         this.setState({
             tags,
             inputVisible: false,

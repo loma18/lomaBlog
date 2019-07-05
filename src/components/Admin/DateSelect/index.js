@@ -5,16 +5,17 @@ import './style.less';
 const Option = Select.Option;
 
 export default (params = {}) => {
-	//选择年月下拉框时调用
+	// 选择年月下拉框时调用
 	const handleSelectChange = (val, type) => {
 		params.handleSelectChange(val, type);
 	};
 
-	const getItems = type => {
+	const getItems = (type) => {
 		let resultList = [];
 		if (type == 'years') {
 			let currentYear = new Date().getFullYear();
-			for (let i = 0; i < 3; i++) {
+			let num = 3;
+			for (let i = 0; i < num; i++) {
 				resultList.push({
 					id: currentYear,
 					name: currentYear + '年'
@@ -40,22 +41,20 @@ export default (params = {}) => {
 		return resultList;
 	};
 
-	const getSelectItem = type => {
+	const getSelectItem = (type) => {
 		let items = getItems(type);
 		return (
 			<Select
 				placeholder={type == 'years' ? '年' : '月'}
 				value={params[type]}
-				onChange={val => handleSelectChange(val, type)}
+				onChange={(val) => handleSelectChange(val, type)}
 				className={'lomaBlog-select select-' + type}
 			>
-				{items.map(item => {
-					return (
-						<Option key={item.id} value={item.name}>
-							{item.name}
-						</Option>
-					);
-				})}
+				{items.map((item) => (
+					<Option key={item.id} value={item.name}>
+						{item.name}
+					</Option>
+				))}
 			</Select>
 		);
 	};
