@@ -13,12 +13,12 @@ class AdminHome extends Component {
 		super(props);
 		let leftKey = getPathnameByIndex(3);
 		this.state = {
-			current:leftKey || 'articleManage'
+			current: leftKey || 'articleManage'
 		};
 	}
     handleClick = (e) => {
     	this.setState({
-    		current:e.key
+    		current: e.key
     	}, () => {
     		this.props.history.push('/admin/home/' + e.key);
     	});
@@ -27,7 +27,7 @@ class AdminHome extends Component {
     setCurrent = () => {
     	let leftKey = getPathnameByIndex(3);
     	leftKey = leftKey ? leftKey : 'articleManage';
-    	this.setState({ current:leftKey });
+    	this.setState({ current: leftKey });
     }
 
     UNSAFE_componentWillReceiveProps() {
@@ -44,17 +44,17 @@ class AdminHome extends Component {
     			<Row type="flex" justify="start">
     				<Col className={'left'}>
     					<Menu
-    						theme={'dark'}
-    						onClick={this.handleClick}
-    						style={{ width:256 }}
-    						defaultOpenKeys={['sub1']}
-    						selectedKeys={[this.state.current]}
-    						mode="inline"
+	theme={'dark'}
+	onClick={this.handleClick}
+	style={{ width: 256 }}
+	defaultOpenKeys={['sub1']}
+	selectedKeys={[this.state.current]}
+	mode="inline"
     					>
     						<Menu.Item key="edit"><Icon type="edit" />写博客</Menu.Item>
     						<SubMenu
-    							key="sub1"
-    							title={
+	key="sub1"
+	title={
     								<span>
     									<Icon type="mail" />
     									<span>博客管理</span>

@@ -13,7 +13,7 @@ class Header extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedKeys:[]
+			selectedKeys: []
 		};
 	}
 
@@ -68,7 +68,7 @@ class Header extends Component {
     		default:
     			key = ['home'];
     	}
-    	this.setState({ selectedKeys:key });
+    	this.setState({ selectedKeys: key });
     }
 
     UNSAFE_componentWillReceiveProps(props) {
@@ -115,9 +115,9 @@ class Header extends Component {
                                 退出登陆
     						</Button>
     					) : (<Search
-    						placeholder="search..."
-    						onSearch={this.handleSearch}
-    					/>)}
+	placeholder="search..."
+	onSearch={this.handleSearch}
+    					     />)}
     				</Col>
     			</Row>
     		</div>

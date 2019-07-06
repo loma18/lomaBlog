@@ -66,7 +66,7 @@ export const formatTimeStampToString = (date, format = 'YYYY-MM-DD') => {
 };
 
 const messageConfig = {
-	maxCount:1
+	maxCount: 1
 };
 export const showSuccessMsg = (msg, duration = 4) => {
 	message.config(messageConfig);
@@ -79,10 +79,10 @@ export const showSuccessMsg = (msg, duration = 4) => {
  * */
 export const openNotification = (type, title, content, duration = 5) => {
 	notification[type]({
-		key:title, // 相同内容不会增加显示框
-		message:title,
-		description:<div style={{ padding:3, wordBreak:'break-all' }}>{content}</div>,
-		duration:duration // 自动计算持续时间
+		key: title, // 相同内容不会增加显示框
+		message: title,
+		description: <div style={{ padding: 3, wordBreak: 'break-all' }}>{content}</div>,
+		duration: duration // 自动计算持续时间
 		/*	style: {
 					width: 350,
 					paddingRight: '12px',

@@ -18,13 +18,13 @@ class AdminHomeCatalogue extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			catalogueList:[], // 个人分类列表
-			selKey:undefined
+			catalogueList: [], // 个人分类列表
+			selKey: undefined
 		};
 	}
 
 	onChange = (val) => {
-		this.setState({ countInput:val });
+		this.setState({ countInput: val });
 	}
 
 	// 新增模块
@@ -44,7 +44,7 @@ class AdminHomeCatalogue extends Component {
 						resetFields();
 						this.fetchData();
 					} else {
-						this.setState({ selKey:undefined });
+						this.setState({ selKey: undefined });
 					}
 				} else {
 					openNotification('error', '保存模块失败', res.msg);
@@ -55,7 +55,7 @@ class AdminHomeCatalogue extends Component {
 	}
 
 	handleEdit = (key) => {
-		this.setState({ selKey:key });
+		this.setState({ selKey: key });
 	}
 
 	// 确认更改
@@ -72,7 +72,7 @@ class AdminHomeCatalogue extends Component {
 	// 删除模块
 	handleConfirmDel = (key) => {
 		let { catalogueList } = this.state;
-		fireGetRequest(DELETE_CATALOGUE, { id:catalogueList[key].id }).then((res) => {
+		fireGetRequest(DELETE_CATALOGUE, { id: catalogueList[key].id }).then((res) => {
 			if (res.code === 200) {
 				showSuccessMsg('删除成功');
 				this.fetchData();
@@ -85,13 +85,13 @@ class AdminHomeCatalogue extends Component {
 
 	// 取消更改
 	handleCancel = () => {
-		this.setState({ selKey:undefined });
+		this.setState({ selKey: undefined });
 	}
 
 	fetchData = () => {
 		fireGetRequest(GET_CATALOGUE_LIST).then((res) => {
 			if (res.code === 200) {
-				this.setState({ catalogueList:res.data, selKey:undefined });
+				this.setState({ catalogueList: res.data, selKey: undefined });
 			} else {
 				openNotification('error', '获取接口模块失败', res.msg);
 			}
@@ -116,9 +116,9 @@ class AdminHomeCatalogue extends Component {
 					</Row>
 					<Row type="flex" gutter={20} className={'columnBody'}>
 						<Col className={'col40'}>
-							<FormItem label='' className={'moduleType'}>
+							<FormItem label="" className={'moduleType'}>
 								{getFieldDecorator('moduleType', {
-									initialValue:''
+									initialValue: ''
 								})(
 									<Input />
 								)}
@@ -130,10 +130,10 @@ class AdminHomeCatalogue extends Component {
 					</Row>
 					{catalogueList.map((item, key) => <Row type="flex" gutter={20} className={'columnBody'} key={key}>
 						<Col className={'col40'}>
-							<FormItem label=''>
+							<FormItem label="">
 								{selKey == key ? getFieldDecorator('module_' + key, {
-									rules:[{ required:true, message:'请输入个人分类名称!' }],
-									initialValue:item.name
+									rules: [{ required: true, message: '请输入个人分类名称!' }],
+									initialValue: item.name
 								})(
 									<Input />
 								) : item.name}
@@ -151,7 +151,7 @@ class AdminHomeCatalogue extends Component {
 										onConfirm={() => this.handleConfirmDel(key)}
 										okText="是"
 										cancelText="否"
-									>
+									                                                                   >
 										<Button>删除</Button>
 									</Popconfirm>}
 								</Col>

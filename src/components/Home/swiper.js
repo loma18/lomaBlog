@@ -6,15 +6,15 @@ class Category extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			index:0
+			index: 0
 		};
 	}
 	render() {
 		const { index } = this.state;
 		let opt = {
-			auto:3000,
-			callback:function (index) {
-				this.setState({ index:Number(index) });
+			auto: 3000,
+			callback: function (index) {
+				this.setState({ index: Number(index) });
 			}.bind(this)
 		};
 

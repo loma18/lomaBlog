@@ -6,9 +6,9 @@ class LomaBlogTag extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			tags:props.tags || [],
-			inputVisible:false,
-			inputValue:''
+			tags: props.tags || [],
+			inputVisible: false,
+			inputValue: ''
 		};
 	}
 
@@ -21,11 +21,11 @@ class LomaBlogTag extends Component {
     };
 
     showInput = () => {
-    	this.setState({ inputVisible:true }, () => this.input.focus());
+    	this.setState({ inputVisible: true }, () => this.input.focus());
     };
 
     handleInputChange = (e) => {
-    	this.setState({ inputValue:e.target.value });
+    	this.setState({ inputValue: e.target.value });
     };
 
     handleInputConfirm = () => {
@@ -38,15 +38,15 @@ class LomaBlogTag extends Component {
     	handleInputConfirm(tags, tagName, inputValue);
     	this.setState({
     		tags,
-    		inputVisible:false,
-    		inputValue:''
+    		inputVisible: false,
+    		inputValue: ''
     	});
     };
 
     saveInputRef = (input) => (this.input = input);
 
     UNSAFE_componentWillReceiveProps(props) {
-    	this.setState({ tags:props.tags });
+    	this.setState({ tags: props.tags });
     }
 
     componentDidMount() {
@@ -73,14 +73,14 @@ class LomaBlogTag extends Component {
     			})}
     			{inputVisible && (
     				<Input
-    					ref={this.saveInputRef}
-    					type="text"
-    					size="small"
-    					className={'tagInpug'}
-    					value={inputValue}
-    					onChange={this.handleInputChange}
-    					onBlur={this.handleInputConfirm}
-    					onPressEnter={this.handleInputConfirm}
+	ref={this.saveInputRef}
+	type="text"
+	size="small"
+	className={'tagInpug'}
+	value={inputValue}
+	onChange={this.handleInputChange}
+	onBlur={this.handleInputConfirm}
+	onPressEnter={this.handleInputConfirm}
     				/>
     			)}
     			<Tag onClick={this.showInput} className={'addTag'}>

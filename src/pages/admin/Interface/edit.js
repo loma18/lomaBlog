@@ -21,14 +21,14 @@ class AdminInterfaceEdit extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			resData:{},
-			fieldList:[], // 待保存字段列表
-			resFieldList:[], // 响应字段列表
-			apiGroup:[], // 接口分组列表
-			selKey:undefined, // 正在编辑的字段key
-			type:undefined, // 记录编辑的是响应字段还是请求字段
-			paramType:'request',
-			spinLoading:false
+			resData: {},
+			fieldList: [], // 待保存字段列表
+			resFieldList: [], // 响应字段列表
+			apiGroup: [], // 接口分组列表
+			selKey: undefined, // 正在编辑的字段key
+			type: undefined, // 记录编辑的是响应字段还是请求字段
+			paramType: 'request',
+			spinLoading: false
 		};
 	}
 
@@ -41,10 +41,10 @@ class AdminInterfaceEdit extends Component {
     			return;
     		}
     		if (values.moduleType == '-1') {
-    			this.props.form.setFields({ moduleType:{ errors:[new Error('请选择模块')] } });
+    			this.props.form.setFields({ moduleType: { errors: [new Error('请选择模块')] } });
     			return;
     		}
-    		this.setState({ spinLoading:true });
+    		this.setState({ spinLoading: true });
     		if (type != 'create') {
     			params.id = selectedKeys;
     		}
@@ -62,7 +62,7 @@ class AdminInterfaceEdit extends Component {
     			} else {
     				openNotification('error', '保存失败', res.msg);
     			}
-    			this.setState({ spinLoading:false });
+    			this.setState({ spinLoading: false });
     		})
     			.catch((err) => console.log(err));
     	});
@@ -73,21 +73,21 @@ class AdminInterfaceEdit extends Component {
     	let list = paramType == 'request' ? fieldList : resFieldList;
     	const { getFieldsValue } = this.props.form;
     	let values = getFieldsValue(['field', 'remark', 'type', 'require']);
-    	let obj = { field:values.field, remark:values.remark, type:values.type, require:values.require };
+    	let obj = { field: values.field, remark: values.remark, type: values.type, require: values.require };
     	list.unshift(obj);
     	if (paramType == 'request') {
-    		this.setState({ fieldList:list }, () => {
+    		this.setState({ fieldList: list }, () => {
     			this.props.form.resetFields(['field', 'remark', 'type', 'require']);
     		});
     	} else {
-    		this.setState({ resFieldList:list }, () => {
+    		this.setState({ resFieldList: list }, () => {
     			this.props.form.resetFields(['field', 'remark', 'type', 'require']);
     		});
     	}
     }
 
     onChange = (val) => {
-    	this.setState({ countInput:val });
+    	this.setState({ countInput: val });
     }
 
     handleConfirmDel = (key, type) => {
@@ -102,12 +102,12 @@ class AdminInterfaceEdit extends Component {
     }
 
     handleEdit = (key, type) => {
-    	this.setState({ selKey:key, type });
+    	this.setState({ selKey: key, type });
     }
 
     // 取消更改
     handleCancel = () => {
-    	this.setState({ selKey:undefined, type:undefined });
+    	this.setState({ selKey: undefined, type: undefined });
     }
 
     // 确认更改
@@ -116,18 +116,18 @@ class AdminInterfaceEdit extends Component {
     	let list = type == 'req' ? fieldList : resFieldList;
     	const { getFieldsValue } = this.props.form;
     	let values = getFieldsValue(['field_' + key + type, 'remark_' + key + type, 'type_' + key + type, 'require_' + key + type]);
-    	list[key] = { field:values['field_' + key + type], remark:values['remark_' + key + type], type:values['type_' + key + type], require:values['require_' + key + type] };
+    	list[key] = { field: values['field_' + key + type], remark: values['remark_' + key + type], type: values['type_' + key + type], require: values['require_' + key + type] };
     	if (type == 'req') {
-    		this.setState({ fieldList:list, selKey:undefined, type:undefined });
+    		this.setState({ fieldList: list, selKey: undefined, type: undefined });
     	} else {
-    		this.setState({ resFieldList:list, selKey:undefined, type:undefined });
+    		this.setState({ resFieldList: list, selKey: undefined, type: undefined });
     	}
     }
 
     getModuleList = () => {
     	fireGetRequest(GET_INTERFACE_MODULE_LIST).then((res) => {
     		if (res.code === 200) {
-    			this.setState({ apiGroup:res.data });
+    			this.setState({ apiGroup: res.data });
     		} else {
     			openNotification('error', '获取接口模块失败', res.msg);
     		}
@@ -138,21 +138,21 @@ class AdminInterfaceEdit extends Component {
     // 删除接口
     handleDelete = () => {
     	const { selectedKeys, fetchData } = this.props;
-    	this.setState({ spinLoading:true });
-    	fireGetRequest(DELETE_INTERFACE_BY_ID, { id:selectedKeys }).then((res) => {
+    	this.setState({ spinLoading: true });
+    	fireGetRequest(DELETE_INTERFACE_BY_ID, { id: selectedKeys }).then((res) => {
     		if (res.code === 200) {
     			showSuccessMsg('删除成功');
     			fetchData();
     		} else {
     			openNotification('error', '删除失败', res.msg);
     		}
-    		this.setState({ spinLoading:false });
+    		this.setState({ spinLoading: false });
     	})
     		.catch((err) => console.log(err));
     }
 
     onSelect = (val) => {
-    	this.setState({ paramType:val });
+    	this.setState({ paramType: val });
     }
 
     getEleList = (type) => {
@@ -169,29 +169,29 @@ class AdminInterfaceEdit extends Component {
     		isEditNow = selKey == key && type == this.state.type;
     		return <Row type="flex" gutter={20} className={'columnBody'} key={key}>
     			<Col className={'col20'}>
-    				<FormItem label=''>
+    				<FormItem label="">
     					{isEditNow ? getFieldDecorator('field_' + key + type, {
-    						rules:[{ required:true, message:'请输入字段名!' }],
-    						initialValue:item.field
+    						rules: [{ required: true, message: '请输入字段名!' }],
+    						initialValue: item.field
     					})(
     						<Input />
     					) : item.field}
     				</FormItem>
     			</Col>
     			<Col className={'col20'}>
-    				<FormItem label=''>
+    				<FormItem label="">
     					{isEditNow ? getFieldDecorator('remark_' + key + type, {
-    						initialValue:item.remark
+    						initialValue: item.remark
     					})(
     						<Input />
     					) : item.remark}
     				</FormItem>
     			</Col>
     			<Col className={'col15'}>
-    				<FormItem label=''>
+    				<FormItem label="">
     					{isEditNow ? getFieldDecorator('type_' + key + type, {
-    						rules:[{ required:true, message:'请选择字段类型!' }],
-    						initialValue:item.type
+    						rules: [{ required: true, message: '请选择字段类型!' }],
+    						initialValue: item.type
     					})(
     						<Select >
     							<Option value={'string'}>string</Option>
@@ -204,10 +204,10 @@ class AdminInterfaceEdit extends Component {
     				</FormItem>
     			</Col>
     			<Col className={'col10'}>
-    				<FormItem label=''>
+    				<FormItem label="">
     					{isEditNow ? getFieldDecorator('require_' + key + type, {
-    						rules:[{ required:true, message:'请选择是否字段必须!' }],
-    						initialValue:item.require
+    						rules: [{ required: true, message: '请选择是否字段必须!' }],
+    						initialValue: item.require
     					})(
     						<Select >
     							<Option value={1}>是</Option>
@@ -224,11 +224,11 @@ class AdminInterfaceEdit extends Component {
     					</Col>
     					<Col>
     						{isEditNow ? <Button onClick={this.handleCancel}>取消</Button> : <Popconfirm
-    							title="是否确认删除?"
-    							onConfirm={() => this.handleConfirmDel(key, type)}
-    							okText="是"
-    							cancelText="否"
-    						>
+	title="是否确认删除?"
+	onConfirm={() => this.handleConfirmDel(key, type)}
+	okText="是"
+	cancelText="否"
+    						                                                               >
     							<Button>删除</Button>
     						</Popconfirm>}
     					</Col>
@@ -246,8 +246,8 @@ class AdminInterfaceEdit extends Component {
     	}
     	let fieldList = [];
     	let resFieldList = [];
-    	this.setState({ spinLoading:true });
-    	fireGetRequest(GET_INTERFACE_DETAILE_BY_ID, { id:selectedKeys }).then((res) => {
+    	this.setState({ spinLoading: true });
+    	fireGetRequest(GET_INTERFACE_DETAILE_BY_ID, { id: selectedKeys }).then((res) => {
     		if (res.code === 200) {
     			if (res.data.fieldList) {
     				fieldList = JSON.parse(res.data.fieldList);
@@ -255,18 +255,18 @@ class AdminInterfaceEdit extends Component {
     			if (res.data.resFieldList) {
     				resFieldList = JSON.parse(res.data.resFieldList);
     			}
-    			this.setState({ resData:res.data, fieldList, resFieldList });
+    			this.setState({ resData: res.data, fieldList, resFieldList });
     		} else {
     			openNotification('error', '获取接口信息失败', res.message);
     		}
-    		this.setState({ spinLoading:false });
+    		this.setState({ spinLoading: false });
     	})
     		.catch((err) => console.log(err));
     }
 
     UNSAFE_componentWillReceiveProps(props) {
     	if (props.selectedKeys != this.props.selectedKeys) {
-    		this.setState({ resData:{}, fieldList:[], resFieldList:[] }, () => {
+    		this.setState({ resData: {}, fieldList: [], resFieldList: [] }, () => {
     			this.fetchData();
     		});
     	}
@@ -291,16 +291,16 @@ class AdminInterfaceEdit extends Component {
     		<div className={'adminInterfaceEdit'}>
     			<Spin spinning={spinLoading}>
     				<Form>
-    					<FormItem label='接口名称' className={'title'}>
+    					<FormItem label="接口名称" className={'title'}>
     						{getFieldDecorator('title', {
-    							rules:[{ required:true, message:'请填写接口名称!' }],
-    							initialValue:resData.title || ''
+    							rules: [{ required: true, message: '请填写接口名称!' }],
+    							initialValue: resData.title || ''
     						})(<Input />)}
     					</FormItem>
-    					<FormItem label='参数类型' className={'paramType'}>
+    					<FormItem label="参数类型" className={'paramType'}>
     						{getFieldDecorator('paramType', {
-    							rules:[{ required:true, message:'请选择参数类型!' }],
-    							initialValue:resData.paramType || 'request'
+    							rules: [{ required: true, message: '请选择参数类型!' }],
+    							initialValue: resData.paramType || 'request'
     						})(
     							<Select onSelect={this.onSelect}>
     								<Option value={'request'}>请求参数</Option>
@@ -308,10 +308,10 @@ class AdminInterfaceEdit extends Component {
     							</Select>
     						)}
     					</FormItem>
-    					<FormItem label='请求方式' className={'methods'}>
+    					<FormItem label="请求方式" className={'methods'}>
     						{getFieldDecorator('methods', {
-    							rules:[{ required:true, message:'请选择请求方式!' }],
-    							initialValue:resData.methods || 'get'
+    							rules: [{ required: true, message: '请选择请求方式!' }],
+    							initialValue: resData.methods || 'get'
     						})(
     							<Select >
     								<Option value={'get'}>GET</Option>
@@ -319,10 +319,10 @@ class AdminInterfaceEdit extends Component {
     							</Select>
     						)}
     					</FormItem>
-    					<FormItem label='所属模块' className={'moduleType'}>
+    					<FormItem label="所属模块" className={'moduleType'}>
     						{getFieldDecorator('moduleType', {
-    							rules:[{ required:true, message:'请选择所属模块!' }],
-    							initialValue:resData.moduleId || '-1'
+    							rules: [{ required: true, message: '请选择所属模块!' }],
+    							initialValue: resData.moduleId || '-1'
     						})(
     							<Select >
     								<Option value={'-1'}>选择所属模块</Option>
@@ -332,10 +332,10 @@ class AdminInterfaceEdit extends Component {
     							</Select>
     						)}
     					</FormItem>
-    					<FormItem label='请求路径' className={'routePath'}>
+    					<FormItem label="请求路径" className={'routePath'}>
     						{getFieldDecorator('routePath', {
-    							rules:[{ required:true, message:'请填写请求路径!' }],
-    							initialValue:resData.routePath || ''
+    							rules: [{ required: true, message: '请填写请求路径!' }],
+    							initialValue: resData.routePath || ''
     						})(<Input />)}
     					</FormItem>
     					<Row type="flex" gutter={20} className={'columnHeader'}>
@@ -347,27 +347,27 @@ class AdminInterfaceEdit extends Component {
     					</Row>
     					<Row type="flex" gutter={20} className={'columnBody'}>
     						<Col className={'col20'}>
-    							<FormItem label=''>
+    							<FormItem label="">
     								{getFieldDecorator('field', {
-    									initialValue:''
+    									initialValue: ''
     								})(
     									<Input />
     								)}
     							</FormItem>
     						</Col>
     						<Col className={'col20'}>
-    							<FormItem label=''>
+    							<FormItem label="">
     								{getFieldDecorator('remark', {
-    									initialValue:''
+    									initialValue: ''
     								})(
     									<Input />
     								)}
     							</FormItem>
     						</Col>
     						<Col className={'col15'}>
-    							<FormItem label=''>
+    							<FormItem label="">
     								{getFieldDecorator('type', {
-    									initialValue:'string'
+    									initialValue: 'string'
     								})(
     									<Select >
     										<Option value={'string'}>string</Option>
@@ -380,9 +380,9 @@ class AdminInterfaceEdit extends Component {
     							</FormItem>
     						</Col>
     						<Col className={'col10'}>
-    							<FormItem label=''>
+    							<FormItem label="">
     								{getFieldDecorator('require', {
-    									initialValue:0
+    									initialValue: 0
     								})(
     									<Select >
     										<Option value={1}>是</Option>
@@ -409,10 +409,10 @@ class AdminInterfaceEdit extends Component {
     				<Col><Button onClick={this.handleSave}>保存</Button></Col>
     				<Col>
     					<Popconfirm
-    						title="是否确认删除?"
-    						onConfirm={this.handleDelete}
-    						okText="是"
-    						cancelText="否"
+	title="是否确认删除?"
+	onConfirm={this.handleDelete}
+	okText="是"
+	cancelText="否"
     					>
     						<Button>删除接口</Button>
     					</Popconfirm>

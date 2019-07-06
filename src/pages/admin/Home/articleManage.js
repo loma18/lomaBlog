@@ -30,19 +30,19 @@ class AdminHomeArticleManage extends Component {
 		months = months ? months : currentMonth;
 		searchVal = searchVal ? decodeURI(searchVal) : '';
 		this.state = {
-			tableData:[],
-			current:key || 'all',
-			years:years + '年',
-			months:months + '月',
-			articleType:articleType || 'all',
-			catalogueType:catalogueType || 'all',
-			catalogueList:[],
+			tableData: [],
+			current: key || 'all',
+			years: years + '年',
+			months: months + '月',
+			articleType: articleType || 'all',
+			catalogueType: catalogueType || 'all',
+			catalogueList: [],
 			searchVal
 		};
 	}
 
 	handleClick = ({ item, key, keyPath, domEvent }) => {
-		this.setState({ current:key }, () => {
+		this.setState({ current: key }, () => {
 			this.props.history.push('/admin/home/articleManage/' + key);
 		});
 	}
@@ -50,22 +50,22 @@ class AdminHomeArticleManage extends Component {
 	setCurrent = () => {
 		let key = getPathnameByIndex(4);
 		key = key ? key : 'all';
-		this.setState({ current:key });
+		this.setState({ current: key });
 	}
 
 	// 改变年/月
 	handleSelectChange = (val, type) => {
-		this.setState({ [type]:val });
+		this.setState({ [type]: val });
 	}
 
 	// 改变文章/个人分类类型
 	handleChangeType = (val, type) => {
-		this.setState({ [type]:val });
+		this.setState({ [type]: val });
 	}
 
 	// 关键词搜索
 	handleChange = (e) => {
-		this.setState({ searchVal:e.target.value });
+		this.setState({ searchVal: e.target.value });
 	}
 
 	// 搜索
@@ -82,7 +82,7 @@ class AdminHomeArticleManage extends Component {
 	getCatalogueList = () => {
 		fireGetRequest(GET_CATALOGUE_LIST).then((res) => {
 			if (res.code === 200) {
-				this.setState({ catalogueList:res.data });
+				this.setState({ catalogueList: res.data });
 			} else {
 				openNotification('error', '获取个人分类失败', res.msg);
 			}
@@ -108,13 +108,13 @@ class AdminHomeArticleManage extends Component {
 		const { current, years, months, articleType, catalogueType, searchVal } = this.state;
 		let year = years.replace('年', '');
 		let month = months.replace('月', '');
-		let params = { status:0 };
+		let params = { status: 0 };
 		if (current == 'all') {
-			params = { status:1, year, month, articleType, catalogueType, searchVal };
+			params = { status: 1, year, month, articleType, catalogueType, searchVal };
 		}
 		fireGetRequest(GET_FILTER_LIST, { ...params }).then((res) => {
 			if (res.code === 200) {
-				this.setState({ tableData:res.data });
+				this.setState({ tableData: res.data });
 			} else {
 				openNotification('error', '获取博客列表失败', res.msg);
 			}
@@ -143,7 +143,7 @@ class AdminHomeArticleManage extends Component {
 			tableData
 		} = this.state;
 		let articleTypeLists = JSON.parse(JSON.stringify(articleTypeList));
-		articleTypeLists.unshift({ key:'all', name:'文章类型', id:0 });
+		articleTypeLists.unshift({ key: 'all', name: '文章类型', id: 0 });
 		return (
 			<div className={'adminHomeArticleManage'}>
 				<Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal" theme={'dark'}>

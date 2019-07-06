@@ -9,28 +9,28 @@ class AdminInterfaceView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			resData:{ fieldList:[], resFieldList:[] },
-			spinLoading:false
+			resData: { fieldList: [], resFieldList: [] },
+			spinLoading: false
 		};
 	}
 
     columns = [
     	{
-    		title:'字段名',
-    		dataIndex:'field'
+    		title: '字段名',
+    		dataIndex: 'field'
     	},
     	{
-    		title:'备注',
-    		dataIndex:'remark'
+    		title: '备注',
+    		dataIndex: 'remark'
     	},
     	{
-    		title:'类型',
-    		dataIndex:'type'
+    		title: '类型',
+    		dataIndex: 'type'
     	},
     	{
-    		title:'是否必须',
-    		dataIndex:'require',
-    		render:(txt) => txt === 0 ? '否' : '是'
+    		title: '是否必须',
+    		dataIndex: 'require',
+    		render: (txt) => txt === 0 ? '否' : '是'
     	}
     ]
 
@@ -40,8 +40,8 @@ class AdminInterfaceView extends Component {
 
     fetchData = (selectedKey) => {
     	let selectedKeys = selectedKey ? selectedKey : this.props.selectedKeys;
-    	this.setState({ spinLoading:true });
-    	fireGetRequest(GET_INTERFACE_DETAILE_BY_ID, { id:selectedKeys }).then((res) => {
+    	this.setState({ spinLoading: true });
+    	fireGetRequest(GET_INTERFACE_DETAILE_BY_ID, { id: selectedKeys }).then((res) => {
     		if (res.code === 200) {
     			if (res.data.fieldList) {
     				res.data.fieldList = JSON.parse(res.data.fieldList).map((item, key) => {
@@ -55,11 +55,11 @@ class AdminInterfaceView extends Component {
     					return item;
     				});
     			}
-    			this.setState({ resData:res.data });
+    			this.setState({ resData: res.data });
     		} else {
     			openNotification('error', '获取接口信息失败', res.message);
     		}
-    		this.setState({ spinLoading:false });
+    		this.setState({ spinLoading: false });
     	})
     		.catch((err) => console.log(err));
     }
@@ -81,21 +81,21 @@ class AdminInterfaceView extends Component {
     				<div className={'requestContainer'}>
                         请求参数
     					<Table
-    						columns={this.columns}
-    						dataSource={resData.fieldList}
-    						pagination={false}
-    						rowKey={'key'}
-    						bordered
+	columns={this.columns}
+	dataSource={resData.fieldList}
+	pagination={false}
+	rowKey={'key'}
+	bordered
     					/>
     				</div>
     				<div className={'responseContainer'}>
                         响应参数
     					<Table
-    						columns={this.columns}
-    						dataSource={resData.resFieldList}
-    						pagination={false}
-    						rowKey={'key'}
-    						bordered
+	columns={this.columns}
+	dataSource={resData.resFieldList}
+	pagination={false}
+	rowKey={'key'}
+	bordered
     					/>
     				</div>
     			</Spin>

@@ -6,11 +6,11 @@ class Audio extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fold:true, // 播放器是否折叠
-			play:false, // 播放/暂停
-			stop:true, // 停止播放
-			volume:0.3, // 媒体音量
-			muted:false // 静音状态
+			fold: true, // 播放器是否折叠
+			play: false, // 播放/暂停
+			stop: true, // 停止播放
+			volume: 0.3, // 媒体音量
+			muted: false // 静音状态
 		};
 	}
 
@@ -113,7 +113,7 @@ class Audio extends Component {
     	} else if (type == 'next') {
     		this.audioNode.src = require('assets/2.mp3');
     	}
-    	this.setState({ play:true }, () => {
+    	this.setState({ play: true }, () => {
     		this.audioNode.play();
     		if (!this.visualizer) {
     			this.initData();
@@ -125,7 +125,7 @@ class Audio extends Component {
 
     // 播放/暂停
     handlePlay = () => {
-    	this.setState({ play:!this.state.play }, () => {
+    	this.setState({ play: !this.state.play }, () => {
     		if (this.state.play) {
     			this.audioNode.play();
     		} else {
@@ -136,7 +136,7 @@ class Audio extends Component {
 
     // 点击展开/缩起播放器
     handleClick = (e) => {
-    	this.setState({ fold:!this.state.fold });
+    	this.setState({ fold: !this.state.fold });
     }
 
     // 停止播放
@@ -146,7 +146,7 @@ class Audio extends Component {
     	this.canvasNode.width = 0;
     	this.audioNode.pause();
     	this.audioNode.currentTime = 0;
-    	this.setState({ play:false, stop:true });
+    	this.setState({ play: false, stop: true });
     }
 
     initAudioData = () => {
@@ -164,7 +164,7 @@ class Audio extends Component {
     		if (!this.canvasNode.width) {
     			this.canvasNode.width = document.documentElement.offsetWidth;
     		}
-    		this.setState({ stop:false });
+    		this.setState({ stop: false });
     		this.initData();
     	};
     	document.onkeydown = (e) => {
@@ -174,7 +174,7 @@ class Audio extends Component {
     		}
     	};
     	window.onscroll = (e) => {
-    		this.setState({ fold:true });
+    		this.setState({ fold: true });
     	};
     }
 
@@ -204,18 +204,18 @@ class Audio extends Component {
     					<Row type="flex" justify="space-between">
     						<Col className={'topLeft ' + (muted ? 'muted' : '')}>
     							<Icon type="sound"
-    								onClick={() => this.setState({ muted:!muted }, () => {
+	onClick={() => this.setState({ muted: !muted }, () => {
     									this.audioNode.muted = this.state.muted;
     								})}
     							/>
     							<Slider
-    								tooltipVisible={false}
-    								value={muted ? 0 : volume}
-    								min={0}
-    								max={1}
-    								step={0.01}
-    								className={'volumnSlider'}
-    								onChange={(val) => this.setState({ volume:val, muted:false }, () => {
+	tooltipVisible={false}
+	value={muted ? 0 : volume}
+	min={0}
+	max={1}
+	step={0.01}
+	className={'volumnSlider'}
+	onChange={(val) => this.setState({ volume: val, muted: false }, () => {
     									this.audioNode.volume = val;
     								})}
     							/>

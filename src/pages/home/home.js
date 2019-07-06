@@ -6,7 +6,7 @@ class HomeIndex extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dataList:[]
+			dataList: []
 		};
 	}
 
@@ -14,19 +14,19 @@ class HomeIndex extends Component {
     	let { dataList } = this.state;
     	dataList = [
     		{
-    			id:1,
-    			title:'123',
-    			description:'description1'
+    			id: 1,
+    			title: '123',
+    			description: 'description1'
     		},
     		{
-    			id:2,
-    			title:'1234',
-    			description:'description2'
+    			id: 2,
+    			title: '1234',
+    			description: 'description2'
     		},
     		{
-    			id:3,
-    			title:'12345',
-    			description:'description3'
+    			id: 3,
+    			title: '12345',
+    			description: 'description3'
     		}
     	];
     	this.setState({ dataList });

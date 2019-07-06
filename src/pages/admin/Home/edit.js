@@ -22,13 +22,13 @@ class AdminHomeEdit extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			resData:{},
-			article:[],
-			catalogue:[], // 最终个人分类
-			hasSelCatalogue:[], // 选中之前已有分类
-			catalogueList:[], // [{id:1,name:'前端'}],
-			compareList:[],
-			spinLoading:false
+			resData: {},
+			article: [],
+			catalogue: [], // 最终个人分类
+			hasSelCatalogue: [], // 选中之前已有分类
+			catalogueList: [], // [{id:1,name:'前端'}],
+			compareList: [],
+			spinLoading: false
 		};
 	}
 
@@ -41,7 +41,7 @@ class AdminHomeEdit extends Component {
 				tempList.push(inputValue);
 			}
 		}
-		this.setState({ [type]:tags, hasSelCatalogue:tempList });
+		this.setState({ [type]: tags, hasSelCatalogue: tempList });
 	}
 
 	handleClose = (tags, type, removedTag) => {
@@ -54,7 +54,7 @@ class AdminHomeEdit extends Component {
 				tempList.splice(index, 1);
 			}
 		}
-		this.setState({ [type]:tags, hasSelCatalogue:tempList });
+		this.setState({ [type]: tags, hasSelCatalogue: tempList });
 	}
 
 	// 修改个人分类选取
@@ -68,7 +68,7 @@ class AdminHomeEdit extends Component {
 				}
 			});
 		}
-		this.setState({ hasSelCatalogue:val, catalogue });
+		this.setState({ hasSelCatalogue: val, catalogue });
 	}
 
 	getTransData = () => {
@@ -81,7 +81,7 @@ class AdminHomeEdit extends Component {
 					}
 				}
 			} else {
-				return { name:item };
+				return { name: item };
 			}
 		});
 		return list;
@@ -99,13 +99,13 @@ class AdminHomeEdit extends Component {
 			values.catalogue = this.getTransData();
 			values.article = article;
 			values.content = values.content.toHTML();
-			this.setState({ spinLoading:true });
+			this.setState({ spinLoading: true });
 			firePostRequest(SAVE_BLOG, { ...values }).then((res) => {
 				if (res.code === 200) {
 					showSuccessMsg('保存成功');
 					this.props.history.push('/admin/home/articleManage');
 				}
-				this.setState({ spinLoading:false });
+				this.setState({ spinLoading: false });
 			})
 				.catch((err) => console.log(err));
 		});
@@ -127,7 +127,7 @@ class AdminHomeEdit extends Component {
 					compareList.push(item.name);
 					return item;
 				});
-				this.setState({ catalogueList:res.data, compareList });
+				this.setState({ catalogueList: res.data, compareList });
 			} else {
 				openNotification('error', '获取个人分类列表失败', res.message);
 			}
@@ -157,13 +157,13 @@ class AdminHomeEdit extends Component {
 					<Form>
 						<FormItem label="">
 							{getFieldDecorator('title', {
-								rules:[{ required:true, message:'请输入文章标题！' }],
-								initialValue:resData.title || ''
+								rules: [{ required: true, message: '请输入文章标题！' }],
+								initialValue: resData.title || ''
 							})(<Input placeholder={'请输入文章标题'} />)}
 						</FormItem>
 						<FormItem label="">
 							{getFieldDecorator('content', {
-								rules:[{ required:true, message:'请输入文章内容！' }]
+								rules: [{ required: true, message: '请输入文章内容！' }]
 							})(
 								<BraftEditor
 									ref={(instance) => (this.editorInstance = instance)}
@@ -197,8 +197,8 @@ class AdminHomeEdit extends Component {
 						</FormItem>
 						<FormItem label="文章类型" className={'article'}>
 							{getFieldDecorator('articleType', {
-								rules:[{ required:true, message:'请选择文章类型！' }],
-								initialValue:resData.articleType || articleTypeList[0] && articleTypeList[0].key
+								rules: [{ required: true, message: '请选择文章类型！' }],
+								initialValue: resData.articleType || articleTypeList[0] && articleTypeList[0].key
 							})(
 								<Select
 									className={'lomaBlog-select select-articleType'}

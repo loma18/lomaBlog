@@ -6,7 +6,7 @@ class ArticleList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dataList:[]
+			dataList: []
 		};
 	}
 
@@ -15,11 +15,11 @@ class ArticleList extends Component {
     	let pathname = window.location.pathname.split('/');
     	let typeName = pathname[pathname.length - 1];
     	if (typeName == 'original') {
-    		dataList = [{ title:'title1' }, { title:'title2' }, { title:'title3' }];
+    		dataList = [{ title: 'title1' }, { title: 'title2' }, { title: 'title3' }];
     	} else if (typeName == 'reprint') {
-    		dataList = [{ title:'title4' }, { title:'title5' }, { title:'title6' }];
+    		dataList = [{ title: 'title4' }, { title: 'title5' }, { title: 'title6' }];
     	} else {
-    		dataList = [{ title:'title7' }, { title:'title8' }, { title:'title9' }];
+    		dataList = [{ title: 'title7' }, { title: 'title8' }, { title: 'title9' }];
     	}
     	this.setState({ dataList });
     }
@@ -36,14 +36,14 @@ class ArticleList extends Component {
     	const { dataList } = this.state;
     	return (<div className={'articleList'}>
     		<List
-    			itemLayout="horizontal"
-    			dataSource={dataList}
-    			renderItem={(item) => (
+	itemLayout="horizontal"
+	dataSource={dataList}
+	renderItem={(item) => (
     				<List.Item>
     					<List.Item.Meta
-    						avatar={<Avatar src={require('assets/swiper/1.png')} />}
-    						title={<a href="https://ant.design">{item.title}</a>}
-    						description="lomalomaloma"
+	avatar={<Avatar src={require('assets/swiper/1.png')} />}
+	title={<a href="https://ant.design">{item.title}</a>}
+	description="lomalomaloma"
     					/>
     				</List.Item>
     			)}

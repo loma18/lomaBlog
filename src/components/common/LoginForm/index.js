@@ -25,8 +25,8 @@ class LoginForm extends Component {
     			return;
     		}
     		firePostRequest(USER_LOGIN, {
-    			uname:values.username,
-    			upwd:values.password
+    			uname: values.username,
+    			upwd: values.password
     		}).then(function (res) {
     			if (res.code === 200) {
     				showSuccessMsg(res.msg);
@@ -35,8 +35,8 @@ class LoginForm extends Component {
     				// loginSubmit(res.)
     			} else {
     				notification.open({
-    					message:'error',
-    					description:'登陆名或密码不正确，请重新输入'
+    					message: 'error',
+    					description: '登陆名或密码不正确，请重新输入'
     				});
     			}
     		})
@@ -66,22 +66,22 @@ class LoginForm extends Component {
     				<Form onSubmit={this.handleSubmit} className="login-form">
     					<FormItem>
     						{getFieldDecorator('username', {
-    							rules:[{ required:true, message:'请输入名字!' }]
+    							rules: [{ required: true, message: '请输入名字!' }]
     						})(
     							<Input
-    								prefix={<Icon type="user" style={{ color:'rgba(0,0,0,.25)' }} />}
-    								placeholder="Username"
+	prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+	placeholder="Username"
     							/>,
     						)}
     					</FormItem>
     					<FormItem>
     						{getFieldDecorator('password', {
-    							rules:[{ required:true, message:'请输入密码!' }]
+    							rules: [{ required: true, message: '请输入密码!' }]
     						})(
     							<Input
-    								prefix={<Icon type="lock" style={{ color:'rgba(0,0,0,.25)' }} />}
-    								type="password"
-    								placeholder="Password"
+	prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+	type="password"
+	placeholder="Password"
     							/>,
     						)}
     					</FormItem>

@@ -52,7 +52,7 @@ class Home extends Component {
     		);
     	}
     	return (
-    		<div style={{ padding:10 }}>
+    		<div style={{ padding: 10 }}>
     			<Row type="flex" justify="space-between">
     				<Col>
     					<Group size="small" onChange={(e) => onTypeChange(e.target.value)} value={type}>
@@ -62,24 +62,24 @@ class Home extends Component {
     				</Col>
     				<Col>
     					<Select
-    						size="small"
-    						dropdownMatchSelectWidth={false}
-    						className="my-year-select"
-    						onChange={(newYear) => {
+	size="small"
+	dropdownMatchSelectWidth={false}
+	className="my-year-select"
+	onChange={(newYear) => {
     							const now = value.clone().year(newYear);
     							onChange(now);
     						}}
-    						value={String(year)}
+	value={String(year)}
     					>
     						{options}
     					</Select>
     				</Col>
     				<Col>
     					<Select
-    						size="small"
-    						dropdownMatchSelectWidth={false}
-    						value={String(month)}
-    						onChange={(selectedMonth) => {
+	size="small"
+	dropdownMatchSelectWidth={false}
+	value={String(month)}
+	onChange={(selectedMonth) => {
     							const newValue = value.clone();
     							newValue.month(parseInt(selectedMonth, 10));
     							onChange(newValue);
@@ -95,9 +95,9 @@ class Home extends Component {
 
     render() {
     	let articleList = [
-    		{ typeName:'原创', count:5, typeKey:'original' },
-    		{ typeName:'转载', count:3, typeKey:'reprint' },
-    		{ typeName:'代码', count:6, typeKey:'code' }
+    		{ typeName: '原创', count: 5, typeKey: 'original' },
+    		{ typeName: '转载', count: 3, typeKey: 'reprint' },
+    		{ typeName: '代码', count: 6, typeKey: 'code' }
     	];
     	return (
     		<div id={'lomaBlog-home'}>
@@ -108,10 +108,10 @@ class Home extends Component {
     				<Col className={'right'}>
     					<div className={'calendar'}>
     						<Calendar
-    							fullscreen={false}
-    							onPanelChange={this.onPanelChange}
-    							onSelect={this.onSelect}
-    							headerRender={this.headerRender}
+	fullscreen={false}
+	onPanelChange={this.onPanelChange}
+	onSelect={this.onSelect}
+	headerRender={this.headerRender}
     						/>
     					</div>
     					<div className={'article'}>

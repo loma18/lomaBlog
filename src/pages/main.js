@@ -19,22 +19,22 @@ class Main extends Component {
 			changeTheme('light');
 		}
 		this.state = {
-			stage:isAdmin ? 'backStage' : 'frontStage' // 前后台是否发生切换
+			stage: isAdmin ? 'backStage' : 'frontStage' // 前后台是否发生切换
 		};
 	}
 
     getMenuList = () => {
     	let pathname = window.location.pathname.split('/');
     	let list = [
-    		{ title:'首页', key:'home' },
-    		{ title:'微语', key:'whisper' }
+    		{ title: '首页', key: 'home' },
+    		{ title: '微语', key: 'whisper' }
     	];
     	if (pathname[1] == 'admin') {
     		list = [
-    			{ title:'首页', key:'admin' },
-    			{ title:'个人中心', key:'mine' },
-    			{ title:'后台接口', key:'interface' },
-    			{ title:'其他', key:'others' }
+    			{ title: '首页', key: 'admin' },
+    			{ title: '个人中心', key: 'mine' },
+    			{ title: '后台接口', key: 'interface' },
+    			{ title: '其他', key: 'others' }
     		];
     	}
     	return list;
