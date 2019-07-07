@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Menu, Select, Input, Button } from 'antd';
+import { Row, Col, Icon, Menu, Select, Input, Button, Pagination } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import DateSelect from 'components/Admin/DateSelect';
 import { fireGetRequest, firePostRequest } from 'service/app';
@@ -26,6 +26,7 @@ class AdminHomeArticleManage extends Component {
 		let currentDate = new Date();
 		let currentYear = currentDate.getFullYear();
 		let currentMonth = currentDate.getMonth() + 1;
+		let page = GetQueryString('page');
 		years = years ? years : currentYear;
 		months = months ? months : currentMonth;
 		searchVal = searchVal ? decodeURI(searchVal) : '';
@@ -35,9 +36,11 @@ class AdminHomeArticleManage extends Component {
 			years: years + '年',
 			months: months + '月',
 			articleType: articleType || 'all',
-			catalogueType: catalogueType || 'all',
+			catalogueType: catalogueType ? (catalogueType == 'all' ? catalogueType : Number(catalogueType)) : 'all',
 			catalogueList: [],
-			searchVal
+			searchVal,
+			page: page || 1,
+			total: 0
 		};
 	}
 
@@ -69,14 +72,17 @@ class AdminHomeArticleManage extends Component {
 	}
 
 	// 搜索
-	handleSearch = () => {
+	handleSearch = (page) => {
 		const { years, months, articleType, catalogueType, searchVal } = this.state;
 		let year = years.replace('年', '');
 		let month = months.replace('月', '');
 		this.props.history.push('/admin/home/articleManage/all?year=' +
 			year + '&month=' + month + '&searchVal=' + searchVal +
-			'&articleType=' + articleType + '&catalogueType=' + catalogueType);
-		this.fetchData();
+			'&articleType=' + articleType + '&catalogueType=' + catalogueType +
+			'&page=' + (page ? page : 1));
+		this.setState({ page: page ? page : 1 }, () => {
+			this.fetchData();
+		})
 	}
 
 	getCatalogueList = () => {
@@ -95,7 +101,7 @@ class AdminHomeArticleManage extends Component {
 		switch (key) {
 			case 'original':
 				return '原创';
-			case 'rePrint':
+			case 'reprint':
 				return '转载';
 			case 'code':
 				return '代码';
@@ -104,17 +110,21 @@ class AdminHomeArticleManage extends Component {
 		}
 	}
 
+	onChange = page => {
+		this.handleSearch(page);
+	};
+
 	fetchData = () => {
-		const { current, years, months, articleType, catalogueType, searchVal } = this.state;
+		const { current, years, months, articleType, catalogueType, searchVal, page } = this.state;
 		let year = years.replace('年', '');
 		let month = months.replace('月', '');
 		let params = { status: 0 };
 		if (current == 'all') {
-			params = { status: 1, year, month, articleType, catalogueType, searchVal };
+			params = { status: 1, year, month, articleType, catalogueType, searchVal, page };
 		}
 		fireGetRequest(GET_FILTER_LIST, { ...params }).then((res) => {
 			if (res.code === 200) {
-				this.setState({ tableData: res.data });
+				this.setState({ tableData: res.data, total: res.total });
 			} else {
 				openNotification('error', '获取博客列表失败', res.msg);
 			}
@@ -140,7 +150,9 @@ class AdminHomeArticleManage extends Component {
 			catalogueType,
 			searchVal,
 			catalogueList,
-			tableData
+			tableData,
+			page,
+			total
 		} = this.state;
 		let articleTypeLists = JSON.parse(JSON.stringify(articleTypeList));
 		articleTypeLists.unshift({ key: 'all', name: '文章类型', id: 0 });
@@ -192,7 +204,7 @@ class AdminHomeArticleManage extends Component {
 						<Input placeholder="请输入标题关键词" onChange={this.handleChange} value={searchVal} />
 					</Col>
 					<Col>
-						<Button onClick={this.handleSearch} icon="search" className={'searchBtn'}>
+						<Button onClick={() => this.handleSearch()} icon="search" className={'searchBtn'}>
 							搜索
     					</Button>
 					</Col>
@@ -207,9 +219,9 @@ class AdminHomeArticleManage extends Component {
 										<Col>
 											<span className={'articleTypeName'}>{this.getArticleTypeName(item.articleType)}</span>
 											<span className={'updateTime'}>{formatMomentToString(item.updateTime, 'YYYY年MM月DD日 HH:mm:ss')}</span>
-											<span className={'icon'}><Icon type="message" /></span>
-											<span className={'icon'}><Icon type="eye" /></span>
-											<span className={'icon'}><Icon type="heart" /></span>
+											<span className={'icon'}><Icon type="message" />{item.comments}</span>
+											<span className={'icon'}><Icon type="eye" />{item.views}</span>
+											<span className={'icon'}><Icon type="heart" />{item.likes}</span>
 										</Col>
 										<Col>
 											<span className={'lookView linkColor'}>查看</span>
@@ -220,6 +232,7 @@ class AdminHomeArticleManage extends Component {
 							))
 						}
 					</ul>
+					<Pagination current={page} onChange={this.onChange} total={total} />
 				</div>
 			</div>
 		);

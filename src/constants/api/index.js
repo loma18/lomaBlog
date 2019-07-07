@@ -16,6 +16,8 @@ export const DELETE_CATALOGUE = '/catalogue/delete'; // 删除个人分类
 
 export const GET_FILTER_LIST = '/blog/getFilterList'; // 根据条件筛选获取博客列表
 
+export const GET_ARTICLE_BY_ID = '/blog/getArticle'; // 根据id获取博客
+
 /**
  * 后台接口
  */
