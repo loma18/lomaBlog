@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { Row, Col, Calendar, Select, Radio, Menu } from 'antd';
 import Swiper from 'components/Home/swiper';
+import { fireGetRequest, firePostRequest } from 'service/app';
+import {
+	GET_FILTER_LIST
+} from 'constants/api';
+import { openNotification, showSuccessMsg, GetQueryString, getPathnameByIndex } from 'utils';
 
 class HomeIndex extends Component {
 	constructor(props) {
@@ -11,8 +16,9 @@ class HomeIndex extends Component {
 	}
 
     fetchData = () => {
-    	let { dataList } = this.state;
-    	fireGetRequest(GET_FILTER_LIST, { ...params }).then((res) => {
+		let { dataList } = this.state;
+		let id = GetQueryString('articleId');
+    	fireGetRequest(GET_FILTER_LIST, { id }).then((res) => {
 			if (res.code === 200) {
 				this.setState({ tableData: res.data });
 			} else {

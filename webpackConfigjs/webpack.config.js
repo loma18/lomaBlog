@@ -13,6 +13,11 @@ module.exports = {
         filename: 'bundle.[hash].js',
         publicPath: '/'
     },
+    performance: { //控制性能提示
+        maxEntrypointSize: 100000000, //默认250000 bytes
+        maxAssetSize: 100000000, //默认250000 bytes
+        hints: 'error' //错误级别：warning/error
+    },
     module: {
         rules: [
             {
@@ -43,7 +48,11 @@ module.exports = {
         contentBase: path.join(__dirname, '../src'),
         compress: true,
         historyApiFallback: true,
-        port: 8080
+        port: 8080,
+        stats: { //打包时构建信息的显示内容及其颜色状态等配置
+            builtAt: true,
+            colors: true
+        }
     },
     resolve: {
         //  配置别名，在项目中可缩减引用路径
