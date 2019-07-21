@@ -4,7 +4,7 @@ export const ROUTE_PATH = {
 	original: '/original',
 	reprint: '/reprint',
 	code: '/code',
-	homeDetail: 'home/detail/:id',
+	homeDetail: '/home/detail',
 	whisper: '/whisper'
 };
 

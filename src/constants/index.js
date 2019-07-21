@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 export const breadcrumbItem = {
 	original: { value: 'original', title: '原创' },
 	reprint: { value: 'reprint', title: '转载' },
@@ -17,3 +19,17 @@ export const articleTypeList = [
 	{ key: 'reprint', name: '转载', id: 2 },
 	{ key: 'code', name: '代码', id: 3 }
 ]; // 文章类型
+
+//通用分页设置
+export const hxPaginationSetup = {
+	defaultPageSize: 10,
+	pageSize: 10,
+	showQuickJumper: true,
+	showTotal: (total, range) => {
+		return (
+			<span>
+				总共<span style={{ color: '#15bace' }}>{total}</span>条
+			</span>
+		);
+	}
+};

@@ -114,6 +114,10 @@ class AdminHomeArticleManage extends Component {
 		this.handleSearch(page);
 	};
 
+	handleLook = (id) => {
+		this.props.history.push('/home/detail?articleId=' + id);
+	}
+
 	fetchData = () => {
 		const { current, years, months, articleType, catalogueType, searchVal, page } = this.state;
 		let year = years.replace('年', '');
@@ -224,7 +228,7 @@ class AdminHomeArticleManage extends Component {
 											<span className={'icon'}><Icon type="heart" />{item.likes}</span>
 										</Col>
 										<Col>
-											<span className={'lookView linkColor'}>查看</span>
+											<span className={'lookView linkColor'} onClick={() => this.handleLook(item.aid)}>查看</span>
 											<span className={'delete dangerColor'}>删除</span>
 										</Col>
 									</Row>

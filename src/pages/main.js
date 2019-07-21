@@ -23,41 +23,50 @@ class Main extends Component {
 		};
 	}
 
-    getMenuList = () => {
-    	let pathname = window.location.pathname.split('/');
-    	let list = [
-    		{ title: '首页', key: 'home' },
-    		{ title: '微语', key: 'whisper' }
-    	];
-    	if (pathname[1] == 'admin') {
-    		list = [
-    			{ title: '首页', key: 'admin' },
-    			{ title: '个人中心', key: 'mine' },
-    			{ title: '后台接口', key: 'interface' },
-    			{ title: '其他', key: 'others' }
-    		];
-    	}
-    	return list;
-    }
+	getMenuList = () => {
+		let pathname = window.location.pathname.split('/');
+		let list = [
+			{ title: '首页', key: 'home' },
+			{ title: '微语', key: 'whisper' }
+		];
+		if (pathname[1] == 'admin') {
+			list = [
+				{ title: '首页', key: 'admin' },
+				{ title: '个人中心', key: 'mine' },
+				{ title: '后台接口', key: 'interface' },
+				{ title: '其他', key: 'others' }
+			];
+		}
+		return list;
+	}
 
-    changeStage = (stage) => {
-    	this.setState({ stage });
-    }
+	changeStage = (stage) => {
+		this.setState({ stage });
+	}
 
-    render() {
-    	let menuList = this.getMenuList();
-    	return (<div id={'lomaBlog-main'}>
-    		<div className={'lomaBlog-header'}>
-    			<Header menuList={menuList} changeStage={this.changeStage} />
-    			<LomaBreadcrumb />
-    		</div>
-    		<div className={'lomaBlog-body'}>
-    			<Routers />
-    		</div>
-    		<Footer />
-    		<BackTop />
-    		<LomaAudio />
-    	</div>);
-    }
+	componentDidUpdate() {
+		let path = window.location.pathname.split('/');
+		if (path[1] == 'admin') {
+			changeTheme('dark');
+		} else {
+			changeTheme('light');
+		}
+	}
+
+	render() {
+		let menuList = this.getMenuList();
+		return (<div id={'lomaBlog-main'}>
+			<div className={'lomaBlog-header'}>
+				<Header menuList={menuList} changeStage={this.changeStage} />
+				<LomaBreadcrumb />
+			</div>
+			<div className={'lomaBlog-body'}>
+				<Routers />
+			</div>
+			<Footer />
+			<BackTop />
+			<LomaAudio />
+		</div>);
+	}
 }
 export default Main;

@@ -6,7 +6,7 @@ const alias = require('./alias');
 
 module.exports = {
     mode: 'development',
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     entry: './src/app.js',
     output: {
         path: path.resolve(__dirname, '../build'),
