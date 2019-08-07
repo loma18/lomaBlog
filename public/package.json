@@ -7,6 +7,7 @@
     "start": "webpack-dev-server --config ./webpackConfigjs/webpack.config.js --inline --colors --content-base ./build",
     "dev": "webpack --config ./webpackConfigjs/webpack.config.js --progress --colors",
     "build": "webpack --watch --progress --config ./webpackConfigjs/webpack.config.js --hot --inline --colors",
+    "build:dll": "webpack --config ./webpackConfigjs/webpack.dll.config.js",
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint -c .eslintrc src/**/*.js --fix",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less --fix"

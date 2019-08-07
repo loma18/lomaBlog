@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Form, Input, Spin, Tooltip, Checkbox, Select, Button } from 'antd';
+import { Row, Col, Icon, Form, Input, Spin, Tooltip, Checkbox, Select, Button, message } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import { fireGetRequest, firePostRequest } from 'service/app';
 import {
@@ -89,9 +89,13 @@ class AdminHomeEdit extends Component {
 
 	// 发布博客
 	handlePublish = (isPublish = true) => {
-		const { article, resData } = this.state;
+		const { article, resData, catalogue } = this.state;
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (err) {
+				return;
+			}
+			if (!catalogue || catalogue.length === 0) {
+				message.info('请至少勾选一个个人分类');
 				return;
 			}
 			values.id = resData.id;

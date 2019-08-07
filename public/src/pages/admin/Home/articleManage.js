@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Menu, Select, Input, Button, Pagination } from 'antd';
+import { Row, Col, Icon, Menu, Select, Input, Button, Pagination, Popconfirm } from 'antd';
+import { inject, observer } from 'mobx-react';
 import { Router, withRouter, Link } from 'react-router-dom';
 import DateSelect from 'components/Admin/DateSelect';
 import { fireGetRequest, firePostRequest } from 'service/app';
 import {
 	GET_CATALOGUE_LIST,
-	GET_FILTER_LIST
+	GET_FILTER_LIST,
+	DELETE_BLOG
 } from 'constants/api';
 import { articleTypeList } from 'constants';
 import { openNotification, showSuccessMsg, getPathnameByIndex, GetQueryString, formatMomentToString } from 'utils';
@@ -14,6 +16,9 @@ const { Option } = Select;
 const Search = Input.Search;
 
 @withRouter
+
+@inject('appStore')
+@observer
 class AdminHomeArticleManage extends Component {
 	constructor(props) {
 		super(props);
@@ -23,18 +28,18 @@ class AdminHomeArticleManage extends Component {
 		let articleType = GetQueryString('articleType');
 		let catalogueType = GetQueryString('catalogueType');
 		let searchVal = GetQueryString('searchVal');
-		let currentDate = new Date();
-		let currentYear = currentDate.getFullYear();
-		let currentMonth = currentDate.getMonth() + 1;
+		// let currentDate = new Date();
+		// let currentYear = currentDate.getFullYear();
+		// let currentMonth = currentDate.getMonth() + 1;
 		let page = GetQueryString('page');
-		years = years ? years : currentYear;
-		months = months ? months : currentMonth;
+		// years = years ? years : currentYear;
+		// months = months ? months : currentMonth;
 		searchVal = searchVal ? decodeURI(searchVal) : '';
 		this.state = {
 			tableData: [],
 			current: key || 'all',
-			years: years + '年',
-			months: months + '月',
+			years: '请选择年份', //years + '年',
+			months: '请选择月份', //months + '月',
 			articleType: articleType || 'all',
 			catalogueType: catalogueType ? (catalogueType == 'all' ? catalogueType : Number(catalogueType)) : 'all',
 			catalogueList: [],
@@ -114,14 +119,29 @@ class AdminHomeArticleManage extends Component {
 		this.handleSearch(page);
 	};
 
+	//查看
 	handleLook = (id) => {
-		this.props.history.push('/home/detail?articleId=' + id);
+		window.location.href = '/home/detail?articleId=' + id;
+		// this.props.history.push('/home/detail?articleId=' + id);
+		// this.props.appStore.setBackStage(false);
+	}
+
+	//删除
+	handleDelete = (id) => {
+		fireGetRequest(DELETE_BLOG, { id }).then(res => {
+			if (res.code === 200) {
+				showSuccessMsg('删除成功');
+				this.fetchData();
+			} else {
+				openNotification('error', '删除失败', res.msg);
+			}
+		}).catch(err => console.log(err))
 	}
 
 	fetchData = () => {
 		const { current, years, months, articleType, catalogueType, searchVal, page } = this.state;
-		let year = years.replace('年', '');
-		let month = months.replace('月', '');
+		let year = years.replace('请选择年份', '').replace('年', '');
+		let month = months.replace('请选择月份', '').replace('月', '');
 		let params = { status: 0 };
 		if (current == 'all') {
 			params = { status: 1, year, month, articleType, catalogueType, searchVal, page };
@@ -229,14 +249,22 @@ class AdminHomeArticleManage extends Component {
 										</Col>
 										<Col>
 											<span className={'lookView linkColor'} onClick={() => this.handleLook(item.aid)}>查看</span>
-											<span className={'delete dangerColor'}>删除</span>
+
+											<Popconfirm
+												title="是否确认删除?"
+												onConfirm={() => this.handleDelete(item.aid)}
+												okText="是"
+												cancelText="否"
+											>
+												<span className={'delete dangerColor'}>删除</span>
+											</Popconfirm>
 										</Col>
 									</Row>
 								</li>
 							))
 						}
 					</ul>
-					<Pagination current={page} onChange={this.onChange} total={total} />
+					{tableData.length > 0 && <Pagination current={page} onChange={this.onChange} total={total} />}
 				</div>
 			</div>
 		);

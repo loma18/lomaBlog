@@ -169,6 +169,25 @@ router.get("/blog/getArticle", (req, res) => {
         if (err) throw err;
         res.json({ code: 200, data: result[0], msg: "success" });
     })
+    sql = "UPDATE lomaBlog_article SET views=views+1 WHERE aid=?"
+    sqlConnect.query(sql, [obj.id, obj.id], (err, result, fields) => {
+        if (err) throw err;
+        if (result.affectedRows > 0) {
+            // console.log(result);
+        }
+    })
+});
+
+// /**通过id删除博客 */
+router.get("/blog/deleteArticle", (req, res) => {
+    let obj = req.query;
+    let sql = "DELETE FROM lomaBlog_article WHERE aid=?";
+    sqlConnect.query(sql, [obj.id], (err, result, fields) => {
+        if (err) throw err;
+        if (result.affectedRows > 0) {
+            res.json({ code: 200, msg: "success" });
+        }
+    })
 });
 
 module.exports = router;

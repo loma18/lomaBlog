@@ -3,10 +3,13 @@ import { action, observable } from 'mobx';
 class AppStore {
 	@observable
 	loading;
+	@observable
+	isBackStage;
 
 	constructor() {
 		this.loading = false;
 		this.isLogined = false;
+		this.isBackStage = window.localStorage.getItem('isBackStage') || window.location.pathname.split('/')[1] == 'admin'
 	}
 
 	@action.bound
@@ -25,6 +28,12 @@ class AppStore {
 	hideLoading = () => {
 		this.loading = false;
 	};
+
+	@action
+	setBackStage = (isBackStage) => {
+		this.isBackStage = isBackStage;
+		window.localStorage.setItem('isBackStage', isBackStage);
+	}
 }
 
 const appStore = new AppStore();

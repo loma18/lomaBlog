@@ -19,7 +19,8 @@ class Main extends Component {
 			changeTheme('light');
 		}
 		this.state = {
-			stage: isAdmin ? 'backStage' : 'frontStage' // 前后台是否发生切换
+			stage: isAdmin ? 'backStage' : 'frontStage', // 前后台是否发生切换
+			handleSearch: ''
 		};
 	}
 
@@ -53,15 +54,19 @@ class Main extends Component {
 		}
 	}
 
+	bindChild = (_this) => {
+		this.setState({ handleSearch: _this.fetchData });
+	}
+
 	render() {
 		let menuList = this.getMenuList();
 		return (<div id={'lomaBlog-main'}>
 			<div className={'lomaBlog-header'}>
-				<Header menuList={menuList} changeStage={this.changeStage} />
+				<Header menuList={menuList} changeStage={this.changeStage} handleSearch={this.state.handleSearch} />
 				<LomaBreadcrumb />
 			</div>
 			<div className={'lomaBlog-body'}>
-				<Routers />
+				<Routers bindChild={this.bindChild} />
 			</div>
 			<Footer />
 			<BackTop />

@@ -2,7 +2,19 @@ let webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// 引入 DllReferencePlugin
+const DllReferencePlugin = require('webpack/lib/DllReferencePlugin');
 const alias = require('./alias');
+
+const dllArr = ['react'];
+// const dllRef = dllArr.map(item => {
+//     return (
+//         new DllReferencePlugin({
+//             context: path.join(__dirname,'../'),
+//             manifest: require(`./build/${item}.manifest.json`) //)
+//         })
+//     )
+// });
 
 module.exports = {
     mode: 'development',
@@ -64,6 +76,7 @@ module.exports = {
             template: './src/index.html',
             favicon: path.join(__dirname, '../src/assets/panelBg.gif')
         }),
-        new CleanWebpackPlugin()
+        // ...dllRef,
+        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*', '!*.dll.js', '!*.manifest.json'], })
     ]
 };

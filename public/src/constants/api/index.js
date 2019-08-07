@@ -8,6 +8,8 @@ export const USER_LOGIN = '/login';
  */
 export const SAVE_BLOG = '/blog/save'; // 保存修改博客
 
+export const DELETE_BLOG = '/blog/deleteArticle'; // 删除博客
+
 export const GET_CATALOGUE_LIST = '/getCatalogueList'; // 获取个人分类
 
 export const SAVE_CATALOGUE = '/catalogue/save'; // 保存修改个人分类

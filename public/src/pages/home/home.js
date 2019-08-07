@@ -32,22 +32,35 @@ class HomeIndex extends Component {
 		});
 	};
 
-	fetchData = () => {
+	fetchData = (searchVal = '') => {
 		const { pagination } = this.state;
-		let page = pagination.current ? pagination.current : 1;
-		fireGetRequest(GET_FILTER_LIST, { page }).then((res) => {
+		let page = pagination.current ? pagination.current : 1,
+			pathname = window.location.pathname.split('/')[1];
+		if (pathname == 'home') {
+			pathname = '';
+		}
+		if (searchVal) {
+			page = 1;
+		}
+		fireGetRequest(GET_FILTER_LIST, { page, articleType: pathname, searchVal }).then((res) => {
 			if (res.code === 200) {
 				pagination.total = res.total;
 				this.setState({ dataList: res.data, pagination });
 			} else {
 				openNotification('error', '获取博客列表失败', res.msg);
 			}
-		})
-			.catch((err) => console.log(err));
+		}).catch((err) => console.log(err));
+	}
+
+	componentWillReceiveProps() {
+		this.fetchData();
 	}
 
 	componentDidMount() {
 		this.fetchData();
+		if (typeof this.props.bindChild == 'function') {
+			this.props.bindChild(this);
+		}
 	}
 
 
@@ -55,7 +68,7 @@ class HomeIndex extends Component {
 		const { dataList, pagination } = this.state;
 		return (
 			<div className={'homeIndex'}>
-				<Swiper />
+				{/* <Swiper /> */}
 				<div className={'home-body'}>
 					<ul>
 						{
@@ -69,7 +82,6 @@ class HomeIndex extends Component {
 												<span>{formatMomentToString(item.createAt, 'YYYY年MM月DD日 HH:mm:ss')}</span>
 												<span><Icon type="eye" />{item.views}</span>
 												<span><Icon type="message" />{item.comments}</span>
-												<span><Icon type="heart" />{item.likes}</span>
 											</div>
 										</Col>
 									</Row>
@@ -77,7 +89,7 @@ class HomeIndex extends Component {
 							))
 						}
 					</ul>
-					<Pagination {...pagination} onChange={this.handleChange} />
+					{dataList.length > 0 && <Pagination {...pagination} onChange={this.handleChange} />}
 				</div>
 			</div>
 		);

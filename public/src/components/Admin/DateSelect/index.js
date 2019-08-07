@@ -13,6 +13,10 @@ export default (params = {}) => {
 	const getItems = (type) => {
 		let resultList = [];
 		if (type == 'years') {
+			resultList.push({
+				id: 0,
+				name: '请选择年份'
+			})
 			let currentYear = new Date().getFullYear();
 			let num = 3;
 			for (let i = 0; i < num; i++) {
@@ -24,6 +28,7 @@ export default (params = {}) => {
 			}
 		} else {
 			resultList = [
+				{ id: 0, name: '请选择月份' },
 				{ id: 1, name: '1月' },
 				{ id: 2, name: '2月' },
 				{ id: 3, name: '3月' },

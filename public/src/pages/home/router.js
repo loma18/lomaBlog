@@ -6,13 +6,13 @@ import Home from 'pages/home/home';
 import AticleList from 'pages/home/articleList';
 import HomeDetail from 'pages/home/detail';
 
-export default () => (
+export default (props) => (
 	<Switch>
-		<Route exact path="/" component={Home} />
-		<Route exact path={ROUTE_PATH.home} component={Home} />
-		<Route path={ROUTE_PATH.original} component={AticleList} />
-		<Route path={ROUTE_PATH.reprint} component={AticleList} />
-		<Route path={ROUTE_PATH.code} component={AticleList} />
+		<Route exact path="/" render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />
+		<Route exact path={ROUTE_PATH.home} render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />}/>
+		<Route path={ROUTE_PATH.original} render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />
+		<Route path={ROUTE_PATH.reprint} render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />
+		<Route path={ROUTE_PATH.code} render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />
 		<Route path={ROUTE_PATH.homeDetail} component={HomeDetail} />
 		{/* <Redirect from={props.location} to={'/'} /> */}
 	</Switch>
