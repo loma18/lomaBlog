@@ -131,11 +131,17 @@ router.post("/blog/save", (req, res) => {
 
 // /**获取博客列表 */
 router.get("/blog/getFilterList", (req, res) => {
-    let obj = req.query;
-    let sql = "SELECT * FROM lomaBlog_article WHERE " + (obj.year ? "year(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
-        (obj.month ? "month(FROM_UNIXTIME(createAt/1000))=? AND " : '') + (obj.articleType && obj.articleType != 'all' ? "articleType=? AND " : '') +
-        (obj.searchVal ? "title LIKE '%" + obj.searchVal + "%' AND " : '') + "aid IN (SELECT aid FROM lomaBlog_article_catalogue " +
-        (obj.catalogueType && obj.catalogueType != 'all' ? "WHERE cid = ?)" : ')') + (obj.page ? " limit " + (obj.page - 1) * 10 + ",20" : '');
+    let obj = req.query;//
+    let sql = "SELECT t1.aid,t1.title,t1.content,t1.tags,t1.status,t1.createAt,t1.updateAt,t1.articleType,t1.views,count(t2.id) as comments" +
+        " FROM lomaBlog_article as t1 left join lomaBlog_article_comment as t2 on t1.aid = t2.aid " +
+        " WHERE " +
+        (obj.year ? "year(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
+        (obj.month ? "month(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
+        (obj.articleType && obj.articleType != 'all' ? "articleType=? AND " : '') +
+        (obj.searchVal ? "title LIKE '%" + obj.searchVal + "%' AND " : '') +
+        "t1.aid IN (SELECT aid FROM lomaBlog_article_catalogue " +
+        (obj.catalogueType && obj.catalogueType != 'all' ? "WHERE cid = ?)" : ')') +
+        ' group by t1.aid ' + (obj.page ? " limit " + (obj.page - 1) * 10 + ",20" : '');
     let params = [];
     if (obj.year) {
         params.push(obj.year);

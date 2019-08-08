@@ -77,6 +77,6 @@ module.exports = {
             favicon: path.join(__dirname, '../src/assets/panelBg.gif')
         }),
         // ...dllRef,
-        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*', '!*.dll.js', '!*.manifest.json'], })
+        new CleanWebpackPlugin()
     ]
 };

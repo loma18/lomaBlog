@@ -2,11 +2,13 @@ const http = require("http");
 const express = require("express");
 const path = require('path');
 const router = require("./router");
-const home = require('./router/admin/home');
+const adminHome = require('./router/admin/home');
+const home = require('./router/home');
 const interfaces = require('./router/admin/interface');
 
 let app = express();
 app.use(router);
+app.use(adminHome);
 app.use(home);
 app.use(interfaces);
 app.use(express.static(path.join(__dirname, './public/build')));

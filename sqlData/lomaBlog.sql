@@ -47,12 +47,14 @@ views       INT NOT NULL DEFAULT 0
 --创建文章评论管理表
 CREATE TABLE lomaBlog_article_comment(
 id          INT PRIMARY KEY AUTO_INCREMENT,
-aid         INT NOT NULL DEFAULT 0,
+aid         INT NOT NULL,
 username    VARCHAR(20) NOT NULL DEFAULT "",
-wechat      VARCHAR(50) NOT NULL DEFAULT "", 
-email       VARCHAR(50) NOT NULL DEFAULT "", 
+QQ          VARCHAR(50), 
+email       VARCHAR(50), 
 content     VARCHAR(1000) NOT NULL DEFAULT "", 
-createAt    TIMESTAMP NOT NULL DEFAULT NOW()
+createAt    bigint,
+parentId    INT,
+parentUsername  VARCHAR(20)
 );
 
 

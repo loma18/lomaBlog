@@ -20,6 +20,10 @@ export const GET_FILTER_LIST = '/blog/getFilterList'; // 根据条件筛选获�
 
 export const GET_ARTICLE_BY_ID = '/blog/getArticle'; // 根据id获取博客
 
+export const CREATE_ARTICLE_COMMENT = '/blog/createArticleComment'; // 新增博客评论
+
+export const GET_ARTICLE_COMMENT_BY_ID = '/blog/getArticleComment'; // 根据id获取博客评论列表
+
 /**
  * 后台接口
  */
