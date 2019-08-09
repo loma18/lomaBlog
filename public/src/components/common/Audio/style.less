@@ -2,6 +2,15 @@
 
 .change(@dangerColor,@lineColor) {
     #lomaBlog-audio {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100vh;
+		width: 0;
+		z-index: 9;
+		&.containerUnfold{
+			width: 100vw;
+		}
         .operatePanel {
             position: fixed;
             left: -540px;
@@ -17,9 +26,43 @@
                 bottom: 100px;
                 left: 0;
                 width: 540px;
-                height: 500px;
+                height: 350px;
                 border: 1px solid @lineColor;
-                background: #4c4545;
+				background: #4c4545;
+				ul{
+					height: 350px;
+					overflow: auto;
+					padding: 10px 0;
+				}
+				ul li{
+					padding: 0 10px;
+					height: 25px;
+					line-height: 25px;
+					cursor: pointer;
+					&:hover{
+						background: @mainColor1;
+					}
+					span{
+						display: inline-block;
+						line-height: 25px;
+						padding: 0 2px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						&:first-child{
+							width: 30px;
+						}
+						&:nth-child(2){
+							width: 200px;
+						}
+						&:nth-child(3){
+							width: 80px;
+						}
+						&:nth-child(2){
+							width: 200px;
+						}
+					}
+				}
             }
             &.unfold {
                 left: 0;

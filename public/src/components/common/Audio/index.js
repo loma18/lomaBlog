@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Row, Col, Icon, Progress, Slider } from 'antd';
 import { fireGetRequest } from 'service/app';
 import {
-	GET_HOT_SONGS
+	GET_HOT_SONGS,
+	GET_SONGS
 } from 'constants/api';
 import './style.less';
 
@@ -11,6 +12,8 @@ class Audio extends Component {
 		super(props);
 		this.state = {
 			songs: [],
+			songHash: '',
+			songData: '',
 			fold: true, // 播放器是否折叠
 			play: false, // 播放/暂停
 			stop: true, // 停止播放
@@ -86,7 +89,9 @@ class Audio extends Component {
 		};
 
 		Visualizer.prototype.draw = function () {
+			// console.log('paused', this.audio.paused);
 			if (!this.audio.paused) {
+				// console.log('dataArray', this.dataArray);
 				// update the data
 				this.analyser.getByteFrequencyData(this.dataArray);
 				// draw in the canvas
@@ -117,6 +122,9 @@ class Audio extends Component {
 			this.audioNode.src = require('assets/1.mp3');
 		} else if (type == 'next') {
 			this.audioNode.src = require('assets/2.mp3');
+		} else {
+			// this.audioNode.src = this.state.songData.url;
+			this.audioNode.src = this.state.songData.url;
 		}
 		this.setState({ play: true }, () => {
 			this.audioNode.play();
@@ -159,6 +167,21 @@ class Audio extends Component {
 		}).catch(err => console.log(err))
 	}
 
+	//获取具体哪首歌播放地址
+	fetchSong = (songHash) => {
+		this.setState({ songHash }, () => {
+			fireGetRequest(GET_SONGS, { songHash }).then(res => {
+				if (res && res.url) {
+					this.setState({ songData: res }, () => {
+						this.handleStep();
+					})
+				} else {
+					this.setState({ songUrl: '' })
+				}
+			}).catch(err => console.log(err))
+		})
+	}
+
 	// 停止播放
 	handleStop = () => {
 		let canvasContext = this.canvasNode.getContext('2d');
@@ -193,9 +216,9 @@ class Audio extends Component {
 				this.handlePlay();
 			}
 		};
-		window.onscroll = (e) => {
-			this.setState({ fold: true });
-		};
+		// window.onscroll = (e) => {
+		// 	this.setState({ fold: true });
+		// };
 	}
 
 	componentDidMount() {
@@ -206,19 +229,29 @@ class Audio extends Component {
 	}
 
 	render() {
-		const { play, fold, volume, muted, stop } = this.state;
-		return (<div id={'lomaBlog-audio'}>
+		const { play, fold, volume, muted, stop, songs, songData } = this.state;
+		let fileInfo = [];
+		return (<div id={'lomaBlog-audio'} className={fold ? 'containerFold' : 'containerUnfold'}>
 			<div className={'operatePanel ' + (fold ? '' : 'unfold')}>
 				<div className={'songPanel'}>
 					<ul>
 						<li>
-							<p>
-								<span>序号</span>
-								<span>歌名</span>
-								<span>时长</span>
-								<span>歌手</span>
-							</p>
+							<span>序号</span>
+							<span>歌名</span>
+							<span>时长</span>
+							<span>歌手</span>
 						</li>
+						{songs.map((item, key) => {
+							fileInfo = item.filename.split('-');
+							return (
+								<li key={key} onClick={() => this.fetchSong(item.hash)}>
+									<span>{key + 1}</span>
+									<span>{fileInfo[1]}</span>
+									<span>{item.first}</span>
+									<span>{fileInfo[0]}</span>
+								</li>
+							)
+						})}
 					</ul>
 				</div>
 				<Row type="flex" justify="space-between">
@@ -277,7 +310,7 @@ class Audio extends Component {
 			<canvas id="canvasContainer" width="0" height="40">
 				您的浏览器暂不支持canvas，建议切换成谷歌浏览器
     		</canvas>
-			<audio id="musicEngine" src={require('assets/1.mp3')}>
+			<audio id="musicEngine" crossOrigin="anonymous" src={require('assets/1.mp3')} >
 				您的浏览器暂不支持audio，建议切换成谷歌浏览器
     		</audio>
 		</div>);
