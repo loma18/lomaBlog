@@ -1,4 +1,5 @@
 let express = require("express");
+const axios = require('axios');
 let router = express.Router();
 const qs = require("querystring");
 const sqlConnect = require('../../sqlConnect');
@@ -43,6 +44,24 @@ router.get("/blog/getArticleComment", (req, res) => {
             }
             res.json({ code: 200, msg: "success", data: arr });
         }
+    })
+});
+
+//获取博客文章各自条数
+router.get("/blog/getArticleTypeCount", (req, res) => {
+    let obj = req.query,
+        sql = "SELECT count(*) as total,articleType FROM lomaBlog_article group by articleType";
+    sqlConnect.query(sql, [], (err, result, fields) => {
+        if (err) throw err;
+        res.json({ code: 200, msg: "success", data: result });
+    })
+});
+
+//获取酷狗歌曲
+router.get("/kugou/getSongs", (req, res) => {
+    let obj = req.query;
+    axios.get('http://m.kugou.com/?json=true').then(response => {
+        res.json(response.data);
     })
 });
 

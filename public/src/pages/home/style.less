@@ -16,6 +16,40 @@
         .calendar {
             margin-bottom: 2rem;
         }
+
+        .article {
+            >h3 {
+                margin: 20px 0 10px;
+            }
+            .ant-menu {
+                background: transparent;
+            }
+        }
+
+        .hot-article {
+            >h3 {
+                margin: 20px 0 10px;
+            }
+
+            .hot-item {
+                height: 50px;
+                border-bottom: 1px dashed @lineColor;
+                margin-left: 20px;
+
+                p {
+                    font-size: @sfont;
+
+                    b {
+                        display: inline-block;
+                        padding: 0 4px;
+                        border-radius: 4px;
+                        background: @mainColor1;
+                        margin-right: 10px;
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -41,9 +75,26 @@
 
             .articleContainer {
                 flex: 1;
+
+                p {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                }
             }
 
             .info {
+                b {
+                    display: inline-block;
+                    padding: 0 4px;
+                    border-radius: 4px;
+                    background: @mainColor1;
+                    margin-right: 10px;
+                    font-weight: normal;
+                }
+
                 span {
                     display: inline-block;
                     margin-right: 10px;
@@ -58,6 +109,9 @@
 }
 
 .homeDetail {
+    >div {
+        min-height: 500px;
+    }
     .comment-form {
         margin-top: 100px;
         border-top: 1px dashed @lineColor;

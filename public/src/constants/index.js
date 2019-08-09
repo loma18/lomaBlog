@@ -20,6 +20,12 @@ export const articleTypeList = [
 	{ key: 'code', name: '代码', id: 3 }
 ]; // 文章类型
 
+export const articleTypeObj = {
+	original: { key: 'original', name: '原创', id: 1 },
+	reprint: { key: 'reprint', name: '转载', id: 2 },
+	code: { key: 'code', name: '代码', id: 3 }
+}
+
 //通用分页设置
 export const hxPaginationSetup = {
 	defaultPageSize: 10,
@@ -28,7 +34,7 @@ export const hxPaginationSetup = {
 	showTotal: (total, range) => {
 		return (
 			<span>
-				总共<span style={{ color: '#15bace' }}>{total}</span>条
+				总共<span style={{ color: '#1890ff' }}>{total}</span>条
 			</span>
 		);
 	}

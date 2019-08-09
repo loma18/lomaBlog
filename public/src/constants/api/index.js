@@ -24,6 +24,8 @@ export const CREATE_ARTICLE_COMMENT = '/blog/createArticleComment'; // 新增博
 
 export const GET_ARTICLE_COMMENT_BY_ID = '/blog/getArticleComment'; // 根据id获取博客评论列表
 
+export const GET_ARTICLE_TYPE_COUNT = '/blog/getArticleTypeCount'; // 获取文章分类各自数量
+
 /**
  * 后台接口
  */
@@ -40,5 +42,11 @@ export const GET_INTERFACE_LIST = '/interface/getList'; // 获取模块及接口
 export const GET_INTERFACE_DETAILE_BY_ID = '/interface/getDetailById'; // 获取接口详情
 
 export const DELETE_INTERFACE_BY_ID = '/interface/delete'; // 删除接口
+
+/**
+ * 获取酷狗音乐列表
+ * */
+// export const GET_HOT_SONGS = 'http://m.kugou.com/';
+export const GET_HOT_SONGS = '/kugou/getSongs';
 
 

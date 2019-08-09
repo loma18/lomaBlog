@@ -4,7 +4,8 @@ import { Router, withRouter, Link } from 'react-router-dom';
 import { fireGetRequest, firePostRequest } from 'service/app';
 import {
 	SAVE_BLOG,
-	GET_CATALOGUE_LIST
+	GET_CATALOGUE_LIST,
+	GET_ARTICLE_BY_ID
 } from 'constants/api';
 import { openNotification, showSuccessMsg, GetQueryString } from 'utils';
 import LomaBlogTag from 'components/Admin/LomaBlogTag';
@@ -98,8 +99,8 @@ class AdminHomeEdit extends Component {
 				message.info('请至少勾选一个个人分类');
 				return;
 			}
-			values.id = resData.id;
-			values.status = resData.status != undefined ? resData.status : (isPublish ? 1 : 0);
+			values.id = resData.aid;
+			values.status = resData.status != undefined && resData.status != 0 ? resData.status : (isPublish ? 1 : 0);
 			values.catalogue = this.getTransData();
 			values.article = article;
 			values.content = values.content.toHTML();
@@ -115,11 +116,6 @@ class AdminHomeEdit extends Component {
 		});
 	}
 
-	// 存草稿
-	saveDraft = () => {
-
-	}
-
 	// 获取个人分类列表
 	getCatalogueList = () => {
 		let compareList = [];
@@ -131,7 +127,9 @@ class AdminHomeEdit extends Component {
 					compareList.push(item.name);
 					return item;
 				});
-				this.setState({ catalogueList: res.data, compareList });
+				this.setState({ catalogueList: res.data, compareList }, () => {
+					this.fetchData();
+				});
 			} else {
 				openNotification('error', '获取个人分类列表失败', res.message);
 			}
@@ -139,17 +137,46 @@ class AdminHomeEdit extends Component {
 			.catch((err) => console.log(err));
 	}
 
+	getCatalogue = () => {
+		const { resData, catalogueList } = this.state;
+		let cid = resData.cid,
+			catalogue = [],
+			article = [];
+		if (!cid) {
+			return;
+		}
+		catalogue = cid.map(item => {
+			for (let i = 0; i < catalogueList.length; i++) {
+				if (item == catalogueList[i].id) {
+					return catalogueList[i].name;
+				}
+			}
+		})
+		if (resData.tags) {
+			article = resData.tags.split(',');
+		}
+		this.setState({ catalogue, hasSelCatalogue: catalogue, article });
+	}
+
 	fetchData = () => {
 		let articleId = GetQueryString('articleId');
-		this.getCatalogueList();
 		if (!articleId) {
 			return;
 		}
-		this.editorInstance.setValue(BraftEditor.createEditorState('内容'));
+		fireGetRequest(GET_ARTICLE_BY_ID, { id: articleId }).then(res => {
+			if (res.code === 200) {
+				this.setState({ resData: res.data }, () => {
+					this.getCatalogue();
+				});
+				this.editorInstance.setValue(BraftEditor.createEditorState(res.data.content));
+			} else {
+				openNotification('error', '获取文章失败', res.msg);
+			}
+		}).catch(err => console.log(err))
 	}
 
 	componentDidMount() {
-		this.fetchData();
+		this.getCatalogueList();
 	}
 
 	render() {
@@ -217,10 +244,10 @@ class AdminHomeEdit extends Component {
 						</FormItem>
 						<Row type="flex" gutter={10}>
 							<Col>
-								<Button type="primary" onClick={this.handlePublish}>发布</Button>
+								<Button type="primary" onClick={() => this.handlePublish(true)}>发布</Button>
 							</Col>
 							<Col>
-								<Button onClick={this.saveDraft}>存草稿</Button>
+								<Button onClick={() => this.handlePublish(false)}>存草稿</Button>
 							</Col>
 						</Row>
 					</Form>

@@ -50,8 +50,9 @@ class AdminHomeArticleManage extends Component {
 	}
 
 	handleClick = ({ item, key, keyPath, domEvent }) => {
-		this.setState({ current: key }, () => {
+		this.setState({ current: key, page: 1 }, () => {
 			this.props.history.push('/admin/home/articleManage/' + key);
+			this.fetchData();
 		});
 	}
 
@@ -126,6 +127,11 @@ class AdminHomeArticleManage extends Component {
 		// this.props.appStore.setBackStage(false);
 	}
 
+	//跳转编辑
+	handleEdit = (id) => {
+		this.props.history.push('/admin/home/edit?articleId=' + id);
+	}
+
 	//删除
 	handleDelete = (id) => {
 		fireGetRequest(DELETE_BLOG, { id }).then(res => {
@@ -140,10 +146,11 @@ class AdminHomeArticleManage extends Component {
 
 	fetchData = () => {
 		const { current, years, months, articleType, catalogueType, searchVal, page } = this.state;
-		let year = years.replace('请选择年份', '').replace('年', '');
-		let month = months.replace('请选择月份', '').replace('月', '');
-		let params = { status: 0 };
-		if (current == 'all') {
+		let year = years.replace('请选择年份', '').replace('年', ''),
+			month = months.replace('请选择月份', '').replace('月', ''),
+			params = { status: 0, page },
+			pathname = window.location.pathname.replace(/\/$/, '').split('/');
+		if (current == 'all' || pathname[pathname.length - 1] != 'draft') {
 			params = { status: 1, year, month, articleType, catalogueType, searchVal, page };
 		}
 		fireGetRequest(GET_FILTER_LIST, { ...params }).then((res) => {
@@ -242,13 +249,13 @@ class AdminHomeArticleManage extends Component {
 									<Row type="flex" justify="space-between">
 										<Col>
 											<span className={'articleTypeName'}>{this.getArticleTypeName(item.articleType)}</span>
-											<span className={'updateTime'}>{formatMomentToString(item.updateTime, 'YYYY年MM月DD日 HH:mm:ss')}</span>
-											<span className={'icon'}><Icon type="message" />{item.comments}</span>
-											<span className={'icon'}><Icon type="eye" />{item.views}</span>
-											<span className={'icon'}><Icon type="heart" />{item.likes}</span>
+											<span className={'updateTime'}>{formatMomentToString(item.updateAt, 'YYYY年MM月DD日 HH:mm:ss')}</span>
+											{current == 'all' && <span className={'icon'}><Icon type="message" />{item.comments}</span>}
+											{current == 'all' && <span className={'icon'}><Icon type="eye" />{item.views}</span>}
 										</Col>
 										<Col>
 											<span className={'lookView linkColor'} onClick={() => this.handleLook(item.aid)}>查看</span>
+											<span className={'lookView linkColor'} onClick={() => this.handleEdit(item.aid)}>编辑</span>
 
 											<Popconfirm
 												title="是否确认删除?"

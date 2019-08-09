@@ -42,7 +42,7 @@ class HomeIndex extends Component {
 		if (searchVal) {
 			page = 1;
 		}
-		fireGetRequest(GET_FILTER_LIST, { page, articleType: pathname, searchVal }).then((res) => {
+		fireGetRequest(GET_FILTER_LIST, { page, articleType: pathname, searchVal, status: 1 }).then((res) => {
 			if (res.code === 200) {
 				pagination.total = res.total;
 				this.setState({ dataList: res.data, pagination });
@@ -66,9 +66,10 @@ class HomeIndex extends Component {
 
 	render() {
 		const { dataList, pagination } = this.state;
+		let pathname = window.location.pathname.split('/')[1];
 		return (
 			<div className={'homeIndex'}>
-				{/* <Swiper /> */}
+				{(!pathname || pathname == 'home') && <Swiper />}
 				<div className={'home-body'}>
 					<ul>
 						{
@@ -79,6 +80,9 @@ class HomeIndex extends Component {
 											<h3 onClick={() => this.handleClick(item.aid)}>{item.title}</h3>
 											<p dangerouslySetInnerHTML={{ __html: item.content }}></p>
 											<div className={'info'}>
+												{item.tags.split(',').map((tag, key) => {
+													return <b key={key}>{tag}</b>
+												})}
 												<span>{formatMomentToString(item.createAt, 'YYYY年MM月DD日 HH:mm:ss')}</span>
 												<span><Icon type="eye" />{item.views}</span>
 												<span><Icon type="message" />{item.comments}</span>

@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { Row, Col, Calendar, Select, Radio, Menu } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
+import { fireGetRequest } from 'service/app';
+import {
+	GET_FILTER_LIST,
+	GET_ARTICLE_TYPE_COUNT
+} from 'constants/api';
+import { openNotification } from 'utils';
+import { articleTypeObj } from 'constants';
 import Routers from './router';
 import './style.less';
 
@@ -9,6 +16,10 @@ const { Group, Button } = Radio;
 class Home extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			hotArticleList: [],
+			articleList: []
+		}
 	}
 
 	onPanelChange = (date, mode) => {
@@ -97,17 +108,41 @@ class Home extends Component {
 		this.props.history.push('/' + typeKey);
 	}
 
+	fetchData = () => {
+		let p1 = fireGetRequest(GET_FILTER_LIST, { hotArticle: true }),
+			p2 = fireGetRequest(GET_ARTICLE_TYPE_COUNT);
+		Promise.all([p1, p2]).then(res => {
+			if (res[0].code === 200) {
+				this.setState({ hotArticleList: res[0].data });
+			} else {
+				openNotification('error', '获取热门文章列表失败', res.msg);
+			}
+			if (res[1].code === 200) {
+				this.setState({ articleList: res[1].data });
+			} else {
+				openNotification('error', '获取文章分类失败', res.msg);
+			}
+		}).catch((err) => console.log(err));
+		// fireGetRequest(GET_FILTER_LIST, { hotArticle: true }).then((res) => {
+		// 	if (res.code === 200) {
+		// 		this.setState({ hotArticleList: res.data });
+		// 	} else {
+		// 		openNotification('error', '获取热门文章列表失败', res.msg);
+		// 	}
+		// }).catch((err) => console.log(err));
+	}
+
+	componentDidMount() {
+		this.fetchData();
+	}
+
 	render() {
-		let articleList = [
-			{ typeName: '原创', count: 5, typeKey: 'original' },
-			{ typeName: '转载', count: 3, typeKey: 'reprint' },
-			{ typeName: '代码', count: 6, typeKey: 'code' }
-		];
+		const { hotArticleList, articleList } = this.state;
 		return (
 			<div id={'lomaBlog-home'}>
 				<Row type="flex" justify="space-between" gutter={20}>
 					<Col className={'left'}>
-						<Routers bindChild={this.props.bindChild}/>
+						<Routers bindChild={this.props.bindChild} />
 					</Col>
 					<Col className={'right'}>
 						<div className={'calendar'}>
@@ -123,10 +158,10 @@ class Home extends Component {
 							<Menu mode="vertical">
 								{
 									articleList.map((item) => (
-										<Menu.Item key={item.typeKey}>
-											<div onClick={() => this.handleJump(item.typeKey)}>
-												{item.typeName}
-												<span>{item.count}</span>
+										<Menu.Item key={item.articleType}>
+											<div onClick={() => this.handleJump(item.articleType)}>
+												{articleTypeObj[item.articleType].name}
+												<span>({item.total})</span>
 											</div>
 										</Menu.Item>
 									))
@@ -135,7 +170,22 @@ class Home extends Component {
 						</div>
 						<div className={'hot-article'}>
 							<h3>热门文章</h3>
-
+							{hotArticleList.map(item => {
+								return (
+									<div className={'hot-item'} key={item.aid}>
+										<h4><Link to={'/home/detail?articleId=' + item.aid}>{item.title}</Link></h4>
+										<p>
+											标签：{
+												item.tags.split(',').map((tag, key) => {
+													return (
+														<b key={key}>{tag}</b>
+													)
+												})
+											}
+										</p>
+									</div>
+								)
+							})}
 						</div>
 					</Col>
 				</Row>

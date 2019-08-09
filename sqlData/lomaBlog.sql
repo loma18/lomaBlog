@@ -38,8 +38,6 @@ status      INT NOT NULL DEFAULT 0,
 createAt    bigint,
 updateAt    bigint,
 articleType VARCHAR(20),
-likes       INT NOT NULL DEFAULT 0,
-comments    INT NOT NULL DEFAULT 0,
 views       INT NOT NULL DEFAULT 0 
 );
 
