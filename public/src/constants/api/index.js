@@ -47,7 +47,8 @@ export const DELETE_INTERFACE_BY_ID = '/interface/delete'; // 删除接口
  * 获取酷狗音乐列表
  * */
 // export const GET_HOT_SONGS = 'http://m.kugou.com/';
-export const GET_HOT_SONGS = '/kugou/getSongs'; //获取新歌列表
+export const GET_HOT_SONGS = '/kugou'; //获取新歌列表
 
-export const GET_SONGS = '/kugou/getSong'; //获取歌曲
+// export const GET_SONGS = '/kugou/getSong'; //获取歌曲
+export const GET_SONGS = '/kugou/app/i/getSongInfo.php'; //获取歌曲
 

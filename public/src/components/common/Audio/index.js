@@ -5,15 +5,19 @@ import {
 	GET_HOT_SONGS,
 	GET_SONGS
 } from 'constants/api';
+import { getMinute } from 'utils';
 import './style.less';
 
 class Audio extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			songs: [],
-			songHash: '',
-			songData: '',
+			songs: [], //播放列表
+			songHash: '', //当前播放歌曲hash
+			songData: '', //当前播放歌曲信息
+			selSongKey: '', //当前播放歌曲序号
+			currentTime: 0, //当前播放歌曲当前播放时长
+			playMode: 'loop', //当前播放模式 loop:循环播放 random:随机播放
 			fold: true, // 播放器是否折叠
 			play: false, // 播放/暂停
 			stop: true, // 停止播放
@@ -22,7 +26,7 @@ class Audio extends Component {
 		};
 	}
 
-	initData = () => {
+	initData = (_this) => {
 		function Visualizer(audio, canvas) {
 			// set up the hooks
 			this.canvas = canvas;
@@ -89,7 +93,14 @@ class Audio extends Component {
 		};
 
 		Visualizer.prototype.draw = function () {
-			// console.log('paused', this.audio.paused);
+			_this.setState({ currentTime: this.audio.currentTime }, () => {
+				// if (this.audio.ended) {
+				// 	console.log('ended');
+				// 	_this.handleStep('next');
+				// 	return;
+				// }
+			})
+
 			if (!this.audio.paused) {
 				// console.log('dataArray', this.dataArray);
 				// update the data
@@ -117,28 +128,44 @@ class Audio extends Component {
 	}
 
 	// 点击上一首/下一首
-	handleStep = (type) => {
-		if (type == 'prev') {
-			this.audioNode.src = require('assets/1.mp3');
-		} else if (type == 'next') {
-			this.audioNode.src = require('assets/2.mp3');
-		} else {
-			// this.audioNode.src = this.state.songData.url;
-			this.audioNode.src = this.state.songData.url;
+	handleStep = (type, key = '') => {
+		let { selSongKey, songs } = this.state;
+		if (key === selSongKey) {
+			return;
 		}
-		this.setState({ play: true }, () => {
-			this.audioNode.play();
-			if (!this.visualizer) {
-				this.initData();
-			} else {
-				this.visualizer.draw();
-			}
-		});
+		if (type == 'prev') {
+			selSongKey = !selSongKey && selSongKey !== 0 ? 0 : selSongKey - 1;
+			selSongKey = selSongKey < 0 ? songs.length - 1 : selSongKey;
+		} else if (type == 'next') {
+			selSongKey = !selSongKey && selSongKey !== 0 ? 0 : selSongKey + 1;
+			selSongKey = selSongKey > songs.length - 1 ? 0 : selSongKey;
+
+		} else {
+			selSongKey = key;
+		}
+		this.setState({ selSongKey, songHash: songs[selSongKey].hash, currentTime: 0 }, () => {
+			this.fetchSong();
+		})
+
+	}
+
+	//改变播放模式
+	changePlayMode = () => {
+		let { playMode } = this.state;
+		playMode = playMode == 'loop' ? 'random' : 'loop';
+		this.setState({ playMode });
 	}
 
 	// 播放/暂停
 	handlePlay = () => {
+		const { songs } = this.state;
+		if (!this.visualizer) {
+			this.setState({ selSongKey: 0, songHash: songs[0].hash }, () => {
+				this.fetchSong();
+			})
+		}
 		this.setState({ play: !this.state.play }, () => {
+
 			if (this.state.play) {
 				this.audioNode.play();
 			} else {
@@ -168,18 +195,21 @@ class Audio extends Component {
 	}
 
 	//获取具体哪首歌播放地址
-	fetchSong = (songHash) => {
-		this.setState({ songHash }, () => {
-			fireGetRequest(GET_SONGS, { songHash }).then(res => {
-				if (res && res.url) {
-					this.setState({ songData: res }, () => {
-						this.handleStep();
-					})
-				} else {
-					this.setState({ songUrl: '' })
-				}
-			}).catch(err => console.log(err))
-		})
+	fetchSong = () => {
+		const { songHash } = this.state;
+		console.log('beforefetchdata');
+		fireGetRequest(GET_SONGS, { cmd: 'playInfo', hash: songHash }).then(res => {
+			if (res && res.url) {
+				console.log('fetchdata');
+				this.setState({ songData: res, play: true }, () => {
+					this.audioNode.src = '/source/' + this.state.songData.url;
+					this.audioNode.play();
+				})
+			}
+			// else {
+			// 	this.setState({ songUrl: '' })
+			// }
+		}).catch(err => console.log(err))
 	}
 
 	// 停止播放
@@ -195,20 +225,29 @@ class Audio extends Component {
 	initAudioData = () => {
 		const { volume } = this.state;
 		this.audioNode.volume = volume;
-		this.audioNode.loop = true;
+		// this.audioNode.loop = true;
 	}
 
 	listenEvent = () => {
 
-		this.audioNode.onpause = function () {
-			console.log('pause');
+		this.audioNode.onpause = () => {
+			if (this.audioNode.ended) { //判断是否结束，如果结束，则播放下一首歌
+				if (this.state.playMode == 'random') {
+					const { songs } = this.state;
+					this.setState({ selSongKey: Math.floor(Math.random() * songs.length) }, () => {
+						this.handleStep('next');
+					})
+				} else {
+					this.handleStep('next');
+				}
+			}
 		};
 		this.audioNode.onplay = () => {
 			if (!this.canvasNode.width) {
 				this.canvasNode.width = document.documentElement.offsetWidth;
 			}
 			this.setState({ stop: false });
-			this.initData();
+			this.initData(this);
 		};
 		document.onkeydown = (e) => {
 			if (!this.state.fold && e.keyCode == 32) {
@@ -229,8 +268,21 @@ class Audio extends Component {
 	}
 
 	render() {
-		const { play, fold, volume, muted, stop, songs, songData } = this.state;
-		let fileInfo = [];
+		const {
+			play,
+			fold,
+			volume,
+			muted,
+			stop,
+			songs,
+			songData,
+			selSongKey,
+			currentTime,
+			playMode
+		} = this.state;
+		let fileInfo = [],
+			imgUrl = songData.album_img && songData.album_img.replace(/\/\{size\}/, ''),
+			duration = songs[selSongKey] ? songs[selSongKey].duration : 0;
 		return (<div id={'lomaBlog-audio'} className={fold ? 'containerFold' : 'containerUnfold'}>
 			<div className={'operatePanel ' + (fold ? '' : 'unfold')}>
 				<div className={'songPanel'}>
@@ -244,10 +296,14 @@ class Audio extends Component {
 						{songs.map((item, key) => {
 							fileInfo = item.filename.split('-');
 							return (
-								<li key={key} onClick={() => this.fetchSong(item.hash)}>
+								<li
+									key={key}
+									onClick={() => this.handleStep('current', key)}
+									className={key === selSongKey ? 'activeSong' : ''}
+								>
 									<span>{key + 1}</span>
 									<span>{fileInfo[1]}</span>
-									<span>{item.first}</span>
+									<span>{getMinute(item.duration)}</span>
 									<span>{fileInfo[0]}</span>
 								</li>
 							)
@@ -255,11 +311,15 @@ class Audio extends Component {
 					</ul>
 				</div>
 				<Row type="flex" justify="space-between">
-					<Col className={'left'}></Col>
+					<Col className={'left'} style={{
+						backgroundImage: imgUrl ? `url(/source/${imgUrl})` :
+							`url(${require('../../../assets/logo.jpg')})`
+					}}
+					></Col>
 					<Col className={'center'}>
-						<h3 className={'songName'}>就是想你就是想你就是想你</h3>
-						<p className={'singer'}>loma</p>
-						<p className={'songType'}>type</p>
+						<h3 className={'songName'}>{songData.songName}</h3>
+						<p className={'singer'}>{songData.singerName}</p>
+						{/* <p className={'songType'}>{}</p> */}
 						<p>
 							<span>1</span>
 							<span>2</span>
@@ -282,21 +342,51 @@ class Audio extends Component {
 									className={'volumnSlider'}
 									onChange={(val) => this.setState({ volume: val, muted: false }, () => {
 										this.audioNode.volume = val;
+										this.audioNode.muted = false;
 									})}
 								/>
 							</Col>
-							<Col><Icon type="retweet" /></Col>
+							<Col>
+								<Icon
+									type={playMode == 'loop' ? 'retweet' : 'shake'}
+									onClick={this.changePlayMode}
+								/>
+							</Col>
 						</Row>
 						<Row type="flex" justify="center" gutter={10}>
 							<Col className={'turnOff'}><i onClick={() => this.handleStop()} title={'停止'} /></Col>
-							<Col><Icon type="step-backward" onClick={() => this.handleStep('prev')} title={'上一首'} /></Col>
+							<Col><Icon type="step-backward" onClick={() => this.handleStep('prev')}
+								title={'上一首'}
+								disabled={songs.length == 0}
+							     /></Col>
 							<Col>
-								<Icon type={play ? 'pause-circle' : 'play-circle'} onClick={this.handlePlay} title={'播放/暂停'} />
+								<Icon type={play ? 'pause-circle' : 'play-circle'} onClick={this.handlePlay}
+									title={'播放/暂停'}
+									disabled={songs.length == 0}
+								/>
 							</Col>
-							<Col><Icon type="step-forward" onClick={() => this.handleStep('next')} title={'下一首'} /></Col>
+							<Col><Icon type="step-forward" onClick={() => this.handleStep('next')}
+								title={'下一首'}
+								disabled={songs.length == 0}
+							     /></Col>
 						</Row>
-						<Row>
-							<Progress percent={30} />
+						<Row type="flex">
+							<Col span={2}>{getMinute(currentTime)}</Col>
+							<Col span={20}>
+								<Slider
+									tooltipVisible={false}
+									disabled={!selSongKey && selSongKey !== 0}
+									value={currentTime}
+									min={0}
+									max={duration}
+									step={1}
+									className={'processSlider'}
+									onChange={(val) => this.setState({ currentTime: val }, () => {
+										this.audioNode.currentTime = val;
+									})}
+								/>
+							</Col>
+							<Col span={2}>{getMinute(duration)}</Col>
 						</Row>
 
 					</Col>
@@ -310,7 +400,7 @@ class Audio extends Component {
 			<canvas id="canvasContainer" width="0" height="40">
 				您的浏览器暂不支持canvas，建议切换成谷歌浏览器
     		</canvas>
-			<audio id="musicEngine" crossOrigin="anonymous" src={require('assets/1.mp3')} >
+			<audio id="musicEngine" crossOrigin="anonymous" >
 				您的浏览器暂不支持audio，建议切换成谷歌浏览器
     		</audio>
 		</div>);

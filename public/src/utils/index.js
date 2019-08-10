@@ -90,3 +90,11 @@ export const openNotification = (type, title, content, duration = 5) => {
 				}*/
 	});
 };
+
+export const getMinute = (duration) => {
+	let minute = Math.floor(duration / 60),
+		second = Math.floor(duration % 60);
+	minute = minute < 10 ? '0' + minute : minute;
+	second = second < 10 ? '0' + second : second;
+	return (minute + ':' + second);
+}

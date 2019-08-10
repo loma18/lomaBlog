@@ -4,8 +4,6 @@ const qs = require("querystring");
 const sqlConnect = require('../sqlConnect');
 
 
-
-
 /*用户登录*/
 router.post("/login", (req, res) => {
     req.on("data", (data) => {

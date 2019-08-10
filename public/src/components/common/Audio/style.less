@@ -8,7 +8,7 @@
 		height: 100vh;
 		width: 0;
 		z-index: 9;
-		&.containerUnfold{
+		&.containerUnfold {
 			width: 100vw;
 		}
         .operatePanel {
@@ -29,37 +29,37 @@
                 height: 350px;
                 border: 1px solid @lineColor;
 				background: #4c4545;
-				ul{
+				ul {
 					height: 350px;
 					overflow: auto;
 					padding: 10px 0;
 				}
-				ul li{
+				ul li {
 					padding: 0 10px;
 					height: 25px;
 					line-height: 25px;
 					cursor: pointer;
-					&:hover{
+					&:hover,&.activeSong {
 						background: @mainColor1;
 					}
-					span{
+					span {
 						display: inline-block;
 						line-height: 25px;
 						padding: 0 2px;
 						overflow: hidden;
 						text-overflow: ellipsis;
 						white-space: nowrap;
-						&:first-child{
+						&:first-child {
 							width: 30px;
 						}
-						&:nth-child(2){
+						&:nth-child(2) {
 							width: 200px;
 						}
-						&:nth-child(3){
+						&:nth-child(3) {
 							width: 80px;
 						}
-						&:nth-child(2){
-							width: 200px;
+						&:nth-child(4) {
+							width: 150px;
 						}
 					}
 				}

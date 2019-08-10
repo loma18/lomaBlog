@@ -57,19 +57,4 @@ router.get("/blog/getArticleTypeCount", (req, res) => {
     })
 });
 
-//获取酷狗歌曲列表
-router.get("/kugou/getSongs", (req, res) => {
-    let obj = req.query;
-    axios.get('http://m.kugou.com/?json=true').then(response => {
-        res.json(response.data);
-    })
-});
-//获取酷狗歌曲
-router.get("/kugou/getSong", (req, res) => {
-    let obj = req.query;
-    axios.get('http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash=' + obj.songHash).then(response => {
-        res.json(response.data);
-    })
-});
-
 module.exports = router;

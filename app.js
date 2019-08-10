@@ -1,8 +1,21 @@
 const http = require("http");
 const express = require("express");
 const path = require('path');
+const request = require('request');
 
 let app = express();
+
+let serverUrl = 'http://m.kugou.com';
+
+app.use('/kugou', function (req, res) {
+    let url = serverUrl + req.url.replace(/\/kugou/, '');
+    req.pipe(request(url)).pipe(res);
+});
+app.use('/source', function (req, res) {
+    let url = req.url.replace(/^\/source/, '').replace(/^\//, '');
+    req.pipe(request(url)).pipe(res);
+});
+
 // app.use(function (req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.header("Access-Control-Allow-Methods", "*");
