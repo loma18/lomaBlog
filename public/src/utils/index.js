@@ -98,3 +98,19 @@ export const getMinute = (duration) => {
 	second = second < 10 ? '0' + second : second;
 	return (minute + ':' + second);
 }
+
+export const splitStr = (str) => {
+	str = str.trim();
+	let a = str.split('['),
+		b = [],
+		result = [],
+		start = 0;
+	a.splice(0, 1);
+	a.map(item => {
+		b = item.split(']');
+		start = b[0].split(':');
+		start = Number(start[0].replace(/^0*/, '')) * 60 + Number(start[1].replace(/^0*/, ''));
+		result.push({ start, lyrics: b[1] });
+	})
+	return result;
+}

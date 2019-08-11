@@ -47,8 +47,21 @@ export const DELETE_INTERFACE_BY_ID = '/interface/delete'; // 删除接口
  * 获取酷狗音乐列表
  * */
 // export const GET_HOT_SONGS = 'http://m.kugou.com/';
-export const GET_HOT_SONGS = '/kugou'; //获取新歌列表
+export const GET_HOT_SONGS = '/source/http://m.kugou.com'; //获取新歌列表
+
+export const GET_OTHER_SONGS = '/source/http://m.kugou.com/plist/list'; //获取其他歌曲分类列表
 
 // export const GET_SONGS = '/kugou/getSong'; //获取歌曲
-export const GET_SONGS = '/kugou/app/i/getSongInfo.php'; //获取歌曲
+export const GET_SONGS = '/source/http://m.kugou.com/app/i/getSongInfo.php'; //获取歌曲
+
+export const GET_SONGS_CATAGORIZE_LIST = '/source/http://m.kugou.com/plist/index&json=true'; //获取歌曲分类列表
+
+export const SEARCH_SONGS_LIST =
+	'/source/http://mobilecdn.kugou.com/api/v3/search/song'; //获取歌曲分类列表
+
+export const GET_SONGS_ACCESS_KEY = '/source/http://krcs.kugou.com/search'; //获取歌词所需id及accesskey
+
+export const GET_SONGS_LYRICS = '/source/http://lyrics.kugou.com/download'; //获取歌词
+
+
 

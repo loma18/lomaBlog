@@ -1,28 +1,40 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Progress, Slider } from 'antd';
+import { Row, Col, Icon, Progress, Slider, Input } from 'antd';
 import { fireGetRequest } from 'service/app';
 import {
 	GET_HOT_SONGS,
-	GET_SONGS
+	GET_OTHER_SONGS,
+	GET_SONGS,
+	GET_SONGS_CATAGORIZE_LIST,
+	SEARCH_SONGS_LIST,
+	GET_SONGS_ACCESS_KEY,
+	GET_SONGS_LYRICS
 } from 'constants/api';
-import { getMinute } from 'utils';
+import { getMinute, openNotification, splitStr } from 'utils';
 import './style.less';
+import { Base64 } from 'js-base64';
+
+const Search = Input.Search;
 
 class Audio extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			songs: [], //播放列表
-			songHash: '', //当前播放歌曲hash
 			songData: '', //当前播放歌曲信息
-			selSongKey: '', //当前播放歌曲序号
+			lyrics: '', //当前播放歌曲歌词
+			selSongKey: 0, //当前播放歌曲序号
 			currentTime: 0, //当前播放歌曲当前播放时长
 			playMode: 'loop', //当前播放模式 loop:循环播放 random:随机播放
 			fold: true, // 播放器是否折叠
 			play: false, // 播放/暂停
 			stop: true, // 停止播放
 			volume: 0.3, // 媒体音量
-			muted: false // 静音状态
+			muted: false, // 静音状态
+			panelSide: 'songs', //播放面板 songs:歌曲面,categorize:分类面
+			categorizeList: [], //歌曲分类
+			specialKey: '-1', //被选中歌曲分类排序key
+			rotates: 0 //歌曲封面旋转角度
 		};
 	}
 
@@ -36,6 +48,8 @@ class Audio extends Component {
 
 			this.WIDTH = canvas.width;
 			this.HEIGHT = canvas.height;
+
+			this.lyrics = '';
 
 			// clear the canvas
 			this.canvasContext.clearRect(0, 0, this.WIDTH, this.HEIGHT);
@@ -67,6 +81,7 @@ class Audio extends Component {
 		Visualizer.prototype.render = function (data, len, context, WIDTH, HEIGHT) {
 			// clear the canvas
 			context.clearRect(0, 0, WIDTH, HEIGHT);
+			context.font = '25px Arial';
 			let barWidth = (500 / len) * 5;
 			let barHeight = 0;
 			let x = (WIDTH - 600) / 2;
@@ -83,8 +98,9 @@ class Audio extends Component {
 				//     context.fillRect(x, (95 - barHeight / 3) / 1.2, barWidth, 3);
 				// }
 				context.fillStyle = grd;
-				context.fillRect(x, 40 - barHeight / 8, barWidth, barHeight / 8);
+				context.fillRect(x, 50 - barHeight / 8, barWidth, barHeight / 8);
 				context.fill();
+				context.fillText(this.lyrics, (WIDTH - context.measureText(this.lyrics).width) / 2, 20)
 				x += barWidth + 8;
 				if (x > originX + 600) {
 					return;
@@ -93,16 +109,12 @@ class Audio extends Component {
 		};
 
 		Visualizer.prototype.draw = function () {
-			_this.setState({ currentTime: this.audio.currentTime }, () => {
-				// if (this.audio.ended) {
-				// 	console.log('ended');
-				// 	_this.handleStep('next');
-				// 	return;
-				// }
-			})
-
 			if (!this.audio.paused) {
+				this.lyrics = _this.getCurLyrics(this.audio.currentTime);
 				// console.log('dataArray', this.dataArray);
+				let { rotates } = _this.state;
+				rotates = rotates + 0.5 > 360 ? 0 : rotates + 0.5;
+				_this.setState({ currentTime: this.audio.currentTime, rotates })
 				// update the data
 				this.analyser.getByteFrequencyData(this.dataArray);
 				// draw in the canvas
@@ -128,22 +140,20 @@ class Audio extends Component {
 	}
 
 	// 点击上一首/下一首
-	handleStep = (type, key = '') => {
-		let { selSongKey, songs } = this.state;
-		if (key === selSongKey) {
+	handleStep = (type, key) => {
+		let { selSongKey, songs, songData } = this.state;
+		if (key != undefined && songs[key].album_id == songData.albumid) {
 			return;
 		}
 		if (type == 'prev') {
-			selSongKey = !selSongKey && selSongKey !== 0 ? 0 : selSongKey - 1;
-			selSongKey = selSongKey < 0 ? songs.length - 1 : selSongKey;
+			selSongKey = !selSongKey ? songs.length - 1 : selSongKey - 1;
 		} else if (type == 'next') {
-			selSongKey = !selSongKey && selSongKey !== 0 ? 0 : selSongKey + 1;
-			selSongKey = selSongKey > songs.length - 1 ? 0 : selSongKey;
+			selSongKey = selSongKey == songs.length - 1 ? 0 : selSongKey + 1;
 
 		} else {
 			selSongKey = key;
 		}
-		this.setState({ selSongKey, songHash: songs[selSongKey].hash, currentTime: 0 }, () => {
+		this.setState({ selSongKey, currentTime: 0 }, () => {
 			this.fetchSong();
 		})
 
@@ -158,11 +168,8 @@ class Audio extends Component {
 
 	// 播放/暂停
 	handlePlay = () => {
-		const { songs } = this.state;
 		if (!this.visualizer) {
-			this.setState({ selSongKey: 0, songHash: songs[0].hash }, () => {
-				this.fetchSong();
-			})
+			this.fetchSong();
 		}
 		this.setState({ play: !this.state.play }, () => {
 
@@ -176,39 +183,69 @@ class Audio extends Component {
 
 	// 点击展开/缩起播放器
 	handleClick = (e) => {
+		const { specialKey } = this.state;
 		this.setState({ fold: !this.state.fold }, () => {
 			if (!this.state.fold) {
-				this.fetchSongsData();
+				this.fetchSongsData(specialKey);
 			}
 		});
 	}
 
 	//获取酷狗音乐列表
-	fetchSongsData = () => {
-		fireGetRequest(GET_HOT_SONGS, { json: true }).then(res => {
-			if (res.data && res.data.length > 0) {
-				this.setState({ songs: res.data })
-			} else {
-				this.setState({ songs: [] })
-			}
-		}).catch(err => console.log(err))
+	fetchSongsData = (specialKey) => {
+		let data = [];
+		const { categorizeList } = this.state;
+		this.setState({ specialKey }, () => {
+			let url = specialKey == '-1' ? GET_HOT_SONGS : (GET_OTHER_SONGS + '/' + categorizeList[specialKey].specialid);
+			fireGetRequest(url, { json: true }).then(res => {
+				if (specialKey == '-1') {
+					data = res.data ? res.data : [];
+				} else {
+					data = res.list && res.list.list && res.list.list.info ? res.list.list.info : [];
+				}
+				this.setState({ songs: data, selSongKey: 0, panelSide: 'songs' }, () => {
+					this.fetchSong();
+				})
+			}).catch(err => console.log(err))
+		})
 	}
 
 	//获取具体哪首歌播放地址
 	fetchSong = () => {
-		const { songHash } = this.state;
-		console.log('beforefetchdata');
-		fireGetRequest(GET_SONGS, { cmd: 'playInfo', hash: songHash }).then(res => {
+		const { selSongKey, songs } = this.state;
+		fireGetRequest(GET_SONGS, { cmd: 'playInfo', hash: songs[selSongKey].hash }).then(res => {
 			if (res && res.url) {
-				console.log('fetchdata');
 				this.setState({ songData: res, play: true }, () => {
 					this.audioNode.src = '/source/' + this.state.songData.url;
 					this.audioNode.play();
 				})
+			} else {
+				openNotification('error', '获取歌曲失败,自动跳转下一曲', res.error);
+				this.handleStep('next');
 			}
 			// else {
 			// 	this.setState({ songUrl: '' })
 			// }
+		}).catch(err => console.log(err))
+		fireGetRequest(GET_SONGS_ACCESS_KEY, { ver: 1, client: 'mobi', hash: songs[selSongKey].hash }).then(res => {
+			if (res.status === 200) {
+				let candidates = res.candidates[0];
+				return fireGetRequest(GET_SONGS_LYRICS, {
+					ver: 1,
+					client: 'pc',
+					id: candidates.id,
+					accesskey: candidates.accesskey,
+					fmt: 'lrc',
+					charset: 'utf8'
+				});
+			}
+		}).then(res => {
+			if (res.status === 200) {
+				let content = Base64.decode(res.content);
+				content = content.trim().replace(/^\[(\S|\s)*offset:0]/, '');
+				content = splitStr(content);
+				this.setState({ lyrics: content })
+			}
 		}).catch(err => console.log(err))
 	}
 
@@ -219,7 +256,52 @@ class Audio extends Component {
 		this.canvasNode.width = 0;
 		this.audioNode.pause();
 		this.audioNode.currentTime = 0;
-		this.setState({ play: false, stop: true });
+		this.setState({ play: false, stop: true, currentTime: 0, rotates: 0 });
+	}
+
+	//改变歌曲面板
+	handleChangePanel = () => {
+		let { panelSide } = this.state;
+		panelSide = panelSide == 'songs' ? 'categorize' : 'songs';
+		this.setState({ panelSide }, () => {
+			if (this.state.panelSide == 'categorize') {
+				this.fetchCategorizeList();
+			}
+		});
+	}
+
+	//获取歌曲分类列表
+	fetchCategorizeList = () => {
+		fireGetRequest(GET_SONGS_CATAGORIZE_LIST).then(res => {
+			if (res.plist && res.plist.list && res.plist.list.info) {
+				this.setState({ categorizeList: res.plist.list.info });
+			} else {
+				openNotification('error', '获取歌曲分类列表失败', res);
+			}
+		}).catch(err => console.log(err))
+	}
+
+	//全网搜索歌曲
+	handleSearch = (val) => {
+		if (!val) {
+			this.fetchSongsData(this.state.specialKey);
+			return;
+		}
+		fireGetRequest(SEARCH_SONGS_LIST, { format: 'json', keyword: val, page: 1, pagesize: 50, showtype: 1 }).then(res => {
+			if (res.data && res.data.info) {
+				this.setState({ songs: res.data.info, selSongKey: 0 });
+			}
+		}).catch(err => console.log(err))
+	}
+
+	//获取当前歌词
+	getCurLyrics = (currentTime) => {
+		const { lyrics } = this.state;
+		for (let i = 0; i < lyrics.length; i++) {
+			if (currentTime >= lyrics[i].start && currentTime <= lyrics[i + 1].start) {
+				return lyrics[i].lyrics;
+			}
+		}
 	}
 
 	initAudioData = () => {
@@ -278,7 +360,11 @@ class Audio extends Component {
 			songData,
 			selSongKey,
 			currentTime,
-			playMode
+			playMode,
+			rotates,
+			panelSide,
+			specialKey,
+			categorizeList
 		} = this.state;
 		let fileInfo = [],
 			imgUrl = songData.album_img && songData.album_img.replace(/\/\{size\}/, ''),
@@ -286,7 +372,44 @@ class Audio extends Component {
 		return (<div id={'lomaBlog-audio'} className={fold ? 'containerFold' : 'containerUnfold'}>
 			<div className={'operatePanel ' + (fold ? '' : 'unfold')}>
 				<div className={'songPanel'}>
-					<ul>
+					<Row className={'panelHeader'} type="flex" gutter={30}>
+						<Col className={'curType'}
+							title={specialKey == -1 ? '酷狗新歌榜' : categorizeList[specialKey].specialname}
+						>
+							{specialKey == -1 ? '酷狗新歌榜' : categorizeList[specialKey].specialname}
+						</Col>
+						<Col
+							onClick={this.handleChangePanel}
+							className={'categorySel'}
+						>
+							{panelSide == 'songs' ? '歌曲分类' : '返回列表'}
+						</Col>
+						<Col>
+							<Search
+								placeholder="全网搜索..."
+								onSearch={this.handleSearch}
+							/>
+						</Col>
+					</Row>
+					<ul className={'categorizeList'} style={{ display: panelSide == 'songs' ? 'none' : 'flex' }}>
+						<li onClick={() => this.fetchSongsData('-1')} className={specialKey == '-1' ? 'active' : ''}>
+							<img src={require('../../../assets/logo.jpg')} />
+							<p title={'酷狗新歌榜'}>酷狗新歌榜</p>
+						</li>
+						{categorizeList.map((item, key) => {
+							return (
+								<li
+									key={key}
+									onClick={() => this.fetchSongsData(key)}
+									className={specialKey == key ? 'active' : ''}
+								>
+									<img src={'/source/' + item.imgurl.replace(/\/\{size\}/, '')} />
+									<p title={item.specialname}>{item.specialname}</p>
+								</li>
+							)
+						})}
+					</ul>
+					<ul className={'songsList'} style={{ display: panelSide == 'songs' ? 'block' : 'none' }}>
 						<li>
 							<span>序号</span>
 							<span>歌名</span>
@@ -313,7 +436,8 @@ class Audio extends Component {
 				<Row type="flex" justify="space-between">
 					<Col className={'left'} style={{
 						backgroundImage: imgUrl ? `url(/source/${imgUrl})` :
-							`url(${require('../../../assets/logo.jpg')})`
+							`url(${require('../../../assets/logo.jpg')})`,
+						transform: `rotate(${rotates}deg)`
 					}}
 					></Col>
 					<Col className={'center'}>
@@ -397,7 +521,7 @@ class Audio extends Component {
 			</div>
 			<div className={'canvasCover ' + (stop ? 'hide' : '')}>
 			</div>
-			<canvas id="canvasContainer" width="0" height="40">
+			<canvas id="canvasContainer" width="0" height="50">
 				您的浏览器暂不支持canvas，建议切换成谷歌浏览器
     		</canvas>
 			<audio id="musicEngine" crossOrigin="anonymous" >

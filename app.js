@@ -5,12 +5,12 @@ const request = require('request');
 
 let app = express();
 
-let serverUrl = 'http://m.kugou.com';
+// let serverUrl = 'http://m.kugou.com';
 
-app.use('/kugou', function (req, res) {
-    let url = serverUrl + req.url.replace(/\/kugou/, '');
-    req.pipe(request(url)).pipe(res);
-});
+// app.use('/kugou', function (req, res) {
+//     let url = serverUrl + req.url.replace(/\/kugou/, '');
+//     req.pipe(request(url)).pipe(res);
+// });
 app.use('/source', function (req, res) {
     let url = req.url.replace(/^\/source/, '').replace(/^\//, '');
     req.pipe(request(url)).pipe(res);

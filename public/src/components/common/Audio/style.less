@@ -28,13 +28,39 @@
                 width: 540px;
                 height: 350px;
                 border: 1px solid @lineColor;
-				background: #4c4545;
+				background: #c8dcd3;
+				.panelHeader {
+					height: 25px;
+					line-height: 25px;
+					.curType {
+						background: @mainColor1;
+						border-radius: 0 0 10px 0;
+						max-width: 100px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+					.categorySel {
+						cursor: pointer;
+					}
+					input {
+						height: 25px;
+					}
+				}
 				ul {
-					height: 350px;
+					height: 325px;
 					overflow: auto;
 					padding: 10px 0;
+					&::-webkit-scrollbar {/* 滚动条整体样式 */
+						width: 4px;     /* 高宽分别对应横竖滚动条的尺寸 */
+						height: 1px;
+					}
+					&::-webkit-scrollbar-thumb {/* 滚动条里面小方块 */
+						border-radius: 10px;
+						background: @mainColor1;
+					}
 				}
-				ul li {
+				ul.songsList li {
 					padding: 0 10px;
 					height: 25px;
 					line-height: 25px;
@@ -50,16 +76,41 @@
 						text-overflow: ellipsis;
 						white-space: nowrap;
 						&:first-child {
-							width: 30px;
+							width: 40px;
 						}
 						&:nth-child(2) {
-							width: 200px;
+							width: 250px;
 						}
 						&:nth-child(3) {
-							width: 80px;
+							width: 60px;
 						}
 						&:nth-child(4) {
 							width: 150px;
+						}
+					}
+				}
+				ul.categorizeList {
+					display: flex;
+					flex-wrap: wrap;
+					padding: 20px 0 0 20px;
+					li {
+						width: 108px;
+						height: 130px;
+						margin-right: 20px;
+						margin-bottom: 20px;
+						cursor: pointer;
+						&.active {
+							border: 1px solid @lineColor;
+						}
+						img {
+							width: 108px;
+							height: 108px;
+						}
+						p {
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+							text-align: center;
 						}
 					}
 				}
@@ -89,7 +140,7 @@
                 background: url('../../../assets/logo.jpg') no-repeat;
                 background-size: contain;
                 border-radius: 50%;
-                animation: rotates 5s linear infinite;
+                // animation: rotates 5s linear infinite;
                 &::after,&::before {
                     position: absolute;
                     top: 50%;
