@@ -204,7 +204,7 @@ class Audio extends Component {
 					data = res.list && res.list.list && res.list.list.info ? res.list.list.info : [];
 				}
 				this.setState({ songs: data, selSongKey: 0, panelSide: 'songs' }, () => {
-					this.fetchSong();
+					// this.fetchSong();
 				})
 			}).catch(err => console.log(err))
 		})
@@ -297,8 +297,10 @@ class Audio extends Component {
 	//获取当前歌词
 	getCurLyrics = (currentTime) => {
 		const { lyrics } = this.state;
+		let nextTime = 0;
 		for (let i = 0; i < lyrics.length; i++) {
-			if (currentTime >= lyrics[i].start && currentTime <= lyrics[i + 1].start) {
+			nextTime = i < lyrics.length - 2 ? lyrics[i + 1].start : 1000;
+			if (currentTime >= lyrics[i].start && currentTime <= nextTime) {
 				return lyrics[i].lyrics;
 			}
 		}
@@ -482,7 +484,7 @@ class Audio extends Component {
 							<Col><Icon type="step-backward" onClick={() => this.handleStep('prev')}
 								title={'上一首'}
 								disabled={songs.length == 0}
-							     /></Col>
+							/></Col>
 							<Col>
 								<Icon type={play ? 'pause-circle' : 'play-circle'} onClick={this.handlePlay}
 									title={'播放/暂停'}
@@ -492,7 +494,7 @@ class Audio extends Component {
 							<Col><Icon type="step-forward" onClick={() => this.handleStep('next')}
 								title={'下一首'}
 								disabled={songs.length == 0}
-							     /></Col>
+							/></Col>
 						</Row>
 						<Row type="flex">
 							<Col span={2}>{getMinute(currentTime)}</Col>
