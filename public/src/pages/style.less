@@ -1,54 +1,45 @@
-@import '../themes/theme.less';
+@import '../themes/base.less';
 
-.change(
-    @dangerColor,
-    @linkColor
-    ) {
-    #lomaBlog-main {
-        padding-top: 106px;
-        .lomaBlog-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9;
-        }
-        .lomaBlog-body {
-            padding: 0 60px;
-        }
-        .ant-back-top {
-            right: 50px;
-        }
+#lomaBlog-main {
+    padding-top: 106px;
+
+    .lomaBlog-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9;
     }
-    .lomaBlog-select,.ant-btn {
-        width: 110px;
-        margin: 0 15px 15px;
+
+    .lomaBlog-body {
+        padding: 0 60px;
     }
-    .dangerColor {
-        color: @dangerColor;
-        cursor: pointer;
-    }
-    .linkColor {
-        color: @linkColor;
-        cursor: pointer;
-    }
-    input {
-        border-radius: 0;
-    }
-    .ant-pagination {
-        float: right;
-        margin: 30px 30px 0 0;
+
+    .ant-back-top {
+        right: 50px;
     }
 }
 
-.dark {
-    .change(
-        @dark_dangerColor,
-        @dark_linkColor,
-    );
- }
-.light {
-    .change(
-        @light_dangerColor,
-        @light_linkColor,
-    );
- }
+.lomaBlog-select,
+.ant-btn {
+    width: 110px;
+    margin: 0 15px 15px;
+}
+
+.dangerColor {
+    color: @dangerColor;
+    cursor: pointer;
+}
+
+.linkColor {
+    color: @linkColor;
+    cursor: pointer;
+}
+
+input {
+    border-radius: 0;
+}
+
+.ant-pagination {
+    float: right;
+    margin: 30px 30px 0 0;
+}

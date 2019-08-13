@@ -1,24 +1,34 @@
-@import './themes/theme.less';
+@import './themes/base.less';
+
 body {
     font-size: @mFont;
-    &.dark {
-        background: @dark_bgColor;
-        color: @dark_color;
-    }
-    &.light {
-        background: @light_bgColor;
-        color: @light_color;
-    }
 }
-h1,h2,h3,h4,h5,h6,p,ul,li {
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+li {
     margin: 0;
     padding: 0;
     list-style: none;
 }
+
+input,
+button,
+.ant-select-selection {
+    border-radius: 0 !important;
+}
+
 #lomaBlog {
     min-width: @AppMinWidth;
     min-height: @AppMinHeight;
 }
+
 .hide {
     display: none;
 }

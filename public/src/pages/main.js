@@ -6,20 +6,12 @@ import Footer from 'components/Footer';
 import LomaBreadcrumb from 'components/common/Breadcrumb';
 import Routers from 'pages/router';
 import LomaAudio from 'components/common/Audio';
-import { changeTheme } from 'utils/functions';
 import './style.less';
 
 class Main extends Component {
 	constructor(props) {
 		super(props);
-		let isAdmin = window.location.pathname.split('/')[1] == 'admin';
-		if (isAdmin) {
-			changeTheme('dark');
-		} else {
-			changeTheme('light');
-		}
 		this.state = {
-			stage: isAdmin ? 'backStage' : 'frontStage', // 前后台是否发生切换
 			handleSearch: ''
 		};
 	}
@@ -41,17 +33,7 @@ class Main extends Component {
 		return list;
 	}
 
-	changeStage = (stage) => {
-		this.setState({ stage });
-	}
-
 	componentDidUpdate() {
-		let path = window.location.pathname.split('/');
-		if (path[1] == 'admin') {
-			changeTheme('dark');
-		} else {
-			changeTheme('light');
-		}
 	}
 
 	bindChild = (_this) => {
@@ -62,7 +44,7 @@ class Main extends Component {
 		let menuList = this.getMenuList();
 		return (<div id={'lomaBlog-main'}>
 			<div className={'lomaBlog-header'}>
-				<Header menuList={menuList} changeStage={this.changeStage} handleSearch={this.state.handleSearch} />
+				<Header menuList={menuList} handleSearch={this.state.handleSearch} />
 				<LomaBreadcrumb />
 			</div>
 			<div className={'lomaBlog-body'}>

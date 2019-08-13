@@ -189,7 +189,7 @@ class AdminHomeArticleManage extends Component {
 		articleTypeLists.unshift({ key: 'all', name: '文章类型', id: 0 });
 		return (
 			<div className={'adminHomeArticleManage'}>
-				<Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal" theme={'dark'}>
+				<Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal">
 					<Menu.Item key="all">
 						全部
     				</Menu.Item>
