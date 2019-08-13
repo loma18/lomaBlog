@@ -177,7 +177,7 @@ router.get("/blog/getFilterList", (req, res) => {
         params = [];
     }
     if (obj.hotArticle) {
-        sql = "SELECT * FROM lomaBlog_article ORDER BY views LIMIT 5 ";
+        sql = "SELECT * FROM lomaBlog_article WHERE status=1 ORDER BY views LIMIT 5 ";
         params = [];
     }
     sqlConnect.query(sql, params, (err, result, fields) => {

@@ -23,6 +23,7 @@ class Audio extends Component {
 			songs: [], //播放列表
 			songData: '', //当前播放歌曲信息
 			lyrics: '', //当前播放歌曲歌词
+			lyricsShow: true, //歌词显示状态
 			selSongKey: 0, //当前播放歌曲序号
 			currentTime: 0, //当前播放歌曲当前播放时长
 			playMode: 'loop', //当前播放模式 loop:循环播放 random:随机播放
@@ -86,7 +87,17 @@ class Audio extends Component {
 			let barHeight = 0;
 			let x = (WIDTH - 600) / 2;
 			let originX = x;
-			let grd = context.createLinearGradient(0, 0, 0, HEIGHT);
+			let grd = context.createLinearGradient(0, 0, WIDTH, 0);
+			grd.addColorStop(0, 'pink');
+			grd.addColorStop(0.4, 'red');
+			grd.addColorStop(0.6, 'orange');
+			grd.addColorStop(1, 'pink');
+			if (this.lyrics) {
+				context.fillStyle = grd;
+				context.fillText(this.lyrics, (WIDTH - context.measureText(this.lyrics).width) / 2, 20)
+				context.fill();
+			}
+			grd = context.createLinearGradient(0, 0, 0, HEIGHT);
 			grd.addColorStop(0, 'white');
 			grd.addColorStop(0.2, 'red');
 			grd.addColorStop(0.8, 'orange');
@@ -100,7 +111,6 @@ class Audio extends Component {
 				context.fillStyle = grd;
 				context.fillRect(x, 50 - barHeight / 8, barWidth, barHeight / 8);
 				context.fill();
-				context.fillText(this.lyrics, (WIDTH - context.measureText(this.lyrics).width) / 2, 20)
 				x += barWidth + 8;
 				if (x > originX + 600) {
 					return;
@@ -306,6 +316,18 @@ class Audio extends Component {
 		}
 	}
 
+	//关闭歌词
+	handleCloseLyrics = () => {
+		const { lyricsShow } = this.state;
+		this.setState({ lyricsShow: !lyricsShow }, () => {
+			if (this.state.lyricsShow) {
+				this.canvasNode.classList.remove('hide');
+			} else {
+				this.canvasNode.classList.add('hide');
+			}
+		});
+	}
+
 	initAudioData = () => {
 		const { volume } = this.state;
 		this.audioNode.volume = volume;
@@ -366,7 +388,8 @@ class Audio extends Component {
 			rotates,
 			panelSide,
 			specialKey,
-			categorizeList
+			categorizeList,
+			lyricsShow
 		} = this.state;
 		let fileInfo = [],
 			imgUrl = songData.album_img && songData.album_img.replace(/\/\{size\}/, ''),
@@ -447,8 +470,7 @@ class Audio extends Component {
 						<p className={'singer'}>{songData.singerName}</p>
 						{/* <p className={'songType'}>{}</p> */}
 						<p>
-							<span>1</span>
-							<span>2</span>
+							<span onClick={this.handleCloseLyrics}>{lyricsShow ? '关闭歌词' : '显示歌词'}</span>
 						</p>
 					</Col>
 					<Col className={'right'}>
@@ -484,7 +506,7 @@ class Audio extends Component {
 							<Col><Icon type="step-backward" onClick={() => this.handleStep('prev')}
 								title={'上一首'}
 								disabled={songs.length == 0}
-							/></Col>
+							     /></Col>
 							<Col>
 								<Icon type={play ? 'pause-circle' : 'play-circle'} onClick={this.handlePlay}
 									title={'播放/暂停'}
@@ -494,7 +516,7 @@ class Audio extends Component {
 							<Col><Icon type="step-forward" onClick={() => this.handleStep('next')}
 								title={'下一首'}
 								disabled={songs.length == 0}
-							/></Col>
+							     /></Col>
 						</Row>
 						<Row type="flex">
 							<Col span={2}>{getMinute(currentTime)}</Col>
@@ -521,7 +543,7 @@ class Audio extends Component {
 					{fold ? '>' : '<'}
 				</p>
 			</div>
-			<div className={'canvasCover ' + (stop ? 'hide' : '')}>
+			<div className={'canvasCover ' + ((stop || !lyricsShow) ? 'hide' : '')}>
 			</div>
 			<canvas id="canvasContainer" width="0" height="50">
 				您的浏览器暂不支持canvas，建议切换成谷歌浏览器

@@ -18,20 +18,7 @@ class HomeDetail extends Component {
 		super(props);
 		this.state = {
 			resData: {},
-			commentList: [
-				// { id: 1, username: 'loma', createAt: new Date('2019-08-05 11:00 ').getTime(), comment: '谢谢博主，有收获', children: [] },
-				// {
-				// 	id: 2, username: 'loma2', createAt: new Date('2019-08-06 9:00').getTime(), comment: '谢谢博主，有收获啊', children: [
-				// 		{
-				// 			id: 3, username: 'loma1', createAt: new Date('2019-08-06 10:00').getTime(), comment: '哈哈，有啥收获啊', parent: 'loma2', children: [
-				// 				{ id: 4, username: 'loma3', createAt: new Date('2019-08-06 11:00').getTime(), comment: '哈哈1，有啥收获啊', parent: 'loma1' },
-				// 				{ id: 5, username: 'loma3', createAt: new Date('2019-08-06 11:00').getTime(), comment: '哈哈2，有啥收获啊', parent: 'loma1' },
-				// 			]
-				// 		},
-
-				// 	]
-				// },
-			],
+			commentList: [],
 			replyId: '',
 			replyUserName: ''
 		}
