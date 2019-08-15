@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, './public/build')));
 app.use(/(\/.*)?/, express.static(path.join(__dirname, './public/build')));
 
 let server = http.createServer(app);
-server.listen(8080);
+server.listen(80);
 
 
 
