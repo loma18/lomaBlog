@@ -4,20 +4,31 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // 引入 DllReferencePlugin
 const DllReferencePlugin = require('webpack/lib/DllReferencePlugin');
+const HtmlIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const alias = require('./alias');
 
-const dllArr = ['react'];
-// const dllRef = dllArr.map(item => {
-//     return (
-//         new DllReferencePlugin({
-//             context: path.join(__dirname,'../'),
-//             manifest: require(`./build/${item}.manifest.json`) //)
-//         })
-//     )
-// });
+const dllArr = ['react', 'vendor'];
+const dllRef = dllArr.map(item => {
+    return (
+        new DllReferencePlugin({
+            // context: path.join(__dirname, '..', 'build'), //可不设置，如设置，必须和dll文件context保持一致
+            name: `_dll_${item}`,
+            // sourceType: "var", //对应dll文件中的libraryTarget,不可为commonjs2
+            manifest: require(`../build/${item}.manifest.json`)
+        })
+    )
+});
+const tmpArr = dllArr.map(item => {
+    return `./${item}.dll.js`;
+})
+const addDllHtmlPath = new HtmlIncludeAssetsPlugin({
+    assets: tmpArr, // 添加的资源相对html的路径
+    append: false // false 在其他资源的之前添加 true 在其他资源之后添加
+});
 
 module.exports = {
-    mode: 'development',
+    // mode: 'development',
+    mode: 'production',
     devtool: 'source-map',
     entry: './src/app.js',
     output: {
@@ -71,12 +82,13 @@ module.exports = {
         alias: alias.alias()
     },
     plugins: [
+        ...dllRef,
         new HtmlWebpackPlugin({
             title: 'lomaBlog',
             template: './src/index.html',
             favicon: path.join(__dirname, '../src/assets/panelBg.gif')
         }),
-        // ...dllRef,
-        new CleanWebpackPlugin()
+        addDllHtmlPath,
+        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*', '!react.*', '!vendor.*'] })
     ]
 };

@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpackConfigjs/webpack.config.js --inline --colors --content-base ./build",
-    "dev": "webpack --config ./webpackConfigjs/webpack.config.js --progress --colors",
-    "build": "webpack --watch --progress --config ./webpackConfigjs/webpack.config.js --hot --inline --colors",
+    "dev": "webpack --watch --config ./webpackConfigjs/webpack.config.js --progress --colors",
+    "build": "webpack --progress --config ./webpackConfigjs/webpack.config.js --hot --inline --colors",
     "build:dll": "webpack --config ./webpackConfigjs/webpack.dll.config.js",
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint -c .eslintrc src/**/*.js --fix",
@@ -45,6 +45,7 @@
     "eslint": "^6.0.1",
     "eslint-plugin-react": "^7.14.2",
     "file-loader": "^4.0.0",
+    "html-webpack-include-assets-plugin": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",

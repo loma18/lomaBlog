@@ -8,6 +8,6 @@ const alias = () => ({
     utils: path.resolve(__dirname,'../src/utils/'),
     constants: path.resolve(__dirname,'../src/constants/'),
     service: path.resolve(__dirname,'../src/service/'),
-    stores: path.resolve(__dirname,'../src/stores/'),
+    stores: path.resolve(__dirname,'../src/stores/')
 })
 module.exports = {alias}
