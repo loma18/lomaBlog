@@ -7,7 +7,7 @@ module.exports = {
     entry: {
         // 项目中用到该两个依赖库文件
         react: ['react', 'react-dom', 'react-router-dom', 'prop-types'],
-        vendor: ['mobx', 'mobx-react', 'axios', 'antd']
+        vendor: ['mobx', 'mobx-react', 'axios', 'antd', 'braft-editor']
     },
     // 输出文件
     output: {

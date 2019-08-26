@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // 引入 DllReferencePlugin
 const DllReferencePlugin = require('webpack/lib/DllReferencePlugin');
 const HtmlIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //将打包后的内容用canvas以图形的方式展示出来
 const alias = require('./alias');
 
 const dllArr = ['react', 'vendor'];
@@ -27,10 +28,10 @@ const addDllHtmlPath = new HtmlIncludeAssetsPlugin({
 });
 
 module.exports = {
-    // mode: 'development',
-    mode: 'production',
+    mode: 'development',
+    // mode: 'production',
     devtool: 'source-map',
-    entry: './src/app.js',
+    entry: { app: './src/app.js' },
     output: {
         path: path.resolve(__dirname, '../build'),
         filename: 'bundle.[hash].js',
@@ -89,6 +90,22 @@ module.exports = {
             favicon: path.join(__dirname, '../src/assets/panelBg.gif')
         }),
         addDllHtmlPath,
-        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*', '!react.*', '!vendor.*'] })
-    ]
+        new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*', '!react.*', '!vendor.*'] }),
+        new BundleAnalyzerPlugin()
+    ],
+    optimization: {
+        splitChunks: {
+          chunks: 'initial',
+          automaticNameDelimiter: '.',
+          cacheGroups: {
+            vendors: {
+              test: /[\\/]node_modules[\\/]/,
+              priority: 1
+            }
+          }
+        },
+        runtimeChunk: {
+          name: entrypoint => `manifest.${entrypoint.name}`
+        }
+      }
 };
