@@ -193,9 +193,9 @@ class Audio extends Component {
 
 	// 点击展开/缩起播放器
 	handleClick = (e) => {
-		const { specialKey } = this.state;
+		const { specialKey, play } = this.state;
 		this.setState({ fold: !this.state.fold }, () => {
-			if (!this.state.fold) {
+			if (!this.state.fold && !play) {
 				this.fetchSongsData(specialKey);
 			}
 		});
@@ -214,7 +214,7 @@ class Audio extends Component {
 					data = res.list && res.list.list && res.list.list.info ? res.list.list.info : [];
 				}
 				this.setState({ songs: data, selSongKey: 0, panelSide: 'songs' }, () => {
-					// this.fetchSong();
+					this.fetchSong();
 				})
 			}).catch(err => console.log(err))
 		})
@@ -226,7 +226,7 @@ class Audio extends Component {
 		fireGetRequest(GET_SONGS, { cmd: 'playInfo', hash: songs[selSongKey].hash }).then(res => {
 			if (res && res.url) {
 				this.setState({ songData: res, play: true }, () => {
-					this.audioNode.src = '/source/' + this.state.songData.url;
+					this.audioNode.src = '/source/getMp3/' + this.state.songData.url.replace('http://fs.open.kugou.com/', '');
 					this.audioNode.play();
 				})
 			} else {
@@ -418,7 +418,7 @@ class Audio extends Component {
 					</Row>
 					<ul className={'categorizeList'} style={{ display: panelSide == 'songs' ? 'none' : 'flex' }}>
 						<li onClick={() => this.fetchSongsData('-1')} className={specialKey == '-1' ? 'active' : ''}>
-							<img src={require('../../../assets/logo.jpg')} />
+							<img src={require('../../../assets/logo.jpg')} alt="酷狗新歌榜" title="酷狗新歌榜" />
 							<p title={'酷狗新歌榜'}>酷狗新歌榜</p>
 						</li>
 						{categorizeList.map((item, key) => {
@@ -428,7 +428,7 @@ class Audio extends Component {
 									onClick={() => this.fetchSongsData(key)}
 									className={specialKey == key ? 'active' : ''}
 								>
-									<img src={'/source/' + item.imgurl.replace(/\/\{size\}/, '')} />
+									<img src={'/source/getImage/' + item.imgurl.replace('http://imge.kugou.com/', '').replace(/\/\{size\}/, '')} alt={item.specialname} title={item.specialname} />
 									<p title={item.specialname}>{item.specialname}</p>
 								</li>
 							)
@@ -460,7 +460,7 @@ class Audio extends Component {
 				</div>
 				<Row type="flex" justify="space-between">
 					<Col className={'left'} style={{
-						backgroundImage: imgUrl ? `url(/source/${imgUrl})` :
+						backgroundImage: imgUrl ? `url(/source/getImage/${imgUrl.replace('http://imge.kugou.com/', '')})` :
 							`url(${require('../../../assets/logo.jpg')})`,
 						transform: `rotate(${rotates}deg)`
 					}}

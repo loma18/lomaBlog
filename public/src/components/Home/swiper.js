@@ -31,7 +31,7 @@ class Category extends React.Component {
 			<div className="swiper">
 				<ReactSwipe className="carousel" swipeOptions={opt}>
 					{imgList.map((item, key) => <div key={key} className="carousel-item">
-						<img src={item} />
+						<img src={item} alt={'轮播图' + key} title={'轮播图' + key} />
 					</div>)}
 				</ReactSwipe>
 				<div className="index-container">

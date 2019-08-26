@@ -78,7 +78,7 @@ class Header extends Component {
 			<div id={'lomaBlog-header'}>
 				<Row type="flex" justify="space-between" gutter={20} className={'nav'}>
 					<Col className={'header-logo'}>
-						<img src={require('assets/logo.jpg')} />
+						<img src={require('assets/logo.jpg')}  alt={'xiangeLogo'} title={'xiangeLogo'}/>
 					</Col>
 					<Col className={'header-menu'}>
 						<Menu mode="horizontal" selectedKeys={selectedKeys} onSelect={this.onSelect}>
