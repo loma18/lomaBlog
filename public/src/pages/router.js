@@ -13,7 +13,7 @@ export default (props) => (
 		<Route path={ROUTE_PATH.original} render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />
 		<Route path={ROUTE_PATH.reprint} render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />
 		<Route path={ROUTE_PATH.code} render={(propss) => <Home {...propss} bindChild={props.bindChild} />} />
-		<Route path={ROUTE_PATH.whisper} component={Whisper} />
+		<Route path={ROUTE_PATH.whisper} render={(propss) => <Whisper {...propss} bindChild={props.bindChild} />}/>
 		<Route path={ROUTE_ADMIN_PATH.admin} component={AdminRouter} />
 		{/* <Redirect from={props.location} to={'/'} /> */}
 	</Switch>

@@ -57,7 +57,7 @@ class AdminInterfaceView extends Component {
     			}
     			this.setState({ resData: res.data });
     		} else {
-    			openNotification('error', '获取接口信息失败', res.message);
+    			openNotification('error', '获取接口信息失败', res.msg);
     		}
     		this.setState({ spinLoading: false });
     	})

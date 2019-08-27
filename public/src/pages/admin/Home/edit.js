@@ -131,7 +131,7 @@ class AdminHomeEdit extends Component {
 					this.fetchData();
 				});
 			} else {
-				openNotification('error', '获取个人分类列表失败', res.message);
+				openNotification('error', '获取个人分类列表失败', res.msg);
 			}
 		})
 			.catch((err) => console.log(err));

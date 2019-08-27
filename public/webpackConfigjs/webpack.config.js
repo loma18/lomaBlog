@@ -87,7 +87,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'lomaBlog',
             template: './src/index.html',
-            favicon: path.join(__dirname, '../src/assets/panelBg.gif')
+            favicon: path.join(__dirname, '../src/assets/favicon.ico')
         }),
         addDllHtmlPath,
         new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['**/*', '!react.*', '!vendor.*'] }),

@@ -44,6 +44,17 @@ export const GET_INTERFACE_DETAILE_BY_ID = '/interface/getDetailById'; // 获取
 export const DELETE_INTERFACE_BY_ID = '/interface/delete'; // 删除接口
 
 /**
+ * 微语
+ */
+export const SAVE_WHISPER = '/whisper/save'; //保存微语
+
+export const DELETE_WHISPER = '/whisper/delete'; //删除微语
+
+export const GET_WHISPER_LIST = '/whisper/getList'; //获取微语列表
+
+
+
+/**
  * 获取酷狗音乐列表
  * */
 export const GET_HOT_SONGS = '/source/getHotSongs'; //获取新歌列表

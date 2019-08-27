@@ -9,6 +9,7 @@ export const breadcrumbItem = {
 	articleManage: { value: 'articleManage', title: '文章管理' },
 	comment: { value: 'comment', title: '评论管理' },
 	catalogue: { value: 'catalogue', title: '个人分类管理' },
+	whisper: { value: 'whisper', title: '微语' },
 	mine: { value: 'mine', title: '个人中心' },
 	interface: { value: 'interface', title: '后台接口' },
 	others: { value: 'others', title: '其他' }

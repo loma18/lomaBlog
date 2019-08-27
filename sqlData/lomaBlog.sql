@@ -74,6 +74,14 @@ title       VARCHAR(100) NOT NULL DEFAULT "",
 routePath   VARCHAR(100) NOT NULL DEFAULT ""
 );
 
+--创建微语表
+CREATE TABLE lomaBlog_whisper(
+id          INT PRIMARY KEY AUTO_INCREMENT,
+description VARCHAR(3000) NOT NULL DEFAULT "",
+createAt    bigint,
+status      INT NOT NULL DEFAULT 0
+);
+
 
 
 

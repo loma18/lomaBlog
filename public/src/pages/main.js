@@ -25,6 +25,7 @@ class Main extends Component {
 		if (pathname[1] == 'admin') {
 			list = [
 				{ title: '首页', key: 'admin' },
+				{ title: '微语', key: 'whisper' },
 				{ title: '个人中心', key: 'mine' },
 				{ title: '后台接口', key: 'interface' },
 				{ title: '其他', key: 'others' }

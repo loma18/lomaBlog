@@ -158,7 +158,7 @@ router.get("/blog/getFilterList", (req, res) => {
         (obj.searchVal ? "title LIKE '%" + obj.searchVal + "%' AND " : '') +
         "t1.aid IN (SELECT aid FROM lomaBlog_article_catalogue " +
         (obj.catalogueType && obj.catalogueType != 'all' ? "WHERE cid = ?)" : ')') +
-        ' group by t1.aid ' + (obj.page ? " limit " + (obj.page - 1) * 10 + ",20" : '');
+        ' group by t1.aid ' + (obj.page ? " limit " + (obj.page - 1) * 20 + ",20" : '');
     let params = [obj.status];
     if (obj.year) {
         params.push(obj.year);
@@ -173,7 +173,7 @@ router.get("/blog/getFilterList", (req, res) => {
         params.push(obj.catalogueType);
     }
     if (obj.status == 0) {
-        sql = "SELECT * FROM lomaBlog_article WHERE status=0 " + (obj.page ? " limit " + (obj.page - 1) * 10 + ",20" : '');
+        sql = "SELECT * FROM lomaBlog_article WHERE status=0 " + (obj.page ? " limit " + (obj.page - 1) * 20 + ",20" : '');
         params = [];
     }
     if (obj.hotArticle) {
@@ -182,7 +182,7 @@ router.get("/blog/getFilterList", (req, res) => {
     }
     sqlConnect.query(sql, params, (err, result, fields) => {
         if (err) throw err;
-        res.json({ code: 200, data: result, msg: "success", total: (obj.page - 1) * 10 + result.length });
+        res.json({ code: 200, data: result, msg: "success", total: (obj.page - 1) * 20 + result.length });
     })
 });
 
