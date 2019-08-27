@@ -6,6 +6,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from 'components/App';
 import { Provider } from 'mobx-react';
 import ErrorBoundary from 'components/common/Errors/ErrorBoundary';
+import 'components/common/canvasParticle22/canvasParticle';
 import * as stores from 'stores';
 import './app.less';
 

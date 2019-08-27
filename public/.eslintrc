@@ -1,4 +1,7 @@
 {
+	/**
+	//文件级别禁用 /* eslint-disable */
+	//指定规则禁用 /* eslint-disable no-alert, no-console */
 	"parser": "babel-eslint",
 	"plugins": [
 		"react"
