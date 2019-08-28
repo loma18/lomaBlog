@@ -4,9 +4,9 @@
   "description": "blog",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpackConfigjs/webpack.config.js --inline --colors --content-base ./build",
-    "dev": "webpack --watch --config ./webpackConfigjs/webpack.config.js --progress --colors --hot",
-    "build": "webpack --progress --config ./webpackConfigjs/webpack.config.js --inline --colors",
+    "start": "webpack-dev-server --progress --config ./webpackConfigjs/dev.config.js --inline",
+    "dev": "webpack --watch --config ./webpackConfigjs/dev.config.js --progress --colors --hot",
+    "build": "webpack --progress --config ./webpackConfigjs/prod.config.js",
     "build:dll": "webpack --config ./webpackConfigjs/webpack.dll.config.js",
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint -c .eslintrc src/**/*.js --fix",
@@ -24,6 +24,7 @@
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-hot-loader": "^4.12.12",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^5.0.1",
     "react-swipe": "^5.1.1"
@@ -56,6 +57,7 @@
     "webpack": "^4.34.0",
     "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.4",
-    "webpack-dev-server": "^3.7.1"
+    "webpack-dev-server": "^3.7.1",
+    "webpack-merge": "^4.2.1"
   }
 }
