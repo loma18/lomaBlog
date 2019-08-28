@@ -1,6 +1,32 @@
-import Loadable from 'react-loadable';
+import { Spin } from 'antd';
 
-export const loadable = (filename) => Loadable({
-	loader: () => require(`${filename}`),
-	loading: () => ('')
-});
+import React, { Component } from 'react';
+
+const AsyncComponent = importComponent => {
+	return class extends Component {
+		constructor(props) {
+			super(props);
+
+			this.state = {
+				component: null
+			};
+		}
+
+		componentDidMount() {
+			importComponent().then(cmp => {
+				this.setState({ component: cmp.default });
+			});
+		}
+		componentWillUnmount() {
+			this.setState = () => {
+				return;
+			};
+		}
+
+		render() {
+			const C = this.state.component;
+			return C ? <C {...this.props} /> : <Spin />;
+		}
+	};
+};
+export default AsyncComponent;

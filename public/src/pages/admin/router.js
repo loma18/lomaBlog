@@ -2,9 +2,9 @@ import React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { ROUTE_ADMIN_PATH } from 'constants/route';
 import Loadable from 'components/Loadable';
-import Admin from 'pages/admin';
-import Interface from 'pages/admin/Interface';
-import Whisper from 'pages/whisper';
+const Admin = Loadable(() => import('pages/admin'));
+const Interface = Loadable(() => import('pages/admin/Interface'));
+const Whisper = Loadable(() => import('pages/whisper'));
 
 export default () => (
 	<div id={'admin'}>

@@ -2,9 +2,9 @@ import React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { ROUTE_PATH, ROUTE_ADMIN_PATH } from 'constants/route';
 import Loadable from 'components/Loadable';
-import Home from 'pages/home';
-import Whisper from 'pages/whisper';
-import AdminRouter from 'pages/admin/router';
+const Home = Loadable(() => import('pages/home'));
+const Whisper = Loadable(() => import('pages/whisper'));
+const AdminRouter = Loadable(() => import('pages/admin/router'));
 
 export default (props) => (
 	<Switch>
