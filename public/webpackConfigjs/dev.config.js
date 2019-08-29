@@ -29,7 +29,7 @@ const addDllHtmlPath = new HtmlIncludeAssetsPlugin({
 
 const devConfig = {
     mode: 'development',
-    devtool: 'eval', //'source-map',
+    devtool: 'source-map', 
     devServer: {
         contentBase: path.join(__dirname, '../build'),
         compress: true,

@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { Row, Col, Menu, Input, Button } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import { ROUTE_PATH, ROUTE_ADMIN_PATH } from 'constants/route';
+import { inject, observer } from 'mobx-react';
 import { USER_INFO } from 'constants/user';
+import { docTitle } from 'constants';
 import './style.less';
 
 const Search = Input.Search;
 
 @withRouter
+@inject('appStore')
+@observer
 class Header extends Component {
 	constructor(props) {
 		super(props);
@@ -55,6 +59,7 @@ class Header extends Component {
 			default:
 				key = ['home'];
 		}
+		this.props.appStore.setDocumentTitle(docTitle[pathname[1]]);
 		this.setState({ selectedKeys: key });
 	}
 
@@ -78,7 +83,7 @@ class Header extends Component {
 			<div id={'lomaBlog-header'}>
 				<Row type="flex" justify="space-between" gutter={20} className={'nav'}>
 					<Col className={'header-logo'}>
-						<img src={require('assets/logo.jpg')}  alt={'xiangeLogo'} title={'xiangeLogo'}/>
+						<img src={require('assets/logo.jpg')} alt={'xiangeLogo'} title={'xiangeLogo'} />
 					</Col>
 					<Col className={'header-menu'}>
 						<Menu mode="horizontal" selectedKeys={selectedKeys} onSelect={this.onSelect}>

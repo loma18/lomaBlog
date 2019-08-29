@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 
+export const docTitle = {
+	home: '',
+	whisper: '微语',
+	original: '原创',
+	reprint: '转载',
+	code: '代码'
+}
+
 export const breadcrumbItem = {
 	original: { value: 'original', title: '原创' },
 	reprint: { value: 'reprint', title: '转载' },

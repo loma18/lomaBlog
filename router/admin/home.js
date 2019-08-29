@@ -2,6 +2,7 @@ let express = require("express");
 let router = express.Router();
 const qs = require("querystring");
 const sqlConnect = require('../../sqlConnect');
+const request = require('request');
 
 /** 获取个人分类列表*/
 router.get("/getCatalogueList", (req, res) => {
@@ -204,12 +205,23 @@ router.get("/blog/getArticle", (req, res) => {
         }
         res.json({ code: 200, data: resultObj[result[0].aid], msg: "success" });
     })
-    sql = "UPDATE lomaBlog_article SET views=views+1 WHERE aid=?"
-    sqlConnect.query(sql, [obj.id, obj.id], (err, result, fields) => {
-        if (err) throw err;
-        if (result.affectedRows > 0) {
-            // console.log(result);
-        }
+    //获取mac地址,确定访问对象唯一性
+    require('getmac').getMac(function (err, userAddress) {
+        if (err) throw err
+        sql = `SELECT mac FROM lomaBlog_article_mac where mac='${userAddress}' AND articleId=${obj.id}`;
+        sqlConnect.query(sql, [], (err, result, fields) => {
+            if (err) throw err;
+            if (result.length == 0) {
+                sql = "UPDATE lomaBlog_article SET views=views+1 WHERE aid=?";
+                sqlConnect.query(sql, [obj.id], (err, result, fields) => {
+                    console.log(result);
+                })
+                sql = "INSERT INTO lomaBlog_article_mac VALUES(null,?,?)";
+                sqlConnect.query(sql, [userAddress,obj.id], (err, result, fields) => {
+                    console.log(result);
+                })
+            }
+        })
     })
 });
 

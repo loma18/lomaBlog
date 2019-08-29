@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Main from 'pages/main';
 import Login from 'pages/login';
+import GlobalLoading from 'components/common/GlobalSpinning';
 
 export default () => {
 	let Comp = <Main />;
@@ -8,5 +9,8 @@ export default () => {
 	if (pathname[1] == 'login') {
 		Comp = <Login />;
 	}
-	return Comp;
+	return <div>
+		<GlobalLoading />
+		{Comp}
+	</div>;
 };

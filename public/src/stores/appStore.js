@@ -34,6 +34,11 @@ class AppStore {
 		this.isBackStage = isBackStage;
 		window.localStorage.setItem('isBackStage', isBackStage);
 	}
+
+	@action
+	setDocumentTitle = (title) => {
+		document.title = title ? title + '|xiange的博客' : 'xiange的博客';
+	}
 }
 
 const appStore = new AppStore();

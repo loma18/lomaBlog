@@ -20,8 +20,8 @@ class HomeIndex extends Component {
 	}
 
 	//点击跳转
-	handleClick = (id) => {
-		this.props.history.push('/home/detail?articleId=' + id);
+	handleClick = (item) => {
+		this.props.history.push('/home/detail?articleId=' + item.aid);
 	}
 
 	handleChange = (page, pageSize) => {
@@ -77,7 +77,7 @@ class HomeIndex extends Component {
 								<li key={item.aid} className={'listItem'}>
 									<Row type="flex" justify="space-between" gutter={10}>
 										<Col className={'articleContainer'}>
-											<h3 onClick={() => this.handleClick(item.aid)}>{item.title}</h3>
+											<h3 onClick={() => this.handleClick(item)}>{item.title}</h3>
 											<p dangerouslySetInnerHTML={{ __html: item.content }}></p>
 											<div className={'info'}>
 												{item.tags.split(',').map((tag, key) => {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
+import { inject, observer } from 'mobx-react';
 import { fireGetRequest, firePostRequest } from 'service/app';
 import {
 	GET_ARTICLE_BY_ID,
@@ -13,6 +14,8 @@ const form = Form.create();
 const { TextArea } = Input;
 
 @form
+@inject('appStore')
+@observer
 class HomeDetail extends Component {
 	constructor(props) {
 		super(props);
@@ -30,6 +33,7 @@ class HomeDetail extends Component {
 		fireGetRequest(GET_ARTICLE_BY_ID, { id }).then((res) => {
 			if (res.code === 200) {
 				this.setState({ resData: res.data }, () => {
+					this.props.appStore.setDocumentTitle(res.data.title);
 					this.fetchCommentData();
 				});
 			} else {

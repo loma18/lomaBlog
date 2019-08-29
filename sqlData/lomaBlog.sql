@@ -82,6 +82,13 @@ createAt    bigint,
 status      INT NOT NULL DEFAULT 0
 );
 
+--创建访问文章记录表
+CREATE TABLE lomaBlog_article_mac(
+id          INT PRIMARY KEY AUTO_INCREMENT,
+mac         VARCHAR(50) NOT NULL DEFAULT "",
+articleId   INT NOT NULL DEFAULT 0
+);
+
 
 
 
