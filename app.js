@@ -20,6 +20,19 @@ app.use(whisper);
 app.use(express.static(path.join(__dirname, './public/build')));
 app.use(/(\/.*)?/, express.static(path.join(__dirname, './public/build')));
 
+//以下代码用以测试auto.js文件自动重启功能
+// test();
+// function test() {
+//     console.log("服务进行中。。。");
+
+//     setTimeout(function () {
+//         console('模拟各种异步业务逻辑。。。');
+//         let c= a.b;// 这里a undefined.所以会报错
+//         //业务正常执行完成，系统退出。
+//         process.exit(0);
+//     },1000);
+// }
+
 let server = http.createServer(app);
 server.listen(80);
 
