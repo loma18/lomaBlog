@@ -105,10 +105,10 @@ class HomeDetail extends Component {
 		const { replyId, replyUserName } = this.state;
 		const { getFieldsValue } = this.props.form;
 		let values = getFieldsValue(['username', 'email', 'qq']);
-		if (!values.username) {
-			message.warning('请先于表头处填写名字');
-			return;
-		}
+		// if (!values.username) {
+		// 	message.warning('请先于表头处填写名字');
+		// 	return;
+		// }
 		if (!this.replyText.current.textAreaRef.value) {
 			message.warning('回复内容不能为空哦');
 			return;
@@ -165,9 +165,11 @@ class HomeDetail extends Component {
 				</div>
 				<Form className="comment-form" layout={'inline'}>
 					<FormItem label={'名字'}>
-						{getFieldDecorator('username', {
-							rules: [{ required: true, message: '请输入名字或昵称!' }]
-						})(
+						{getFieldDecorator('username'
+							// , {
+							// 	rules: [{ required: true, message: '请输入名字或昵称!' }]
+							// }
+						)(
 							<Input
 								placeholder="请输入名字或昵称"
 							/>

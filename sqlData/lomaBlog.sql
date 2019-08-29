@@ -89,6 +89,13 @@ mac         VARCHAR(50) NOT NULL DEFAULT "",
 articleId   INT NOT NULL DEFAULT 0
 );
 
+--创建mac-游客name对应表
+CREATE TABLE lomaBlog_user_mac(
+id          INT PRIMARY KEY AUTO_INCREMENT,
+mac         VARCHAR(50) NOT NULL DEFAULT "",
+username    VARCHAR(50) NOT NULL DEFAULT ""
+);
+
 
 
 
