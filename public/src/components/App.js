@@ -8,7 +8,7 @@ export default () => {
 	let isLogin = window.localStorage.getItem(USER_INFO.IS_LOGIN);
 	let Comp = <Main />;
 	const pathname = window.location.pathname.split('/');
-	if (!isLogin && pathname[1] != 'login') {
+	if (!isLogin && pathname[1] == 'admin') {
 		setTimeout(function () {
 			window.location.href = '/login';
 		}, 500)

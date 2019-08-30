@@ -1,5 +1,9 @@
 CREATE DATABASE lomaBlog CHARSET=UTF8;
 USE lomaBlog;
+
+--导出数据库：（亲测有效）
+--1、win+R：cmd-->进入mysql/bin文件夹;
+--2、mysqldump --column-statistics=0 -h localhost -u root -p lomaBlog > db.sql
 --创建用户表
 CREATE TABLE lomaBlog_user(
 uid    INT PRIMARY KEY AUTO_INCREMENT,
