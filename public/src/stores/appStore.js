@@ -5,11 +5,18 @@ class AppStore {
 	loading;
 	@observable
 	isBackStage;
+	@observable
+	helpMac;
 
 	constructor() {
 		this.loading = false;
 		this.isLogined = false;
 		this.isBackStage = window.localStorage.getItem('isBackStage') || window.location.pathname.split('/')[1] == 'admin'
+		if (!window.localStorage.getItem('helpMac')) {
+			let randomNum = Math.floor(Math.random() * 100000000);
+			window.localStorage.setItem('helpMac', randomNum);
+			this.helpMac = randomNum;
+		}
 	}
 
 	@action.bound

@@ -15,13 +15,14 @@ router.post("/blog/createArticleComment", (req, res) => {
             username = '';
         require('getmac').getMac(function (err, userAddress) {
             if (err) throw err
-            sql = `SELECT * FROM lomaBlog_user_mac WHERE mac='${userAddress}'`;
+            let mac = userAddress + obj.helpMac;
+            sql = `SELECT * FROM lomaBlog_user_mac WHERE mac='${mac}'`;
             sqlConnect.query(sql, params, (err, result, fields) => {
                 if (err) throw err;
                 if (result.length === 0) {
                     sql = `INSERT INTO lomaBlog_user_mac VALUES(null,?,?)`
-                    username = obj.username ? obj.username : '游客' + Math.floor((Math.random() * 100000000));
-                    params = [userAddress, username];
+                    username = obj.username ? obj.username : '游客' + obj.helpMac;
+                    params = [mac, username];
                     sqlConnect.query(sql, params, (err, result, fields) => {
                         if (err) throw err;
                         if (result.affectedRows > 0) {

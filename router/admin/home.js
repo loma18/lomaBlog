@@ -205,10 +205,11 @@ router.get("/blog/getArticle", (req, res) => {
         }
         res.json({ code: 200, data: resultObj[result[0].aid], msg: "success" });
     })
-    //获取mac地址,确定访问对象唯一性
+    //获取mac地址,确定访问对象唯一性--此方法不能获取远程访问服务器的客户端mac,获取的其实只是服务器的mac
     require('getmac').getMac(function (err, userAddress) {
         if (err) throw err
-        sql = `SELECT mac FROM lomaBlog_article_mac where mac='${userAddress}' AND articleId=${obj.id}`;
+        let mac = userAddress + obj.helpMac;
+        sql = `SELECT mac FROM lomaBlog_article_mac where mac='${mac}' AND articleId=${obj.id}`;
         sqlConnect.query(sql, [], (err, result, fields) => {
             if (err) throw err;
             if (result.length == 0) {
@@ -217,7 +218,7 @@ router.get("/blog/getArticle", (req, res) => {
                     console.log(result);
                 })
                 sql = "INSERT INTO lomaBlog_article_mac VALUES(null,?,?)";
-                sqlConnect.query(sql, [userAddress,obj.id], (err, result, fields) => {
+                sqlConnect.query(sql, [mac, obj.id], (err, result, fields) => {
                     console.log(result);
                 })
             }

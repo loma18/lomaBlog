@@ -10,7 +10,6 @@ export default class GlobalSpin extends Component {
 		const { appStore } = this.props;
 		return (
 			<Spin spinning={appStore.loading} size="large">
-				globalLoading...
 			</Spin>
 		);
 	}

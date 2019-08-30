@@ -30,7 +30,8 @@ class HomeDetail extends Component {
 
 	fetchData = () => {
 		const id = GetQueryString('articleId');
-		fireGetRequest(GET_ARTICLE_BY_ID, { id }).then((res) => {
+		const helpMac = window.localStorage.getItem('helpMac');
+		fireGetRequest(GET_ARTICLE_BY_ID, { id, helpMac }).then((res) => {
 			if (res.code === 200) {
 				this.setState({ resData: res.data }, () => {
 					this.props.appStore.setDocumentTitle(res.data.title);
@@ -57,11 +58,12 @@ class HomeDetail extends Component {
 	//提交评论
 	handleSubmit = () => {
 		const id = GetQueryString('articleId');
+		const helpMac = window.localStorage.getItem('helpMac');
 		this.props.form.validateFields((err, values) => {
 			if (err) {
 				return;
 			}
-			firePostRequest(CREATE_ARTICLE_COMMENT, { articalId: id, ...values }).then(res => {
+			firePostRequest(CREATE_ARTICLE_COMMENT, { articalId: id, ...values, helpMac }).then(res => {
 				if (res.code === 200) {
 					this.fetchCommentData();
 				} else {
@@ -105,6 +107,7 @@ class HomeDetail extends Component {
 		const { replyId, replyUserName } = this.state;
 		const { getFieldsValue } = this.props.form;
 		let values = getFieldsValue(['username', 'email', 'qq']);
+		const helpMac = window.localStorage.getItem('helpMac');
 		// if (!values.username) {
 		// 	message.warning('请先于表头处填写名字');
 		// 	return;
@@ -113,7 +116,7 @@ class HomeDetail extends Component {
 			message.warning('回复内容不能为空哦');
 			return;
 		}
-		firePostRequest(CREATE_ARTICLE_COMMENT, { articalId: id, parentId: replyId, parentUsername: replyUserName, ...values, content: this.replyText.current.textAreaRef.value }).then(res => {
+		firePostRequest(CREATE_ARTICLE_COMMENT, { articalId: id, parentId: replyId, parentUsername: replyUserName, ...values, content: this.replyText.current.textAreaRef.value, helpMac }).then(res => {
 			if (res.code === 200) {
 				this.fetchCommentData();
 			} else {
