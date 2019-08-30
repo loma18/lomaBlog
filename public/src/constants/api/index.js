@@ -52,6 +52,13 @@ export const DELETE_WHISPER = '/whisper/delete'; //删除微语
 
 export const GET_WHISPER_LIST = '/whisper/getList'; //获取微语列表
 
+/**
+ * 评论管理
+ */
+export const GET_COMMENT_LIST = '/comment/getList'; //获取全部评论
+
+export const DELETE_COMMENT_BY_ID = '/comment/deleteById'; //删除评论
+
 
 
 /**

@@ -152,7 +152,7 @@ router.get("/blog/getFilterList", (req, res) => {
     let sql = "SELECT t1.aid,t1.title,t1.content,t1.tags,t1.status,t1.createAt,t1.updateAt,t1.articleType,t1.views,count(t2.id) as comments" +
         " FROM lomaBlog_article as t1 left join lomaBlog_article_comment as t2 on t1.aid = t2.aid " +
         " WHERE " +
-        "status=? AND " +
+        "t1.status=? AND " +
         (obj.year ? "year(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
         (obj.month ? "month(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
         (obj.articleType && obj.articleType != 'all' ? "articleType=? AND " : '') +
@@ -237,5 +237,51 @@ router.get("/blog/deleteArticle", (req, res) => {
         }
     })
 });
+
+
+/**
+ * **********************************************评论管理************************************************
+ */
+router.get("/comment/getList", (req, res) => {
+    let obj = req.query;
+    let sql = `SELECT t1.id,t1.aid,t1.username,t1.QQ,t1.email,t1.content,t1.createAt,t1.parentId,t1.parentUsername,t2.title 
+    FROM lomaBlog_article_comment as t1 left join lomaBlog_article as t2 on t1.aid=t2.aid WHERE t1.status=0 limit ${(obj.page - 1) * 20},20`;
+    sqlConnect.query(sql, [], (err, result1, fields) => {
+        if (err) throw err;
+        sql = "SELECT count(*) as total FROM lomaBlog_article_comment WHERE status=0";
+        sqlConnect.query(sql, [], (err, result2, fields) => {
+            if (err) throw err;
+            res.json({ code: 200, data: result1, total: result2[0].total, msg: "success" });
+        })
+    })
+})
+
+router.get("/comment/deleteById", (req, res) => {
+    let obj = req.query;
+    // let sql = `DELETE FROM lomaBlog_article_comment WHERE id=?`;
+    // sqlConnect.query(sql, [obj.id], (err, result1, fields) => {
+    //     if (err) throw err;
+    deleteComment(res, sqlConnect, obj.id);
+    // })
+})
+
+//删除该评论下的子评论
+function deleteComment(res, sqlConnect, id) {
+    let sql = `DELETE FROM lomaBlog_article_comment WHERE id=?`;
+    sqlConnect.query(sql, [id], (err, result1, fields) => {
+        if (err) throw err;
+        sql = "SELECT * FROM lomaBlog_article_comment WHERE parentId=?";
+        sqlConnect.query(sql, [id], (err, result2, fields) => {
+            if (err) throw err;
+            if (result2.length === 0) {
+                res.json({ code: 200, msg: "success" });
+            }
+            for (let i = 0; i < result2.length; i++) {
+                deleteComment(res, sqlConnect, result2[i].id);
+            }
+        })
+    })
+
+}
 
 module.exports = router;

@@ -32,7 +32,7 @@ router.post("/blog/createArticleComment", (req, res) => {
                 } else {
                     username = result[0].username;
                 }
-                sql = "INSERT INTO lomaBlog_article_comment VALUE(null,?,?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,?,?)";
+                sql = "INSERT INTO lomaBlog_article_comment VALUE(null,?,?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,?,?,0)";
                 params = [obj.articalId, username, obj.qq, obj.email, obj.content, obj.parentId, obj.parentUsername];
                 sqlConnect.query(sql, params, (err, result, fields) => {
                     if (err) throw err;

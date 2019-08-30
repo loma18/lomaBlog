@@ -52,7 +52,8 @@ email       VARCHAR(50),
 content     VARCHAR(1000) NOT NULL DEFAULT "", 
 createAt    bigint,
 parentId    INT,
-parentUsername  VARCHAR(20)
+parentUsername  VARCHAR(20),
+status      INT NOT NULL DEFAULT 0
 );
 
 
