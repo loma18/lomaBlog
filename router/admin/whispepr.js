@@ -45,7 +45,7 @@ router.get("/whisper/delete", (req, res) => {
 router.get("/whisper/getList", (req, res) => {
     let obj = req.query,
         sql1 = "SELECT * FROM lomaBlog_whisper WHERE status=0 " + (obj.searchValue ? " AND description LIKE '%" + obj.searchValue + "%' " : ' ') +
-            "limit " + (obj.page - 1) * 20 + ",20",
+            "order by createAt desc limit " + (obj.page - 1) * 20 + ",20",
         sql2 = "SELECT count(id) as total FROM lomaBlog_whisper WHERE status=0 " + (obj.searchValue ? " AND description LIKE '%" + obj.searchValue + "%' " : ' '),
         params = [];
     sqlConnect.query(sql1, params, (err, result1, fields) => {

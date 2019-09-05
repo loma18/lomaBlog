@@ -17,6 +17,8 @@ app.use(adminHome);
 app.use(home);
 app.use(interfaces);
 app.use(whisper);
+// app.use(express.static(path.join(__dirname, './introduce-webPage')));
+app.use('/introduce', express.static(path.join(__dirname, './introduce-webPage')));
 app.use(express.static(path.join(__dirname, './public/build')));
 app.use(/(\/.*)?/, express.static(path.join(__dirname, './public/build')));
 

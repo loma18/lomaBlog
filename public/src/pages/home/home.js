@@ -74,18 +74,18 @@ class HomeIndex extends Component {
 					<ul>
 						{
 							dataList.map((item) => (
-								<li key={item.aid} className={'listItem'}>
+								<li key={item.aid} className={'listItem'} onClick={() => this.handleClick(item)}>
 									<Row type="flex" justify="space-between" gutter={10}>
 										<Col className={'articleContainer'}>
-											<h3 onClick={() => this.handleClick(item)}>{item.title}</h3>
-											<p dangerouslySetInnerHTML={{ __html: item.content }}></p>
+											<h3>{item.title}</h3>
+											<p className={'description'}>{item.description}</p>
 											<div className={'info'}>
-												{item.tags.split(',').map((tag, key) => {
-													return <b key={key}>{tag}</b>
-												})}
 												<span>{formatMomentToString(item.createAt, 'YYYY年MM月DD日 HH:mm:ss')}</span>
 												<span><Icon type="eye" />{item.views}</span>
 												<span><Icon type="message" />{item.comments}</span>
+												{item.tags.split(',').map((tag, key) => {
+													return <b key={key}>{tag}</b>
+												})}
 											</div>
 										</Col>
 									</Row>

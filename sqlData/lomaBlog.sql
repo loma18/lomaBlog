@@ -42,7 +42,8 @@ status      INT NOT NULL DEFAULT 0,
 createAt    bigint,
 updateAt    bigint,
 articleType VARCHAR(20),
-views       INT NOT NULL DEFAULT 0 
+views       INT NOT NULL DEFAULT 0,
+description VARCHAR(2000) NOT NULL DEFAULT "" 
 );
 
 

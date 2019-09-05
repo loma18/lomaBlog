@@ -64,11 +64,11 @@ router.post("/blog/save", (req, res) => {
         let obj = JSON.parse(str);
         let article = obj.article.join(','),
             catalogue = obj.catalogue,
-            sql = `INSERT INTO lomaBlog_article (title,content,tags,status,createAt,updateAt,articleType) VALUES(?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,UNIX_TIMESTAMP(NOW())*1000,?)`,
-            params = [obj.title, obj.content, article, obj.status, obj.articleType];
+            sql = `INSERT INTO lomaBlog_article (title,content,tags,status,createAt,updateAt,articleType,description) VALUES(?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,UNIX_TIMESTAMP(NOW())*1000,?,?)`,
+            params = [obj.title, obj.content, article, obj.status, obj.articleType,obj.description];
         if (obj.id) {
-            sql = `UPDATE lomaBlog_article SET title=?,content=?,tags=?,status=?,updateAt=UNIX_TIMESTAMP(NOW())*1000,articleType=? WHERE aid=?`;
-            params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.id];
+            sql = `UPDATE lomaBlog_article SET title=?,content=?,tags=?,status=?,updateAt=UNIX_TIMESTAMP(NOW())*1000,articleType=?,description=? WHERE aid=?`;
+            params = [obj.title, obj.content, article, obj.status, obj.articleType ,obj.description, obj.id];
         }
         sqlConnect.query(sql, params, (err, resultMsg, fields) => {
             if (err) throw err;
@@ -149,7 +149,7 @@ function handleCatalogue(res, sqlConnect, catalogue, obj, resultMsg) {
 // /**获取博客列表 */
 router.get("/blog/getFilterList", (req, res) => {
     let obj = req.query;
-    let sql = "SELECT t1.aid,t1.title,t1.content,t1.tags,t1.status,t1.createAt,t1.updateAt,t1.articleType,t1.views,count(t2.id) as comments" +
+    let sql = "SELECT t1.aid,t1.title,t1.content,t1.tags,t1.status,t1.createAt,t1.updateAt,t1.articleType,t1.description,t1.views,count(t2.id) as comments" +
         " FROM lomaBlog_article as t1 left join lomaBlog_article_comment as t2 on t1.aid = t2.aid " +
         " WHERE " +
         "t1.status=? AND " +
@@ -159,7 +159,7 @@ router.get("/blog/getFilterList", (req, res) => {
         (obj.searchVal ? "title LIKE '%" + obj.searchVal + "%' AND " : '') +
         "t1.aid IN (SELECT aid FROM lomaBlog_article_catalogue " +
         (obj.catalogueType && obj.catalogueType != 'all' ? "WHERE cid = ?)" : ')') +
-        ' group by t1.aid ' + (obj.page ? " limit " + (obj.page - 1) * 20 + ",20" : '');
+        ' group by t1.aid ' + (obj.page ? " order by t1.updateAt desc limit " + (obj.page - 1) * 20 + ",20" : '');
     let params = [obj.status];
     if (obj.year) {
         params.push(obj.year);
@@ -174,7 +174,7 @@ router.get("/blog/getFilterList", (req, res) => {
         params.push(obj.catalogueType);
     }
     if (obj.status == 0) {
-        sql = "SELECT * FROM lomaBlog_article WHERE status=0 " + (obj.page ? " limit " + (obj.page - 1) * 20 + ",20" : '');
+        sql = "SELECT * FROM lomaBlog_article WHERE status=0 " + (obj.page ? "order by updateAt desc limit " + (obj.page - 1) * 20 + ",20" : '');
         params = [];
     }
     if (obj.hotArticle) {
@@ -215,7 +215,7 @@ router.get("/blog/getArticle", (req, res) => {
             if (result.length == 0) {
                 sql = "UPDATE lomaBlog_article SET views=views+1 WHERE aid=?";
                 sqlConnect.query(sql, [obj.id], (err, result, fields) => {
-                    console.log(result);
+                    // console.log(result);
                 })
                 sql = "INSERT INTO lomaBlog_article_mac VALUES(null,?,?)";
                 sqlConnect.query(sql, [mac, obj.id], (err, result, fields) => {

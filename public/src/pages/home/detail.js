@@ -136,7 +136,7 @@ class HomeDetail extends Component {
 					<b>{!item.parentId ? item.username : (item.username + ' 回复 ' + item.parentUsername)}</b>: <span>{formatMomentToString(item.createAt, 'YYYY-MM-DD HH:mm')}</span>
 					<p>{item.content}<span onClick={() => this.handleReply(item.id, item.username)}>{!item.parentId ? '评论' : '回复'}</span></p>
 					{item.display && <div className={'replyComments'}>
-						<TextArea rows={4} ref={this.replyText} maxLength={300}/>
+						<TextArea rows={4} ref={this.replyText} maxLength={300} />
 						<div>
 							<Button onClick={() => this.handleCancelReply()}>取消</Button>
 							<Button onClick={() => this.handleSubmitReply()}>提交</Button>
@@ -162,7 +162,14 @@ class HomeDetail extends Component {
 		return (
 			<div className={'homeDetail'}>
 				<h2>{resData.title}</h2>
-				<p>{formatMomentToString(resData.createAt, 'YYYY年MM月DD日 HH:mm:ss')}</p>
+				<p>
+					<span>
+						{formatMomentToString(resData.createAt, 'YYYY年MM月DD日 HH:mm:ss')}
+					</span>
+					<span className={'rt'}>
+						最后更新时间：{formatMomentToString(resData.updateAt, 'YYYY年MM月DD日 HH:mm:ss')}
+					</span>
+				</p>
 				<hr />
 				<div dangerouslySetInnerHTML={{ __html: resData.content }}>
 				</div>

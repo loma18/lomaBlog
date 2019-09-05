@@ -21,6 +21,7 @@
             >h3 {
                 margin: 20px 0 10px;
             }
+
             .ant-menu {
                 background: transparent;
             }
@@ -59,7 +60,13 @@
 
         li.listItem {
             margin-bottom: 1rem;
+            padding-bottom: 5px;
             border-bottom: 1px solid @lineColor;
+
+            &:hover {
+                cursor: pointer;
+                box-shadow: -5px -5px 10px 0 inset @bgColor;
+            }
 
             h3 {
                 cursor: pointer;
@@ -112,6 +119,7 @@
     >div {
         min-height: 500px;
     }
+
     .comment-form {
         margin-top: 100px;
         border-top: 1px dashed @lineColor;

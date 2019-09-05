@@ -13,7 +13,11 @@ class Footer extends Component {
 	render() {
 		return (
 			<div id={'lomaBlog-footer'}>
-               footer
+				<Row>
+					<Col>
+						<a href="/introduce" target="_blank">关于我</a>
+					</Col>
+				</Row>
 			</div>
 		);
 	}

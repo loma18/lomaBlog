@@ -104,6 +104,7 @@ class AdminHomeEdit extends Component {
 			values.catalogue = this.getTransData();
 			values.article = article;
 			values.content = values.content.toHTML();
+			values.description = values.content.replace(/<(\S|\s)*?>/g, '').slice(0, 300);
 			this.setState({ spinLoading: true });
 			firePostRequest(SAVE_BLOG, { ...values }).then((res) => {
 				if (res.code === 200) {
