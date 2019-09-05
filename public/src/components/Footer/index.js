@@ -17,6 +17,12 @@ class Footer extends Component {
 					<Col>
 						<a href="/introduce" target="_blank">关于我</a>
 					</Col>
+					<Col>
+						<p><a href="http://icp.chinaz.com/loma18.com" target="_blank">粤ICP备19110811号</a></p>
+					</Col>
+					<Col>
+						© CopyRight {new Date().getFullYear()} xiange的博客
+					</Col>	
 				</Row>
 			</div>
 		);

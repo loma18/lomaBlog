@@ -805,7 +805,7 @@
   box-sizing: border-box;
 }
 body {
-  background: #ffffff;
+  background: #fff;
   padding-top: 60px;
   margin: 0;
   font: 14px "microsoft yahei", Arial, simsun;
@@ -840,7 +840,7 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: #000000;
+  color: #000;
   text-decoration: underline;
 }
 img {
@@ -860,7 +860,12 @@ img {
 #skill > h1,
 #myshow > h1,
 #contact > h1 {
-  transition: all .2s linear;
+  transition: all 0.2s linear;
+}
+.myTrends li img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
 }
 #homepage:hover > h1,
 #exp:hover > h1,
@@ -929,7 +934,7 @@ ul.Fixed li a.hover {
 }
 #top ul.rt li a:hover,
 #top ul.rt li a.hover {
-  color: #000000;
+  color: #000;
   text-decoration: underline;
   font-weight: bold;
 }
@@ -963,7 +968,7 @@ ul.Fixed li a.hover {
   width: 172px;
   height: 172px;
   border-radius: 50%;
-  transition: transform .3s linear;
+  transition: transform 0.3s linear;
 }
 #homepage div.rt > div:first-child:hover img {
   transform: scale(1.2);
@@ -1054,7 +1059,7 @@ ul.Fixed li a.hover {
 #exp > div > div.edu div.rt p a img {
   width: 100%;
   height: 100%;
-  transition: transform .5s linear;
+  transition: transform 0.5s linear;
 }
 #exp > div > div.edu div.rt p a:hover img {
   transform: scale(1.1);
@@ -1382,28 +1387,4 @@ ul.Fixed li a.hover {
 #contact > div div.rt ul li {
   float: left;
   margin-right: 10px;
-}
-#contact > div div.rt ul a {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  border-radius: 50%;
-  background: #fff;
-  text-align: center;
-}
-#contact > div div.rt ul a b {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1px;
-  height: 1px;
-  border-radius: 50%;
-  transition: all .2s linear;
-}
-#contact > div div.rt ul a:hover b {
-  transform-origin: center;
-  transform: scale(51);
-  background-color: rgba(0, 0, 0, 0.4);
 }
