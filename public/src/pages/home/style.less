@@ -37,6 +37,16 @@
                 border-bottom: 1px dashed @lineColor;
                 margin-left: 20px;
 
+                h4 {
+                    a {
+                        display: inline-block;
+                        width: 300px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+
                 p {
                     font-size: @sfont;
 
@@ -82,6 +92,14 @@
 
             .articleContainer {
                 flex: 1;
+
+                h3 {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                }
 
                 p {
                     overflow: hidden;

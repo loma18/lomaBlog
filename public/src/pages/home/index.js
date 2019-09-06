@@ -173,7 +173,7 @@ class Home extends Component {
 							{hotArticleList.map(item => {
 								return (
 									<div className={'hot-item'} key={item.aid}>
-										<h4><Link to={'/home/detail?articleId=' + item.aid}>{item.title}</Link></h4>
+										<h4 title={item.title}><Link to={'/home/detail?articleId=' + item.aid}>{item.title}</Link></h4>
 										<p>
 											标签：{
 												item.tags.split(',').map((tag, key) => {

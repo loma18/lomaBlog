@@ -22,7 +22,7 @@ class Footer extends Component {
 					</Col>
 					<Col>
 						© CopyRight {new Date().getFullYear()} xiange的博客
-					</Col>	
+					</Col>
 				</Row>
 			</div>
 		);
