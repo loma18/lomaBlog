@@ -57,6 +57,25 @@ router.get("/catalogue/delete", (req, res) => {
     })
 });
 
+/**
+ * 获取附件列表
+ */
+router.get("/blog/attachment/getList", (req, res) => {
+    let obj = req.query;
+    let sql = "SELECT*FROM lomaBlog_attachment WHERE aid=?",
+        params = [obj.articleId];
+    sqlConnect.query(sql, params, (err, result, fields) => {
+        if (err) throw err;
+        let arr = [];
+        if (result.length > 0) {
+            result.map(item => {
+                arr.push({ id: item.id, fileName: item.file_name });
+            })
+        }
+        res.json({ code: 200, data: arr, msg: "success" });
+    })
+})
+
 /**保存博客 */
 router.post("/blog/save", (req, res) => {
     req.on("data", (data) => {
@@ -65,10 +84,10 @@ router.post("/blog/save", (req, res) => {
         let article = obj.article.join(','),
             catalogue = obj.catalogue,
             sql = `INSERT INTO lomaBlog_article (title,content,tags,status,createAt,updateAt,articleType,description) VALUES(?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,UNIX_TIMESTAMP(NOW())*1000,?,?)`,
-            params = [obj.title, obj.content, article, obj.status, obj.articleType,obj.description];
+            params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.description];
         if (obj.id) {
             sql = `UPDATE lomaBlog_article SET title=?,content=?,tags=?,status=?,updateAt=UNIX_TIMESTAMP(NOW())*1000,articleType=?,description=? WHERE aid=?`;
-            params = [obj.title, obj.content, article, obj.status, obj.articleType ,obj.description, obj.id];
+            params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.description, obj.id];
         }
         sqlConnect.query(sql, params, (err, resultMsg, fields) => {
             if (err) throw err;

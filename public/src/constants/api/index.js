@@ -26,6 +26,10 @@ export const GET_ARTICLE_COMMENT_BY_ID = '/blog/getArticleComment'; // 根据id�
 
 export const GET_ARTICLE_TYPE_COUNT = '/blog/getArticleTypeCount'; // 获取文章分类各自数量
 
+export const GET_ATTACHMENT_LIST = '/blog/attachment/getList'; // 获取博客附件列表
+
+
+
 /**
  * 后台接口
  */

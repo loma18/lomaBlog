@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Form, Input, Spin, Tooltip, Checkbox, Select, Button, message } from 'antd';
+import { Row, Col, Icon, Form, Input, Spin, Tooltip, Checkbox, Select, Button, message, Upload } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import { fireGetRequest, firePostRequest } from 'service/app';
 import {
 	SAVE_BLOG,
 	GET_CATALOGUE_LIST,
-	GET_ARTICLE_BY_ID
+	GET_ARTICLE_BY_ID,
+	GET_ATTACHMENT_LIST
 } from 'constants/api';
 import { openNotification, showSuccessMsg, GetQueryString } from 'utils';
 import LomaBlogTag from 'components/Admin/LomaBlogTag';
@@ -29,6 +30,8 @@ class AdminHomeEdit extends Component {
 			hasSelCatalogue: [], // 选中之前已有分类
 			catalogueList: [], // [{id:1,name:'前端'}],
 			compareList: [],
+			fileList: [], //所有附件，用于界面显示
+			backFileList: [], //后台返回附件
 			spinLoading: false
 		};
 	}
@@ -90,7 +93,14 @@ class AdminHomeEdit extends Component {
 
 	// 发布博客
 	handlePublish = (isPublish = true) => {
-		const { article, resData, catalogue } = this.state;
+		const { article, resData, catalogue, backFileList, fileList } = this.state;
+		let backFileIds = this.getID(backFileList),
+			upLoadfileList = [];
+		fileList.map((val, index) => {
+			if (!val.id) {
+				upLoadfileList.push(val.originFileObj);
+			}
+		});
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (err) {
 				return;
@@ -105,6 +115,8 @@ class AdminHomeEdit extends Component {
 			values.article = article;
 			values.content = values.content.toHTML();
 			values.description = values.content.replace(/<(\S|\s)*?>/g, '').slice(0, 300);
+			values.files = upLoadfileList;
+			values.attachmentIds = backFileIds;
 			this.setState({ spinLoading: true });
 			firePostRequest(SAVE_BLOG, { ...values }).then((res) => {
 				if (res.code === 200) {
@@ -159,6 +171,60 @@ class AdminHomeEdit extends Component {
 		this.setState({ catalogue, hasSelCatalogue: catalogue, article });
 	}
 
+	beforeUpload = (file, fileList) => {
+		if (file.size > 1000000) {
+			return false;
+		} else {
+			return true;
+		}
+	};
+
+	onChangeCallBack = list => {
+		list.fileList = list.fileList.map(item => {
+			item.status = 'done';
+			return item;
+		});
+		this.setState({ fileList: list.fileList });
+	};
+
+	afterRemoveFile = (file, index) => {
+		let currentIndex = '';
+		let { backFileList } = this.state;
+		backFileList.forEach((v, i) => {
+			if (file.uid == v.uid) {
+				currentIndex = i;
+				return;
+			}
+		});
+
+		backFileList.splice(currentIndex, 1);
+
+		this.setState({ backFileList });
+	};
+
+	//处理返回的附件列表
+	transData = list => {
+		for (let i = 0; i < list.length; i++) {
+			list[i].uid = -list[i].id;
+			list[i].name = list[i].fileName;
+			list[i].status = 'done';
+		}
+		return list;
+	};
+
+	getAttachmentList = () => {
+		let articleId = GetQueryString('articleId'),
+			backFileList = [];
+		fireGetRequest(GET_ATTACHMENT_LIST, { articleId }).then(res => {
+			if (res.code === 200) {
+				backFileList = this.transData(res[1].data);
+				this.setState({ fileList: backFileList, backFileList });
+			} else {
+				openNotification('error', '获取附件列表失败', res.msg);
+			}
+		}).catch(err => console.log(err))
+	}
+
 	fetchData = () => {
 		let articleId = GetQueryString('articleId');
 		if (!articleId) {
@@ -178,10 +244,11 @@ class AdminHomeEdit extends Component {
 
 	componentDidMount() {
 		this.getCatalogueList();
+		this.getAttachmentList();
 	}
 
 	render() {
-		const { resData, article, catalogue, hasSelCatalogue, catalogueList, spinLoading } = this.state;
+		const { resData, article, catalogue, hasSelCatalogue, catalogueList, spinLoading, fileList } = this.state;
 		const { getFieldDecorator } = this.props.form;
 		return (
 			<div className={'adminHomeEdit'}>
@@ -242,6 +309,21 @@ class AdminHomeEdit extends Component {
 									))}
 								</Select>
 							)}
+						</FormItem>
+						<FormItem label="附件" className={'attachment'}>
+							<Upload
+								onChange={this.onChangeCallBack}
+								fileList={fileList}
+								onRemove={this.afterRemoveFile}
+								beforeUpload={this.beforeUpload}
+								// multiple
+								action=""
+								isDragger={false}
+							>
+								<Button>
+									<Icon type="upload" /> 上传文件
+    							</Button>
+							</Upload>
 						</FormItem>
 						<Row type="flex" gutter={10}>
 							<Col>

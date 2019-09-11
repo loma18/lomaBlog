@@ -102,6 +102,15 @@ mac         VARCHAR(50) NOT NULL DEFAULT "",
 username    VARCHAR(50) NOT NULL DEFAULT ""
 );
 
+--创建文章-附件表
+CREATE TABLE lomaBlog_attachment(
+id          INT PRIMARY KEY AUTO_INCREMENT,
+aid         INT NOT NULL,
+file_name   VARCHAR(100),
+createAt    bigint,
+file_path   VARCHAR(4000)
+)
+
 
 
 
