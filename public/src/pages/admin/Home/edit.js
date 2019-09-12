@@ -96,9 +96,11 @@ class AdminHomeEdit extends Component {
 		const { article, resData, catalogue, backFileList, fileList } = this.state;
 		let backFileIds = this.getID(backFileList),
 			upLoadfileList = [];
+		let formData = new FormData();
 		fileList.map((val, index) => {
 			if (!val.id) {
 				upLoadfileList.push(val.originFileObj);
+				formData.append('file', val.originFileObj)
 			}
 		});
 		this.props.form.validateFieldsAndScroll((err, values) => {
@@ -112,13 +114,17 @@ class AdminHomeEdit extends Component {
 			values.id = resData.aid;
 			values.status = resData.status != undefined && resData.status != 0 ? resData.status : (isPublish ? 1 : 0);
 			values.catalogue = this.getTransData();
-			values.article = article;
+			values.catalogue = JSON.stringify(values.catalogue);
+			values.article = JSON.stringify(article);
 			values.content = values.content.toHTML();
 			values.description = values.content.replace(/<(\S|\s)*?>/g, '').slice(0, 300);
-			values.files = upLoadfileList;
-			values.attachmentIds = backFileIds;
+			values.attachmentIds = JSON.stringify(backFileIds);
+			for(var key in values){
+				formData.append([key], values[key]);
+			}
+			// values.files = upLoadfileList;
 			this.setState({ spinLoading: true });
-			firePostRequest(SAVE_BLOG, { ...values }).then((res) => {
+			firePostRequest(SAVE_BLOG, formData).then((res) => {
 				if (res.code === 200) {
 					showSuccessMsg('保存成功');
 					this.props.history.push('/admin/home/articleManage');
@@ -128,6 +134,12 @@ class AdminHomeEdit extends Component {
 				.catch((err) => console.log(err));
 		});
 	}
+
+	getID = lists => {
+		return lists.map(list => {
+			return list.id > 0 ? list.id : -list.id;
+		});
+	};
 
 	// 获取个人分类列表
 	getCatalogueList = () => {
@@ -217,7 +229,7 @@ class AdminHomeEdit extends Component {
 			backFileList = [];
 		fireGetRequest(GET_ATTACHMENT_LIST, { articleId }).then(res => {
 			if (res.code === 200) {
-				backFileList = this.transData(res[1].data);
+				backFileList = this.transData(res.data);
 				this.setState({ fileList: backFileList, backFileList });
 			} else {
 				openNotification('error', '获取附件列表失败', res.msg);

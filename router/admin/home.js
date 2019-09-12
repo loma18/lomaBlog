@@ -3,6 +3,12 @@ let router = express.Router();
 const qs = require("querystring");
 const sqlConnect = require('../../sqlConnect');
 const request = require('request');
+var fs = require('fs');
+var formidable = require('formidable');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
+let app = express();
+app.use(multipart({ uploadDir: '/attachment' }))
 
 /** 获取个人分类列表*/
 router.get("/getCatalogueList", (req, res) => {
@@ -77,45 +83,106 @@ router.get("/blog/attachment/getList", (req, res) => {
 })
 
 /**保存博客 */
-router.post("/blog/save", (req, res) => {
-    req.on("data", (data) => {
-        let str = data.toString();
-        let obj = JSON.parse(str);
-        let article = obj.article.join(','),
-            catalogue = obj.catalogue,
-            sql = `INSERT INTO lomaBlog_article (title,content,tags,status,createAt,updateAt,articleType,description) VALUES(?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,UNIX_TIMESTAMP(NOW())*1000,?,?)`,
-            params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.description];
-        if (obj.id) {
-            sql = `UPDATE lomaBlog_article SET title=?,content=?,tags=?,status=?,updateAt=UNIX_TIMESTAMP(NOW())*1000,articleType=?,description=? WHERE aid=?`;
-            params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.description, obj.id];
+router.post("/blog/save", multipartMiddleware, (req, res) => {
+    // req.on("data", (data) => {
+    // let str = data.toString();
+    let obj = req.body;
+    let article = JSON.parse(obj.article).join(','),
+        catalogue = JSON.parse(obj.catalogue),
+        sql = `INSERT INTO lomaBlog_article (title,content,tags,status,createAt,updateAt,articleType,description) VALUES(?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,UNIX_TIMESTAMP(NOW())*1000,?,?)`,
+        params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.description];
+    if (obj.id && obj.id != 'undefined') {
+        sql = `UPDATE lomaBlog_article SET title=?,content=?,tags=?,status=?,updateAt=UNIX_TIMESTAMP(NOW())*1000,articleType=?,description=? WHERE aid=?`;
+        params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.description, obj.id];
+    }
+    sqlConnect.query(sql, params, (err, resultMsg, fields) => {
+        // if (err) throw err;
+        if (err) { res.json({ code: 500, msg: err }); }
+        if (catalogue.length === 0) {
+            // saveAttachment(req, res, sqlConnect, obj, resultMsg);
+            deleteAttachment(req, res, sqlConnect, obj, resultMsg);
+            // res.json({ code: 200, msg: 'success' });
+            return;
         }
-        sqlConnect.query(sql, params, (err, resultMsg, fields) => {
-            if (err) throw err;
-            if (catalogue.length === 0) {
-                res.json({ code: 200, msg: 'success' });
-                return;
-            }
 
-            if (obj.id) {
-                sql = `DELETE FROM lomaBlog_article_catalogue where aid=?`;
-                sqlConnect.query(sql, [obj.id], (err, result, fields) => {
-                    if (err) throw err;
-                    handleCatalogue(res, sqlConnect, catalogue, obj, resultMsg);
-                });
-                return;
-            } else {
-                handleCatalogue(res, sqlConnect, catalogue, obj, resultMsg);
-            }
-
-        })
+        if (obj.id && obj.id != 'undefined') {
+            sql = `DELETE FROM lomaBlog_article_catalogue where aid=?`;
+            sqlConnect.query(sql, [obj.id], (err, result, fields) => {
+                if (err) throw err;
+                handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg);
+            });
+        } else {
+            handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg);
+        }
     })
 });
 
-function handleCatalogue(res, sqlConnect, catalogue, obj, resultMsg) {
+function saveAttachment(req, res, sqlConnect, obj, resultMsg) {
+    let sql = 'INSERT INTO lomaBlog_attachment VALUES(null,?,?,UNIX_TIMESTAMP(NOW())*1000,?)',
+        params = [],
+        articleId = obj.id && obj.id != 'undefined' ? obj.id : resultMsg.insertId;
+    if (!req.files || !req.files.file) {
+        // deleteAttachment(res, sqlConnect, obj, resultMsg);
+        return;
+    }
+    let file = req.files.file,
+        fileList = file.path ? [file] : file,
+        data = '',
+        path = '',
+        filename = [];
+    let uploadDir = ''; // 存储路径
+    for (let i = 0; i < fileList.length; i++) {
+        filename = fileList[i].path.split(['\\']);
+        path = fileList[i].path;
+        data = fs.readFileSync(fileList[i].path);
+        uploadDir = __dirname + '/../../attachment/' + filename[filename.length - 1];
+        fs.writeFile(uploadDir, data, function (err) { // 存储文件
+            if (err) { res.json({ code: 500, msg: err }); }
+            fs.unlink(path, function () { }) // 删除文件
+            params = [articleId, req.files.file.name, uploadDir];
+            sqlConnect.query(sql, params, (err, result, fields) => {
+                if (err) { res.json({ code: 500, msg: err }); }
+                // deleteAttachment(res, sqlConnect, obj, resultMsg);
+            });
+        })
+    }
+    res.json({ code: 200, msg: 'success' })
+}
+
+//删除博客原来相关附件
+function deleteAttachment(req, res, sqlConnect, obj, resultMsg) {
+    let sql = 'SELECT id,file_path FROM lomaBlog_attachment WHERE aid=?',
+        existFileId = JSON.parse(obj.attachmentIds),
+        delId = [],
+        articleId = obj.id && obj.id != 'undefined' ? obj.id : resultMsg.insertId;
+    sqlConnect.query(sql, [articleId], (err, result, fields) => {
+        if (err) { res.json({ code: 500, msg: err }); }
+        for (let i = 0; i < result.length; i++) {
+            if (existFileId.indexOf(result[i].id) < 0) {
+                delId.push(result[i]);
+            }
+        }
+        if (delId.length === 0) {
+            saveAttachment(req, res, sqlConnect, obj, resultMsg);
+            return;
+        }
+        sql = 'DELETE FROM lomaBlog_attachment WHERE id=?';
+        for (let j = 0; j < delId.length; j++) {
+            fs.unlink(delId[j].file_path, function () { });
+            sqlConnect.query(sql, [delId[j].id], (err, result, fields) => {
+                if (err) { res.json({ code: 500, msg: err }); }
+                saveAttachment(req, res, sqlConnect, obj, resultMsg);
+                // res.json({ code: 200, msg: 'success' })
+            })
+        }
+    })
+}
+
+function handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg) {
     let hasNew = false,
         params = [],
         params1 = [],
-        articleId = obj.id ? obj.id : resultMsg.insertId;
+        articleId = obj.id && obj.id != 'undefined' ? obj.id : resultMsg.insertId;
     let sql = `INSERT INTO lomaBlog_catalogue VALUE`;
     let sql1 = `INSERT INTO lomaBlog_article_catalogue VALUE`;
     for (let i = 0; i < catalogue.length; i++) {
@@ -143,7 +210,9 @@ function handleCatalogue(res, sqlConnect, catalogue, obj, resultMsg) {
                 sqlConnect.query(sql1, params1, (err, result, fields) => {
                     if (err) throw err;
                     if (result.affectedRows > 0) {
-                        res.json({ code: 200, msg: "success" });
+                        deleteAttachment(req, res, sqlConnect, obj, resultMsg);
+                        // saveAttachment(req, res, sqlConnect, obj, resultMsg);
+                        // res.json({ code: 200, msg: "success" });
                     } else {
                         res.json({ code: 500, msg: "保存失败" });
                     }
@@ -157,7 +226,9 @@ function handleCatalogue(res, sqlConnect, catalogue, obj, resultMsg) {
         sqlConnect.query(sql1, params1, (err, result, fields) => {
             if (err) throw err;
             if (result.affectedRows > 0) {
-                res.json({ code: 200, msg: "success" });
+                deleteAttachment(req, res, sqlConnect, obj, resultMsg);
+                // saveAttachment(req, res, sqlConnect, obj, resultMsg);
+                // res.json({ code: 200, msg: "success" });
             } else {
                 res.json({ code: 500, msg: "保存失败" });
             }
