@@ -94,7 +94,7 @@ router.get("/blog/attachment/download", (req, res) => {
                 // 注意这里的type设置，导出不同文件type值不同application/vnd.openxmlformats-officedocument.wordprocessingml.document
                 // "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 "Content-Type": `${mimeType};chartset=utf-8`,
-                'Content-disposition': `attachment; filename=${result[0].file_name}`
+                'Content-disposition': `attachment; filename=${encodeURI(result[0].file_name)}`
             });
             let pathname = result[0].file_path;
             let fReadStream = fs.createReadStream(pathname);

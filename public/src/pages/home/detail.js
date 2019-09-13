@@ -155,11 +155,16 @@ class HomeDetail extends Component {
 	}
 
 	//点击下载附件
-	handleDownload = (id) => {
-		fireGetRequest(DOWNLOAD_ATTACHMENT_BY_ID, { id }, { responseType: 'blob' }).then(res => {
+	handleDownload = (item) => {
+		fireGetRequest(DOWNLOAD_ATTACHMENT_BY_ID, { id: item.id }, { responseType: 'blob' }).then(res => {
 			let blob = new Blob([res], { type: res.type });
 			let objUrl = URL.createObjectURL(blob);
-			window.location.href = objUrl;
+			let a = document.createElement('a');
+			a.href = objUrl;
+			a.download = item.fileName;
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
 		}).catch(err => console.log(err))
 	}
 
@@ -211,7 +216,7 @@ class HomeDetail extends Component {
 							{fileList.map(item => {
 								return (
 									<li key={item.id}>
-										<span onClick={() => this.handleDownload(item.id)}>{item.fileName}</span>
+										<span onClick={() => this.handleDownload(item)}>{item.fileName}</span>
 									</li>
 								)
 							})}
