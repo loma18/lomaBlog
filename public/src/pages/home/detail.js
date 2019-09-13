@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { Row, Col, Button, Form, Input, message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { fireGetRequest, firePostRequest } from 'service/app';
+import BraftEditor from 'braft-editor';
+import 'braft-editor/dist/index.css';
 import {
 	GET_ARTICLE_BY_ID,
 	CREATE_ARTICLE_COMMENT,
-	GET_ARTICLE_COMMENT_BY_ID
+	GET_ARTICLE_COMMENT_BY_ID,
+	GET_ATTACHMENT_LIST,
+	DOWNLOAD_ATTACHMENT_BY_ID
 } from 'constants/api';
 import { openNotification, formatMomentToString, GetQueryString } from 'utils';
 
@@ -23,6 +27,7 @@ class HomeDetail extends Component {
 			resData: {},
 			commentList: [],
 			replyId: '',
+			fileList: [],
 			replyUserName: ''
 		}
 		this.replyText = React.createRef();
@@ -31,10 +36,12 @@ class HomeDetail extends Component {
 	fetchData = () => {
 		const id = GetQueryString('articleId');
 		const helpMac = window.localStorage.getItem('helpMac');
+		this.getAttachmentList();
 		fireGetRequest(GET_ARTICLE_BY_ID, { id, helpMac }).then((res) => {
 			if (res.code === 200) {
 				this.setState({ resData: res.data }, () => {
 					this.props.appStore.setDocumentTitle(res.data.title);
+					this.editorInstance.setValue(BraftEditor.createEditorState(res.data.content));
 					this.fetchCommentData();
 				});
 			} else {
@@ -147,6 +154,27 @@ class HomeDetail extends Component {
 		})
 	}
 
+	//点击下载附件
+	handleDownload = (id) => {
+		fireGetRequest(DOWNLOAD_ATTACHMENT_BY_ID, { id }, { responseType: 'blob' }).then(res => {
+			let blob = new Blob([res], { type: res.type });
+			let objUrl = URL.createObjectURL(blob);
+			window.location.href = objUrl;
+		}).catch(err => console.log(err))
+	}
+
+	//获取附件列表
+	getAttachmentList = () => {
+		let articleId = GetQueryString('articleId');
+		fireGetRequest(GET_ATTACHMENT_LIST, { articleId }).then(res => {
+			if (res.code === 200) {
+				this.setState({ fileList: res.data });
+			} else {
+				openNotification('error', '获取附件列表失败', res.msg);
+			}
+		}).catch(err => console.log(err))
+	}
+
 	componentWillReceiveProps(props) {
 		this.fetchData();
 	}
@@ -157,7 +185,7 @@ class HomeDetail extends Component {
 	}
 
 	render() {
-		const { resData, commentList } = this.state;
+		const { resData, commentList, fileList } = this.state;
 		const { getFieldDecorator } = this.props.form;
 		return (
 			<div className={'homeDetail'}>
@@ -171,8 +199,26 @@ class HomeDetail extends Component {
 					</span>
 				</p>
 				<hr />
-				<div dangerouslySetInnerHTML={{ __html: resData.content }}>
-				</div>
+				<BraftEditor
+					ref={(instance) => (this.editorInstance = instance)}
+					readOnly
+					controls={[]}
+				/>
+				{fileList.length > 0 && <Row>
+					<Col>附件列表：</Col>
+					<Col>
+						<ul className={'attachmentList'}>
+							{fileList.map(item => {
+								return (
+									<li key={item.id}>
+										<span onClick={() => this.handleDownload(item.id)}>{item.fileName}</span>
+									</li>
+								)
+							})}
+						</ul>
+					</Col>
+				</Row>
+				}
 				<Form className="comment-form" layout={'inline'}>
 					<FormItem label={'名字'}>
 						{getFieldDecorator('username'

@@ -116,7 +116,8 @@ class AdminHomeEdit extends Component {
 			values.catalogue = this.getTransData();
 			values.catalogue = JSON.stringify(values.catalogue);
 			values.article = JSON.stringify(article);
-			values.content = values.content.toHTML();
+			// values.content = values.content.toHTML();
+			values.content = values.content.toRAW();
 			values.description = values.content.replace(/<(\S|\s)*?>/g, '').slice(0, 300);
 			values.attachmentIds = JSON.stringify(backFileIds);
 			for(var key in values){
@@ -328,7 +329,7 @@ class AdminHomeEdit extends Component {
 								fileList={fileList}
 								onRemove={this.afterRemoveFile}
 								beforeUpload={this.beforeUpload}
-								// multiple
+								multiple
 								action=""
 								isDragger={false}
 							>

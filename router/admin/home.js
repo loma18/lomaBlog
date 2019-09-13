@@ -7,6 +7,7 @@ var fs = require('fs');
 var formidable = require('formidable');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
+var utils = require('../../utils');
 let app = express();
 app.use(multipart({ uploadDir: '/attachment' }))
 
@@ -68,24 +69,61 @@ router.get("/catalogue/delete", (req, res) => {
  */
 router.get("/blog/attachment/getList", (req, res) => {
     let obj = req.query;
-    let sql = "SELECT*FROM lomaBlog_attachment WHERE aid=?",
+    let sql = "SELECT id,file_name as fileName FROM lomaBlog_attachment WHERE aid=?",
         params = [obj.articleId];
     sqlConnect.query(sql, params, (err, result, fields) => {
         if (err) throw err;
-        let arr = [];
+        res.json({ code: 200, data: result, msg: "success" });
+    })
+})
+
+/**
+ * 下载附件
+ */
+router.get("/blog/attachment/download", (req, res) => {
+    let obj = req.query;
+    let sql = "SELECT file_path,file_name FROM lomaBlog_attachment WHERE id=?",
+        params = [obj.id];
+    sqlConnect.query(sql, params, (err, result, fields) => {
+        if (err) { res.json({ code: 500, msg: err }); };
         if (result.length > 0) {
-            result.map(item => {
-                arr.push({ id: item.id, fileName: item.file_name });
+            var a = result[0].file_path;
+            a = a.split(/(?=[a-zA-Z0-9]*?)\.(?=[a-zA-Z0-9]+$)/);
+            var mimeType = utils.getMIME(a[1]);
+            res.writeHead(200, {
+                // 注意这里的type设置，导出不同文件type值不同application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                // "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "Content-Type": `${mimeType};chartset=utf-8`,
+                'Content-disposition': `attachment; filename=${result[0].file_name}`
+            });
+            let pathname = result[0].file_path;
+            let fReadStream = fs.createReadStream(pathname);
+        
+            //读取文件发生错误事件
+            fReadStream.on('error', (err) => {
+                console.log('发生异常:', err);
+            });
+            //已打开要读取的文件事件
+            fReadStream.on('open', (fd) => {
+                console.log('文件已打开:', fd);
+            });
+            //文件已经就位，可用于读取事件
+            fReadStream.on('ready', () => {
+                console.log('文件已准备好..');
             })
+            fReadStream.on('data', (chunk) => {
+                res.write(chunk, 'binary');
+            });
+            //文件读取完成事件
+            fReadStream.on('end', () => {
+                res.end();
+            });
         }
-        res.json({ code: 200, data: arr, msg: "success" });
     })
 })
 
 /**保存博客 */
 router.post("/blog/save", multipartMiddleware, (req, res) => {
-    // req.on("data", (data) => {
-    // let str = data.toString();
     let obj = req.body;
     let article = JSON.parse(obj.article).join(','),
         catalogue = JSON.parse(obj.catalogue),
@@ -96,19 +134,20 @@ router.post("/blog/save", multipartMiddleware, (req, res) => {
         params = [obj.title, obj.content, article, obj.status, obj.articleType, obj.description, obj.id];
     }
     sqlConnect.query(sql, params, (err, resultMsg, fields) => {
-        // if (err) throw err;
-        if (err) { res.json({ code: 500, msg: err }); }
+        if (err) {
+            res.json({ code: 500, msg: err });
+        }
         if (catalogue.length === 0) {
-            // saveAttachment(req, res, sqlConnect, obj, resultMsg);
             deleteAttachment(req, res, sqlConnect, obj, resultMsg);
-            // res.json({ code: 200, msg: 'success' });
             return;
         }
 
         if (obj.id && obj.id != 'undefined') {
             sql = `DELETE FROM lomaBlog_article_catalogue where aid=?`;
             sqlConnect.query(sql, [obj.id], (err, result, fields) => {
-                if (err) throw err;
+                if (err) {
+                    res.json({ code: 500, msg: err });
+                }
                 handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg);
             });
         } else {
@@ -122,31 +161,30 @@ function saveAttachment(req, res, sqlConnect, obj, resultMsg) {
         params = [],
         articleId = obj.id && obj.id != 'undefined' ? obj.id : resultMsg.insertId;
     if (!req.files || !req.files.file) {
-        // deleteAttachment(res, sqlConnect, obj, resultMsg);
+        res.json({ code: 200, msg: 'success' })
         return;
     }
     let file = req.files.file,
         fileList = file.path ? [file] : file,
-        data = '',
-        path = '',
-        filename = [];
+        data = '';
     let uploadDir = ''; // 存储路径
     for (let i = 0; i < fileList.length; i++) {
-        filename = fileList[i].path.split(['\\']);
-        path = fileList[i].path;
         data = fs.readFileSync(fileList[i].path);
-        uploadDir = __dirname + '/../../attachment/' + filename[filename.length - 1];
-        fs.writeFile(uploadDir, data, function (err) { // 存储文件
+        uploadDir = __dirname + '/../../attachment/';
+        fs.writeFile(uploadDir + fileList[i].path.split(['\\']).slice(-1)[0], data, function (err) { // 存储文件
             if (err) { res.json({ code: 500, msg: err }); }
-            fs.unlink(path, function () { }) // 删除文件
-            params = [articleId, req.files.file.name, uploadDir];
+            fs.unlink(fileList[i].path, function () { }) // 删除文件
+            params = [articleId, fileList[i].name, uploadDir + fileList[i].path.split(['\\']).slice(-1)[0]];
             sqlConnect.query(sql, params, (err, result, fields) => {
-                if (err) { res.json({ code: 500, msg: err }); }
-                // deleteAttachment(res, sqlConnect, obj, resultMsg);
+                if (err) {
+                    res.json({ code: 500, msg: err });
+                }
+                if (i == fileList.length - 1) {
+                    res.json({ code: 200, msg: 'success' })
+                }
             });
         })
     }
-    res.json({ code: 200, msg: 'success' })
 }
 
 //删除博客原来相关附件
@@ -154,6 +192,7 @@ function deleteAttachment(req, res, sqlConnect, obj, resultMsg) {
     let sql = 'SELECT id,file_path FROM lomaBlog_attachment WHERE aid=?',
         existFileId = JSON.parse(obj.attachmentIds),
         delId = [],
+        tempStr = '',
         articleId = obj.id && obj.id != 'undefined' ? obj.id : resultMsg.insertId;
     sqlConnect.query(sql, [articleId], (err, result, fields) => {
         if (err) { res.json({ code: 500, msg: err }); }
@@ -166,14 +205,19 @@ function deleteAttachment(req, res, sqlConnect, obj, resultMsg) {
             saveAttachment(req, res, sqlConnect, obj, resultMsg);
             return;
         }
-        sql = 'DELETE FROM lomaBlog_attachment WHERE id=?';
+        tempStr = delId.map(function (item) { return item.id }).join(',');
+        sql = `DELETE FROM lomaBlog_attachment WHERE id in (${tempStr})`;
         for (let j = 0; j < delId.length; j++) {
-            fs.unlink(delId[j].file_path, function () { });
-            sqlConnect.query(sql, [delId[j].id], (err, result, fields) => {
-                if (err) { res.json({ code: 500, msg: err }); }
-                saveAttachment(req, res, sqlConnect, obj, resultMsg);
-                // res.json({ code: 200, msg: 'success' })
-            })
+            fs.unlink(delId[j].file_path, function () {
+                if (j == delId.length - 1) {
+                    sqlConnect.query(sql, [], (err, result, fields) => {
+                        if (err) {
+                            res.json({ code: 500, msg: err });
+                        }
+                        saveAttachment(req, res, sqlConnect, obj, resultMsg);
+                    })
+                }
+            });
         }
     })
 }

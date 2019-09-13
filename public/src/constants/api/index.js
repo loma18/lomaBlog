@@ -28,6 +28,8 @@ export const GET_ARTICLE_TYPE_COUNT = '/blog/getArticleTypeCount'; // 获取文�
 
 export const GET_ATTACHMENT_LIST = '/blog/attachment/getList'; // 获取博客附件列表
 
+export const DOWNLOAD_ATTACHMENT_BY_ID = '/blog/attachment/download'; // 下载博客附件
+
 
 
 /**
