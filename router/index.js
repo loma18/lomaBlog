@@ -2,7 +2,11 @@ let express = require("express");
 let router = express.Router();
 const qs = require("querystring");
 const sqlConnect = require('../sqlConnect');
+const path = require('path');
 
+router.get('/baidu_verify_fdB5I1FLUq.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/../baidu_verify_fdB5I1FLUq.html'));
+})
 
 /*用户登录*/
 router.post("/login", (req, res) => {
