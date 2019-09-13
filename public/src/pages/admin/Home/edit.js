@@ -117,8 +117,8 @@ class AdminHomeEdit extends Component {
 			values.catalogue = JSON.stringify(values.catalogue);
 			values.article = JSON.stringify(article);
 			// values.content = values.content.toHTML();
+			values.description = values.content.toHTML().replace(/<(\S|\s)*?>/g, '').slice(0, 300);
 			values.content = values.content.toRAW();
-			values.description = values.content.replace(/<(\S|\s)*?>/g, '').slice(0, 300);
 			values.attachmentIds = JSON.stringify(backFileIds);
 			for(var key in values){
 				formData.append([key], values[key]);
