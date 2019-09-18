@@ -47,8 +47,10 @@ router.post("/catalogue/save", (req, res) => {
             };
             if (result.affectedRows > 0) {
                 res.json({ code: 200, msg: "success" });
+                return;
             } else {
                 res.json({ code: 500, msg: "error" });
+                return;
             }
         });
     })
@@ -94,7 +96,10 @@ router.get("/blog/attachment/download", (req, res) => {
     let sql = "SELECT file_path,file_name FROM lomaBlog_attachment WHERE id=?",
         params = [obj.id];
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) { res.json({ code: 500, msg: err }); };
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         if (result.length > 0) {
             var a = result[0].file_path;
             a = a.split(/(?=[a-zA-Z0-9]*?)\.(?=[a-zA-Z0-9]+$)/);
@@ -145,6 +150,7 @@ router.post("/blog/save", multipartMiddleware, (req, res) => {
     sqlConnect.query(sql, params, (err, resultMsg, fields) => {
         if (err) {
             res.json({ code: 500, msg: err });
+            return;
         }
         if (catalogue.length === 0) {
             deleteAttachment(req, res, sqlConnect, obj, resultMsg);
@@ -156,6 +162,7 @@ router.post("/blog/save", multipartMiddleware, (req, res) => {
             sqlConnect.query(sql, [obj.id], (err, result, fields) => {
                 if (err) {
                     res.json({ code: 500, msg: err });
+                    return;
                 }
                 handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg);
             });
@@ -181,12 +188,16 @@ function saveAttachment(req, res, sqlConnect, obj, resultMsg) {
         data = fs.readFileSync(fileList[i].path);
         uploadDir = __dirname + '/../../attachment/';
         fs.writeFile(uploadDir + fileList[i].path.split(['\\']).slice(-1)[0], data, function (err) { // 存储文件
-            if (err) { res.json({ code: 500, msg: err }); }
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            }
             fs.unlink(fileList[i].path, function () { }) // 删除文件
             params = [articleId, fileList[i].name, uploadDir + fileList[i].path.split(['\\']).slice(-1)[0]];
             sqlConnect.query(sql, params, (err, result, fields) => {
                 if (err) {
                     res.json({ code: 500, msg: err });
+                    return;
                 }
                 if (i == fileList.length - 1) {
                     res.json({ code: 200, msg: 'success' })
@@ -204,7 +215,10 @@ function deleteAttachment(req, res, sqlConnect, obj, resultMsg) {
         tempStr = '',
         articleId = obj.id && obj.id != 'undefined' ? obj.id : resultMsg.insertId;
     sqlConnect.query(sql, [articleId], (err, result, fields) => {
-        if (err) { res.json({ code: 500, msg: err }); }
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        }
         for (let i = 0; i < result.length; i++) {
             if (existFileId.indexOf(result[i].id) < 0) {
                 delId.push(result[i]);
@@ -222,6 +236,7 @@ function deleteAttachment(req, res, sqlConnect, obj, resultMsg) {
                     sqlConnect.query(sql, [], (err, result, fields) => {
                         if (err) {
                             res.json({ code: 500, msg: err });
+                            return;
                         }
                         saveAttachment(req, res, sqlConnect, obj, resultMsg);
                     })
@@ -274,10 +289,12 @@ function handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg) {
                         // res.json({ code: 200, msg: "success" });
                     } else {
                         res.json({ code: 500, msg: "保存失败" });
+                        return;
                     }
                 });
             } else {
                 res.json({ code: 500, msg: "保存失败" });
+                return;
             }
         });
     } else {
@@ -293,6 +310,7 @@ function handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg) {
                 // res.json({ code: 200, msg: "success" });
             } else {
                 res.json({ code: 500, msg: "保存失败" });
+                return;
             }
         });
     }
@@ -460,6 +478,7 @@ function deleteComment(res, sqlConnect, id) {
             };
             if (result2.length === 0) {
                 res.json({ code: 200, msg: "success" });
+                return;
             }
             for (let i = 0; i < result2.length; i++) {
                 deleteComment(res, sqlConnect, result2[i].id);

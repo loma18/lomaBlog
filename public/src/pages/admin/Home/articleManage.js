@@ -57,6 +57,8 @@ class AdminHomeArticleManage extends Component {
 			searchVal,
 			articleType: articleType || 'all',
 			catalogueType: catalogueType ? (catalogueType == 'all' ? catalogueType : Number(catalogueType)) : 'all',
+		}, () => {
+			this.fetchData();
 		});
 	}
 
@@ -154,7 +156,6 @@ class AdminHomeArticleManage extends Component {
 	componentDidMount() {
 		this.setCurrent();
 		this.getCatalogueList();
-		this.fetchData();
 	}
 
 	render() {

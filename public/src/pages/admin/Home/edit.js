@@ -11,7 +11,7 @@ import {
 import { openNotification, showSuccessMsg, GetQueryString } from 'utils';
 import LomaBlogTag from 'components/Admin/LomaBlogTag';
 import BraftEditor from 'braft-editor';
-import { articleTypeList } from 'constants';
+import { articleTypeList, braftControls } from 'constants';
 import 'braft-editor/dist/index.css';
 
 const form = Form.create();
@@ -279,7 +279,7 @@ class AdminHomeEdit extends Component {
 							})(
 								<BraftEditor
 									ref={(instance) => (this.editorInstance = instance)}
-									excludeControls={['media']}
+									controls={braftControls}
 								/>
 							)}
 						</FormItem>
