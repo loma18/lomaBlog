@@ -1,0 +1,4 @@
+http://www.loma18.com/original
+http://www.loma18.com/home/detail?articleId=1
+http://www.loma18.com/home/detail?articleId=3
+http://www.loma18.com/home/detail?articleId=4

@@ -8,6 +8,10 @@ router.get('/baidu_verify_fdB5I1FLUq.html', (req, res) => {
     res.sendFile(path.join(__dirname, '/../baidu_verify_fdB5I1FLUq.html'));
 })
 
+router.get('/sitemap_loma18.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, '/../sitemap_loma18.txt'));
+})
+
 /*用户登录*/
 router.post("/login", (req, res) => {
     req.on("data", (data) => {
