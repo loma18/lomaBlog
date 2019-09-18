@@ -7,7 +7,10 @@ const sqlConnect = require('../../sqlConnect');
 router.get("/interface/getModuleList", (req, res) => {
     let sql = "SELECT*FROM lomaBlog_interfaceGroup";
     sqlConnect.query(sql, [], (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         let arr = [];
         if (result.length > 0) {
             result.map(item => {
@@ -33,7 +36,10 @@ router.post("/interface/module/save", (req, res) => {
             params = [obj.title];
         }
         sqlConnect.query(sql, params, (err, result, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result.affectedRows > 0) {
                 res.json({ code: 200, msg: "success" });
             } else {
@@ -49,7 +55,10 @@ router.get("/interface/module/delete", (req, res) => {
     let sql = "DELETE FROM lomaBlog_interfaceGroup WHERE gid=?",
         params = [obj.id];
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         if (result.affectedRows > 0) {
             res.json({ code: 200, msg: "success" });
         }
@@ -70,7 +79,10 @@ router.post("/interface/save", (req, res) => {
         }
         params = [obj.moduleId, obj.fieldList, obj.paramType, obj.methods, obj.title, obj.routePath, obj.resFieldList, obj.id];
         sqlConnect.query(sql, params, (err, result, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result.affectedRows > 0) {
                 res.json({ code: 200, msg: "success" });
             } else {
@@ -84,7 +96,10 @@ router.post("/interface/save", (req, res) => {
 router.get("/interface/getList", (req, res) => {
     let sql = "SELECT t1.title,t1.routePath,t1.moduleId,t1.id,t2.title as titles FROM lomaBlog_interface as t1 left join lomaBlog_interfaceGroup as t2 on t1.moduleId = t2.gid";
     sqlConnect.query(sql, [], (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         let arr = [],
             obj = {};
         if (result.length > 0) {
@@ -116,7 +131,10 @@ router.get("/interface/getDetailById", (req, res) => {
         sql = "SELECT*FROM lomaBlog_interface WHERE id=?",
         params = [obj.id];
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         if (result.length > 0) {
             res.json({ code: 200, data: result[0], msg: "success" });
         }
@@ -129,7 +147,10 @@ router.get("/interface/delete", (req, res) => {
         sql = "DELETE FROM lomaBlog_interface WHERE id=?",
         params = [obj.id];
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         if (result.affectedRows > 0) {
             res.json({ code: 200, msg: "success" });
         }

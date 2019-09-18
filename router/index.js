@@ -20,7 +20,10 @@ router.post("/login", (req, res) => {
             sql = "SELECT*FROM lomaBlog_user WHERE uname=? AND upwd=?",
             params = [obj.uname, obj.upwd];
         sqlConnect.query(sql, params, (err, result, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result.length > 0) {
                 res.json({ code: 200, msg: "登陆成功" });
                 // conn.release();

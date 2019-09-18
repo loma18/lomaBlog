@@ -23,17 +23,15 @@ export const breadcrumbItem = {
 	others: { value: 'others', title: '其他' }
 };
 
-export const articleTypeList = [
-	{ key: 'original', name: '原创', id: 1 },
-	{ key: 'reprint', name: '转载', id: 2 },
-	{ key: 'code', name: '代码', id: 3 }
-]; // 文章类型
-
 export const articleTypeObj = {
 	original: { key: 'original', name: '原创', id: 1 },
 	reprint: { key: 'reprint', name: '转载', id: 2 },
-	code: { key: 'code', name: '代码', id: 3 }
+	secret: { key: 'secret', name: '私人', id: 3 }
 }
+
+export const articleTypeList = [
+	...Object.values(articleTypeObj)
+]; // 文章类型
 
 //通用分页设置
 export const hxPaginationSetup = {

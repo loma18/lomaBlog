@@ -9,7 +9,7 @@ import {
 	GET_FILTER_LIST,
 	DELETE_BLOG
 } from 'constants/api';
-import { articleTypeList } from 'constants';
+import { articleTypeList, articleTypeObj } from 'constants';
 import { openNotification, showSuccessMsg, getPathnameByIndex, GetQueryString, formatMomentToString } from 'utils';
 
 const { Option } = Select;
@@ -22,29 +22,16 @@ const Search = Input.Search;
 class AdminHomeArticleManage extends Component {
 	constructor(props) {
 		super(props);
-		let key = getPathnameByIndex(4);
-		let years = GetQueryString('year');
-		let months = GetQueryString('month');
-		let articleType = GetQueryString('articleType');
-		let catalogueType = GetQueryString('catalogueType');
-		let searchVal = GetQueryString('searchVal');
-		// let currentDate = new Date();
-		// let currentYear = currentDate.getFullYear();
-		// let currentMonth = currentDate.getMonth() + 1;
-		let page = GetQueryString('page');
-		// years = years ? years : currentYear;
-		// months = months ? months : currentMonth;
-		searchVal = searchVal ? decodeURI(searchVal) : '';
 		this.state = {
 			tableData: [],
-			current: key || 'all',
-			years: '请选择年份', //years + '年',
-			months: '请选择月份', //months + '月',
-			articleType: articleType || 'all',
-			catalogueType: catalogueType ? (catalogueType == 'all' ? catalogueType : Number(catalogueType)) : 'all',
+			current: 'all',
+			years: '请选择年份',
+			months: '请选择月份',
+			articleType: 'all',
+			catalogueType: 'all',
 			catalogueList: [],
-			searchVal,
-			page: page || 1,
+			searchVal: '',
+			page: 1,
 			total: 0
 		};
 	}
@@ -57,9 +44,20 @@ class AdminHomeArticleManage extends Component {
 	}
 
 	setCurrent = () => {
-		let key = getPathnameByIndex(4);
+		let key = getPathnameByIndex(4),
+			articleType = GetQueryString('articleType'),
+			catalogueType = GetQueryString('catalogueType'),
+			searchVal = GetQueryString('searchVal'),
+			page = GetQueryString('page');
+		searchVal = searchVal ? decodeURI(searchVal) : '';
 		key = key ? key : 'all';
-		this.setState({ current: key });
+		this.setState({
+			page: page || 1,
+			current: key,
+			searchVal,
+			articleType: articleType || 'all',
+			catalogueType: catalogueType ? (catalogueType == 'all' ? catalogueType : Number(catalogueType)) : 'all',
+		});
 	}
 
 	// 改变年/月
@@ -102,34 +100,20 @@ class AdminHomeArticleManage extends Component {
 			.catch((err) => console.log(err));
 	}
 
-	// 获取文章类型名称
-	getArticleTypeName = (key) => {
-		switch (key) {
-			case 'original':
-				return '原创';
-			case 'reprint':
-				return '转载';
-			case 'code':
-				return '代码';
-			default:
-				return '原创';
-		}
-	}
-
 	onChange = page => {
 		this.handleSearch(page);
 	};
 
 	//查看
-	handleLook = (id) => {
-		window.location.href = '/home/detail?articleId=' + id;
+	handleLook = (item) => {
+		window.location.href = `/home/detail?articleType=${item.articleType}&status=${item.status}&articleId=${item.aid}&showAll=true`;
 		// this.props.history.push('/home/detail?articleId=' + id);
 		// this.props.appStore.setBackStage(false);
 	}
 
 	//跳转编辑
-	handleEdit = (id) => {
-		this.props.history.push('/admin/home/edit?articleId=' + id);
+	handleEdit = (item) => {
+		this.props.history.push(`/admin/home/edit?articleType=${item.articleType}&status=${item.status}&articleId=${item.aid}&showAll=true`);
 	}
 
 	//删除
@@ -148,10 +132,10 @@ class AdminHomeArticleManage extends Component {
 		const { current, years, months, articleType, catalogueType, searchVal, page } = this.state;
 		let year = years.replace('请选择年份', '').replace('年', ''),
 			month = months.replace('请选择月份', '').replace('月', ''),
-			params = { status: 0, page },
+			params = { status: 0, page, showSecret: true },
 			pathname = window.location.pathname.replace(/\/$/, '').split('/');
 		if (current == 'all' || pathname[pathname.length - 1] != 'draft') {
-			params = { status: 1, year, month, articleType, catalogueType, searchVal, page };
+			params = { status: 1, year, month, articleType, catalogueType, searchVal, page, showSecret: true };
 		}
 		fireGetRequest(GET_FILTER_LIST, { ...params }).then((res) => {
 			if (res.code === 200) {
@@ -168,6 +152,7 @@ class AdminHomeArticleManage extends Component {
 	}
 
 	componentDidMount() {
+		this.setCurrent();
 		this.getCatalogueList();
 		this.fetchData();
 	}
@@ -248,14 +233,14 @@ class AdminHomeArticleManage extends Component {
 									<h3>{item.title}</h3>
 									<Row type="flex" justify="space-between">
 										<Col>
-											<span className={'articleTypeName'}>{this.getArticleTypeName(item.articleType)}</span>
+											<span className={'articleTypeName'}>{articleTypeObj[item.articleType] ? articleTypeObj[item.articleType].name : item.articleType}</span>
 											<span className={'updateTime'}>{formatMomentToString(item.updateAt, 'YYYY年MM月DD日 HH:mm:ss')}</span>
 											{current == 'all' && <span className={'icon'}><Icon type="message" />{item.comments}</span>}
 											{current == 'all' && <span className={'icon'}><Icon type="eye" />{item.views}</span>}
 										</Col>
 										<Col>
-											<span className={'lookView linkColor'} onClick={() => this.handleLook(item.aid)}>查看</span>
-											<span className={'lookView linkColor'} onClick={() => this.handleEdit(item.aid)}>编辑</span>
+											<span className={'lookView linkColor'} onClick={() => this.handleLook(item)}>查看</span>
+											<span className={'lookView linkColor'} onClick={() => this.handleEdit(item)}>编辑</span>
 
 											<Popconfirm
 												title="是否确认删除?"

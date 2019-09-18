@@ -120,7 +120,7 @@ class AdminHomeEdit extends Component {
 			values.description = values.content.toHTML().replace(/<(\S|\s)*?>/g, '').slice(0, 300);
 			values.content = values.content.toRAW();
 			values.attachmentIds = JSON.stringify(backFileIds);
-			for(var key in values){
+			for (var key in values) {
 				formData.append([key], values[key]);
 			}
 			// values.files = upLoadfileList;
@@ -243,7 +243,7 @@ class AdminHomeEdit extends Component {
 		if (!articleId) {
 			return;
 		}
-		fireGetRequest(GET_ARTICLE_BY_ID, { id: articleId }).then(res => {
+		fireGetRequest(GET_ARTICLE_BY_ID, { id: articleId, showAll: true }).then(res => {
 			if (res.code === 200) {
 				this.setState({ resData: res.data }, () => {
 					this.getCatalogue();

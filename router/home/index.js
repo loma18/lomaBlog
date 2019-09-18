@@ -14,17 +14,26 @@ router.post("/blog/createArticleComment", (req, res) => {
             params = [],
             username = '';
         require('getmac').getMac(function (err, userAddress) {
-            if (err) throw err
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             let mac = userAddress + obj.helpMac;
             sql = `SELECT * FROM lomaBlog_user_mac WHERE mac='${mac}'`;
             sqlConnect.query(sql, params, (err, result, fields) => {
-                if (err) throw err;
+                if (err) {
+                    res.json({ code: 500, msg: err });
+                    return;
+                };
                 if (result.length === 0) {
                     sql = `INSERT INTO lomaBlog_user_mac VALUES(null,?,?)`
                     username = obj.username ? obj.username : '游客' + obj.helpMac;
                     params = [mac, username];
                     sqlConnect.query(sql, params, (err, result, fields) => {
-                        if (err) throw err;
+                        if (err) {
+                            res.json({ code: 500, msg: err });
+                            return;
+                        };
                         if (result.affectedRows > 0) {
                             console.log('新增mac-username成功');
                         }
@@ -35,7 +44,10 @@ router.post("/blog/createArticleComment", (req, res) => {
                 sql = "INSERT INTO lomaBlog_article_comment VALUE(null,?,?,?,?,?,UNIX_TIMESTAMP(NOW())*1000,?,?,0)";
                 params = [obj.articalId, username, obj.qq, obj.email, obj.content, obj.parentId, obj.parentUsername];
                 sqlConnect.query(sql, params, (err, result, fields) => {
-                    if (err) throw err;
+                    if (err) {
+                        res.json({ code: 500, msg: err });
+                        return;
+                    };
                     if (result.affectedRows > 0) {
                         res.json({ code: 200, msg: "success" });
                     }
@@ -52,7 +64,10 @@ router.get("/blog/getArticleComment", (req, res) => {
         params = [obj.articalId],
         arr = [];
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         for (let i = 0; i < result.length; i++) {
             if (result[i].parentId) {
                 for (let j = 0; j < arr.length; j++) {
@@ -72,9 +87,12 @@ router.get("/blog/getArticleComment", (req, res) => {
 //获取博客文章各自条数
 router.get("/blog/getArticleTypeCount", (req, res) => {
     let obj = req.query,
-        sql = "SELECT count(*) as total,articleType FROM lomaBlog_article WHERE status=1 group by articleType";
+        sql = "SELECT count(*) as total,articleType FROM lomaBlog_article WHERE status=1 AND articleType!='secret' group by articleType";
     sqlConnect.query(sql, [], (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         res.json({ code: 200, msg: "success", data: result });
     })
 });

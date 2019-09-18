@@ -21,7 +21,7 @@ class HomeIndex extends Component {
 
 	//点击跳转
 	handleClick = (item) => {
-		this.props.history.push('/home/detail?articleId=' + item.aid);
+		this.props.history.push(`/home/detail?articleType=${item.articleType}&status=${item.status}&articleId=${item.aid}`);
 	}
 
 	handleChange = (page, pageSize) => {

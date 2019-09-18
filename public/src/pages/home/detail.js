@@ -36,8 +36,11 @@ class HomeDetail extends Component {
 	fetchData = () => {
 		const id = GetQueryString('articleId');
 		const helpMac = window.localStorage.getItem('helpMac');
+		let status = GetQueryString('status'),
+			articleType = GetQueryString('articleType'),
+			showAll = GetQueryString('showAll');
 		this.getAttachmentList();
-		fireGetRequest(GET_ARTICLE_BY_ID, { id, helpMac }).then((res) => {
+		fireGetRequest(GET_ARTICLE_BY_ID, { id, helpMac, status, articleType, showAll }).then((res) => {
 			if (res.code === 200) {
 				this.setState({ resData: res.data }, () => {
 					this.props.appStore.setDocumentTitle(res.data.title);
@@ -170,8 +173,10 @@ class HomeDetail extends Component {
 
 	//获取附件列表
 	getAttachmentList = () => {
-		let articleId = GetQueryString('articleId');
-		fireGetRequest(GET_ATTACHMENT_LIST, { articleId }).then(res => {
+		let articleId = GetQueryString('articleId'),
+			status = GetQueryString('status'),
+			articleType = GetQueryString('articleType');
+		fireGetRequest(GET_ATTACHMENT_LIST, { articleId, status, articleType }).then(res => {
 			if (res.code === 200) {
 				this.setState({ fileList: res.data });
 			} else {

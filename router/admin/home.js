@@ -41,7 +41,10 @@ router.post("/catalogue/save", (req, res) => {
             params = [obj.name];
         }
         sqlConnect.query(sql, params, (err, result, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result.affectedRows > 0) {
                 res.json({ code: 200, msg: "success" });
             } else {
@@ -57,7 +60,10 @@ router.get("/catalogue/delete", (req, res) => {
     let sql = "DELETE FROM lomaBlog_catalogue WHERE cid=?",
         params = [obj.id];
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         if (result.affectedRows > 0) {
             res.json({ code: 200, msg: "success" });
         }
@@ -72,7 +78,10 @@ router.get("/blog/attachment/getList", (req, res) => {
     let sql = "SELECT id,file_name as fileName FROM lomaBlog_attachment WHERE aid=?",
         params = [obj.articleId];
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         res.json({ code: 200, data: result, msg: "success" });
     })
 })
@@ -98,7 +107,7 @@ router.get("/blog/attachment/download", (req, res) => {
             });
             let pathname = result[0].file_path;
             let fReadStream = fs.createReadStream(pathname);
-        
+
             //读取文件发生错误事件
             fReadStream.on('error', (err) => {
                 console.log('发生异常:', err);
@@ -242,7 +251,10 @@ function handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg) {
     sql = sql.replace(/,$/, '');
     if (hasNew) {
         sqlConnect.query(sql, params, (err, result, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result.affectedRows > 0) {
                 let insertId = result.insertId;
                 for (let i = 0; i < result.affectedRows; i++) {
@@ -252,7 +264,10 @@ function handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg) {
                 }
                 sql1 = sql1.replace(/,$/, '');
                 sqlConnect.query(sql1, params1, (err, result, fields) => {
-                    if (err) throw err;
+                    if (err) {
+                        res.json({ code: 500, msg: err });
+                        return;
+                    };
                     if (result.affectedRows > 0) {
                         deleteAttachment(req, res, sqlConnect, obj, resultMsg);
                         // saveAttachment(req, res, sqlConnect, obj, resultMsg);
@@ -268,7 +283,10 @@ function handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg) {
     } else {
         sql1 = sql1.replace(/,$/, '');
         sqlConnect.query(sql1, params1, (err, result, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result.affectedRows > 0) {
                 deleteAttachment(req, res, sqlConnect, obj, resultMsg);
                 // saveAttachment(req, res, sqlConnect, obj, resultMsg);
@@ -287,6 +305,7 @@ router.get("/blog/getFilterList", (req, res) => {
         " FROM lomaBlog_article as t1 left join lomaBlog_article_comment as t2 on t1.aid = t2.aid " +
         " WHERE " +
         "t1.status=? AND " +
+        (!obj.showSecret ? "t1.articleType!='secret' AND " : ' ') +
         (obj.year ? "year(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
         (obj.month ? "month(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
         (obj.articleType && obj.articleType != 'all' ? "articleType=? AND " : '') +
@@ -312,11 +331,14 @@ router.get("/blog/getFilterList", (req, res) => {
         params = [];
     }
     if (obj.hotArticle) {
-        sql = "SELECT * FROM lomaBlog_article WHERE status=1 ORDER BY views LIMIT 5 ";
+        sql = "SELECT * FROM lomaBlog_article WHERE status=1 AND articleType!='secret' ORDER BY views desc LIMIT 5 ";
         params = [];
     }
     sqlConnect.query(sql, params, (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         res.json({ code: 200, data: result, msg: "success", total: (obj.page - 1) * 20 + result.length });
     })
 });
@@ -325,10 +347,18 @@ router.get("/blog/getFilterList", (req, res) => {
 router.get("/blog/getArticle", (req, res) => {
     let obj = req.query;
     let sql = "SELECT t1.aid,t1.articleType,t1.content,t1.createAt,t1.status,t1.tags,t1.title,t1.updateAt,t1.views,t2.cid " +
-        " FROM lomaBlog_article as t1,lomaBlog_article_catalogue as t2 WHERE t1.aid=? AND t1.aid=t2.aid";
-    sqlConnect.query(sql, [obj.id], (err, result, fields) => {
-        if (err) throw err;
+        " FROM lomaBlog_article as t1,lomaBlog_article_catalogue as t2 WHERE t1.aid=? AND t1.aid=t2.aid" +
+        (!obj.showAll ? " AND t1.articleType=? AND t1.status=? AND t1.status!=0 AND t1.articleType!='secret'" : " ");
+    sqlConnect.query(sql, [obj.id, obj.articleType, obj.status], (err, result, fields) => {
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         let resultObj = {};
+        if (result.length === 0) {
+            res.json({ code: 500, data: {}, msg: "没有权限,获取文章失败" });
+            return;
+        }
         for (let i = 0, len1 = result.length; i < len1; i++) {
             if (!resultObj[result[i].aid]) {
                 result[i].cid = [result[i].cid];
@@ -341,11 +371,17 @@ router.get("/blog/getArticle", (req, res) => {
     })
     //获取mac地址,确定访问对象唯一性--此方法不能获取远程访问服务器的客户端mac,获取的其实只是服务器的mac
     require('getmac').getMac(function (err, userAddress) {
-        if (err) throw err
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         let mac = userAddress + obj.helpMac;
         sql = `SELECT mac FROM lomaBlog_article_mac where mac='${mac}' AND articleId=${obj.id}`;
         sqlConnect.query(sql, [], (err, result, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result.length == 0) {
                 sql = "UPDATE lomaBlog_article SET views=views+1 WHERE aid=?";
                 sqlConnect.query(sql, [obj.id], (err, result, fields) => {
@@ -365,7 +401,10 @@ router.get("/blog/deleteArticle", (req, res) => {
     let obj = req.query;
     let sql = "DELETE FROM lomaBlog_article WHERE aid=?";
     sqlConnect.query(sql, [obj.id], (err, result, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         if (result.affectedRows > 0) {
             res.json({ code: 200, msg: "success" });
         }
@@ -381,10 +420,16 @@ router.get("/comment/getList", (req, res) => {
     let sql = `SELECT t1.id,t1.aid,t1.username,t1.QQ,t1.email,t1.content,t1.createAt,t1.parentId,t1.parentUsername,t2.title 
     FROM lomaBlog_article_comment as t1 left join lomaBlog_article as t2 on t1.aid=t2.aid WHERE t1.status=0 limit ${(obj.page - 1) * 20},20`;
     sqlConnect.query(sql, [], (err, result1, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         sql = "SELECT count(*) as total FROM lomaBlog_article_comment WHERE status=0";
         sqlConnect.query(sql, [], (err, result2, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             res.json({ code: 200, data: result1, total: result2[0].total, msg: "success" });
         })
     })
@@ -403,10 +448,16 @@ router.get("/comment/deleteById", (req, res) => {
 function deleteComment(res, sqlConnect, id) {
     let sql = `DELETE FROM lomaBlog_article_comment WHERE id=?`;
     sqlConnect.query(sql, [id], (err, result1, fields) => {
-        if (err) throw err;
+        if (err) {
+            res.json({ code: 500, msg: err });
+            return;
+        };
         sql = "SELECT * FROM lomaBlog_article_comment WHERE parentId=?";
         sqlConnect.query(sql, [id], (err, result2, fields) => {
-            if (err) throw err;
+            if (err) {
+                res.json({ code: 500, msg: err });
+                return;
+            };
             if (result2.length === 0) {
                 res.json({ code: 200, msg: "success" });
             }
