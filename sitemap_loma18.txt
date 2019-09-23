@@ -3,3 +3,5 @@ http://www.loma18.com/home/detail?articleType=original&status=1&articleId=1
 http://www.loma18.com/home/detail?articleType=original&status=1&articleId=4
 http://www.loma18.com/home/detail?articleType=original&status=1&articleId=3
 http://www.loma18.com/home/detail/?articleType=reprint&status=1&articleId=10
+http://www.loma18.com/home/detail/?articleType=original&status=1&articleId=14
+http://www.loma18.com/home/detail/?articleType=original&status=1&articleId=15
