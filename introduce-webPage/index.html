@@ -189,23 +189,23 @@
             <form action="">
                 <div>
                     <span class="glyphicon glyphicon-user"></span>
-                    <input type="text" placeholder="请输入您的名字"/>
+                    <input type="text" placeholder="请输入您的名字" id="username"/>
                 </div>
                 <div>
                     <span class="glyphicon glyphicon-envelope"></span>
-                    <input type="email" placeholder="Email"/>
+                    <input type="email" placeholder="Email" id="email"/>
                 </div>
                 <div>
                     <span class="glyphicon glyphicon-leaf"></span>
-                    <input type="text" placeholder="主题"/>
+                    <input type="text" placeholder="主题" id="pointDot"/>
                 </div>
                 <div>
                     <span class="glyphicon glyphicon-comment"></span>
-                    <textarea name="massage" id="massage">请输入信息</textarea><br/>
+                    <textarea name="message" id="message" placeholder="请输入信息"></textarea><br/>
                 </div>
                 <div>
                     <span class="glyphicon glyphicon-envelope"></span>
-                    <button type="button">发送</button>
+                    <button type="button" id="sendMsg">发送</button>
                 </div>
             </form>
         </div>
@@ -223,6 +223,7 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.bootcss.com/axios/0.19.0/axios.js"></script>
 <script src="js/index.js"></script>
 </body>
 </html>

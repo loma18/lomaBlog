@@ -3,6 +3,7 @@ let router = express.Router();
 const qs = require("querystring");
 const sqlConnect = require('../sqlConnect');
 const path = require('path');
+const sendEmail = require('./sendEmail.js');
 
 router.get('/baidu_verify_fdB5I1FLUq.html', (req, res) => {
     res.sendFile(path.join(__dirname, '/../baidu_verify_fdB5I1FLUq.html'));
@@ -34,6 +35,14 @@ router.post("/login", (req, res) => {
         });
     })
 });
+
+router.post('/sendMsg', (req, res) => {
+    req.on("data", (data) => {
+        let str = data.toString(),
+            obj = JSON.parse(str);
+        sendEmail.send(obj,res);
+    })
+})
 
 
 module.exports = router;
