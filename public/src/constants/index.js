@@ -55,5 +55,5 @@ export const braftControls = [
     'headings', 'list-ul', 'list-ol', 'blockquote', 'code', 'separator',
     'link', 'separator', 'hr', 'separator',
     'media', 'separator',
-    'clear'
+    'clear', 'fullscreen'
 ]

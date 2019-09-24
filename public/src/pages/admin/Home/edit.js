@@ -117,8 +117,8 @@ class AdminHomeEdit extends Component {
 			values.catalogue = JSON.stringify(values.catalogue);
 			values.article = JSON.stringify(article);
 			// values.content = values.content.toHTML();
-			values.description = values.content.toHTML().replace(/<(\S|\s)*?>/g, '').slice(0, 300);
-			values.content = values.content.toRAW();
+			values.description = encodeURIComponent(values.content.toHTML().replace(/<(\S|\s)*?>/g, '').slice(0, 300));
+			values.content = encodeURIComponent(values.content.toRAW());
 			values.attachmentIds = JSON.stringify(backFileIds);
 			for (var key in values) {
 				formData.append([key], values[key]);
@@ -248,7 +248,7 @@ class AdminHomeEdit extends Component {
 				this.setState({ resData: res.data }, () => {
 					this.getCatalogue();
 				});
-				this.editorInstance.setValue(BraftEditor.createEditorState(res.data.content));
+				this.editorInstance.setValue(BraftEditor.createEditorState(decodeURIComponent(res.data.content)));
 			} else {
 				openNotification('error', '获取文章失败', res.msg);
 			}

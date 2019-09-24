@@ -78,7 +78,7 @@ class HomeIndex extends Component {
 									<Row type="flex" justify="space-between" gutter={10}>
 										<Col className={'articleContainer'}>
 											<h3>{item.title}</h3>
-											<p className={'description'}>{item.description}</p>
+											<p className={'description'}>{decodeURIComponent(item.description)}</p>
 											<div className={'info'}>
 												<span>{formatMomentToString(item.createAt, 'YYYY年MM月DD日 HH:mm:ss')}</span>
 												<span><Icon type="eye" />{item.views}</span>

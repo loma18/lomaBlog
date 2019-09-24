@@ -44,7 +44,7 @@ class HomeDetail extends Component {
 			if (res.code === 200) {
 				this.setState({ resData: res.data }, () => {
 					this.props.appStore.setDocumentTitle(res.data.title);
-					this.editorInstance.setValue(BraftEditor.createEditorState(res.data.content));
+					this.editorInstance.setValue(BraftEditor.createEditorState(decodeURIComponent(res.data.content)));
 					this.fetchCommentData();
 				});
 			} else {
