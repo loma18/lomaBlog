@@ -319,7 +319,7 @@ function handleCatalogue(req, res, sqlConnect, catalogue, obj, resultMsg) {
 // /**获取博客列表 */
 router.get("/blog/getFilterList", (req, res) => {
     let obj = req.query;
-    let sql = "SELECT t1.aid,t1.title,t1.content,t1.tags,t1.status,t1.createAt,t1.updateAt,t1.articleType,t1.description,t1.views,count(t2.id) as comments" +
+    let sql = "SELECT t1.aid,t1.title,t1.tags,t1.status,t1.createAt,t1.updateAt,t1.articleType,t1.description,t1.views,count(t2.id) as comments" +
         " FROM lomaBlog_article as t1 left join lomaBlog_article_comment as t2 on t1.aid = t2.aid " +
         " WHERE " +
         "t1.status=? AND " +
