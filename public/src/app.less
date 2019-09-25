@@ -1,0 +1,60 @@
+@import './themes/base.less';
+
+body {
+    font-size: @mFont;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#J_dotLine {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background: transparent;
+    display: block;
+    margin: 0 auto;
+}
+
+input,
+button,
+.ant-select-selection {
+    border-radius: 0 !important;
+}
+
+.globalLoading {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 100;
+
+    .ant-spin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+#lomaBlog {
+    min-width: @AppMinWidth;
+    min-height: @AppMinHeight;
+}
+
+.hide {
+    display: none;
+}

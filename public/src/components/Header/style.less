@@ -1,0 +1,52 @@
+@import '../../themes/base.less';
+
+#lomaBlog-header {
+    width: 100vw;
+    min-width: @AppMinWidth;
+    border-bottom: 1px solid @lineColor;
+    background: @bgColor;
+    line-height: 50px;
+    padding: 0 60px;
+    transition: all 0.1s;
+
+    .header-logo {
+        width: 150px;
+        text-align: center;
+
+        img {
+            height: 50px;
+        }
+    }
+
+    .header-menu {
+        background: @bgColor;
+        flex: 1;
+
+        .ant-menu {
+            background: @bgColor;
+            border: none;
+
+            .ant-menu-item {
+                &:hover {
+                    border-color: @color2;
+
+                    >a {
+                        color: @color2;
+                    }
+                }
+
+                >a {
+                    color: @color;
+                }
+            }
+
+            li.ant-menu-item-selected {
+                border-bottom: 2px solid @color2;
+
+                >a {
+                    color: @color2;
+                }
+            }
+        }
+    }
+}

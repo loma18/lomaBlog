@@ -1,0 +1,219 @@
+@import '../../themes/base.less';
+
+#lomaBlog-home {
+    padding: 10px 0;
+
+    .left {
+        flex: 1;
+        width: calc(~'100% - 350px');
+    }
+
+    .right {
+        width: 350px;
+        box-shadow: 0 0 5px;
+        padding: 2rem;
+
+        .calendar {
+            margin-bottom: 2rem;
+        }
+
+        .article {
+            >h3 {
+                margin: 20px 0 10px;
+            }
+
+            .ant-menu {
+                background: transparent;
+            }
+        }
+
+        .hot-article {
+            >h3 {
+                margin: 20px 0 10px;
+            }
+
+            .hot-item {
+                height: 50px;
+                border-bottom: 1px dashed @lineColor;
+                margin-left: 20px;
+
+                h4 {
+                    a {
+                        display: inline-block;
+                        width: 300px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+
+                p {
+                    font-size: @sfont;
+
+                    b {
+                        display: inline-block;
+                        padding: 0 4px;
+                        border-radius: 4px;
+                        background: @mainColor1;
+                        margin-right: 10px;
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.homeIndex {
+    .home-body {
+        margin-top: 2rem;
+
+        li.listItem {
+            margin-bottom: 1rem;
+            padding-bottom: 5px;
+            border-bottom: 1px solid @lineColor;
+
+            &:hover {
+                cursor: pointer;
+                box-shadow: -5px -5px 10px 0 inset @bgColor;
+            }
+
+            h3 {
+                cursor: pointer;
+            }
+
+            .imgContainer {
+                width: 200px;
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            .articleContainer {
+                flex: 1;
+
+                h3,
+                p {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                }
+            }
+
+            .info {
+                b {
+                    display: inline-block;
+                    padding: 0 4px;
+                    border-radius: 4px;
+                    background: @mainColor1;
+                    margin-right: 10px;
+                    font-weight: normal;
+                }
+
+                span {
+                    display: inline-block;
+                    margin-right: 10px;
+
+                    i {
+                        margin-right: 3px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.homeDetail {
+    .bf-content {
+		height: auto;
+        min-height: 500px;
+    }
+
+    .attachmentList {
+        li {
+            margin-bottom: 5px;
+        }
+
+        li span {
+            cursor: pointer;
+            color: @mainColor1;
+        }
+    }
+
+    .comment-form {
+        margin-top: 100px;
+        border-top: 1px dashed @lineColor;
+
+        .comment {
+            display: flex;
+
+            .ant-form-item-control-wrapper {
+                flex: 1;
+            }
+        }
+
+        textarea {
+            max-height: 500px;
+        }
+
+        button {
+            margin: 20px 70px;
+        }
+    }
+
+    .commentList {
+        margin-left: 70px;
+        margin-right: 20px;
+
+        li {
+            p {
+                word-break: break-all;
+
+                span {
+                    float: right;
+                    cursor: pointer;
+                    color: @linkColor;
+                }
+            }
+
+            b {
+                font-size: @lFont;
+            }
+        }
+
+        li.childrenCls {
+            margin-left: 30px;
+
+            p {
+                margin-right: 30px;
+            }
+        }
+
+        li.parentCls {
+            border-top: 1px solid @lineColor;
+            margin-top: 15px;
+            padding: 10px;
+
+            &:first-child {
+                border: none;
+            }
+        }
+
+        .replyComments {
+            clear: both;
+
+            textarea {
+                max-height: 300px;
+            }
+
+            div {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 10px;
+            }
+        }
+    }
+}
