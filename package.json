@@ -19,12 +19,10 @@
   },
   "lint-staged": {
     "public/src/**/*.less": [
-      "npm run format",
       "npm run lint:style",
       "git add"
     ],
     "public/src/**/*.{js,jsx}": [
-      "npm run format",
       "npm run lint:es",
       "git add"
     ]

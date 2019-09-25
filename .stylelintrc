@@ -28,6 +28,7 @@
     "selector-combinator-space-before": null,
     "selector-pseudo-class-no-unknown": null,
     "no-descending-specificity": null,
-    "font-family-no-missing-generic-family-keyword": null
+    "font-family-no-missing-generic-family-keyword": null,
+    "function-calc-no-invalid": null
   }
 }
