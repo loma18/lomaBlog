@@ -3,7 +3,7 @@ import moment from 'moment';
 import { message, notification } from 'antd';
 
 // 根据传入字段获取对应url地址栏参数
-export const GetQueryString = (name) => {
+export const GetQueryString = name => {
 	let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
 	let r = window.location.search.substr(1).match(reg);
 	if (r != null) {
@@ -13,7 +13,7 @@ export const GetQueryString = (name) => {
 	}
 };
 
-export const getPathnameByIndex = (index) => {
+export const getPathnameByIndex = index => {
 	const pathname = window.location.pathname.split('/');
 	if (pathname[index]) {
 		return pathname[index];
@@ -26,12 +26,13 @@ export const getPathnameByIndex = (index) => {
  * momentjs 格式成 2017-09-12
  * */
 
-export const formatMomentToString = (mDate, format = 'YYYY-MM-DD') => mDate ? moment(mDate).format(format) : null;
+export const formatMomentToString = (mDate, format = 'YYYY-MM-DD') =>
+	mDate ? moment(mDate).format(format) : null;
 
 /**
  * 把2017-12-12 字符串的格式实例化成 moment
  * */
-export const convertStringToMoment = (dateStr) => {
+export const convertStringToMoment = dateStr => {
 	if (!dateStr || dateStr < 1) {
 		return undefined;
 	}
@@ -81,7 +82,9 @@ export const openNotification = (type, title, content, duration = 5) => {
 	notification[type]({
 		key: title, // 相同内容不会增加显示框
 		message: title,
-		description: <div style={{ padding: 3, wordBreak: 'break-all' }}>{content}</div>,
+		description: (
+			<div style={{ padding: 3, wordBreak: 'break-all' }}>{content}</div>
+		),
 		duration: duration // 自动计算持续时间
 		/*	style: {
 					width: 350,
@@ -91,15 +94,15 @@ export const openNotification = (type, title, content, duration = 5) => {
 	});
 };
 
-export const getMinute = (duration) => {
+export const getMinute = duration => {
 	let minute = Math.floor(duration / 60),
 		second = Math.floor(duration % 60);
 	minute = minute < 10 ? '0' + minute : minute;
 	second = second < 10 ? '0' + second : second;
-	return (minute + ':' + second);
-}
+	return minute + ':' + second;
+};
 
-export const splitStr = (str) => {
+export const splitStr = str => {
 	str = str.trim();
 	let a = str.split('['),
 		b = [],
@@ -109,8 +112,10 @@ export const splitStr = (str) => {
 	a.map(item => {
 		b = item.split(']');
 		start = b[0].split(':');
-		start = Number(start[0].replace(/^0*/, '')) * 60 + Number(start[1].replace(/^0*/, ''));
+		start =
+			Number(start[0].replace(/^0*/, '')) * 60 +
+			Number(start[1].replace(/^0*/, ''));
 		result.push({ start, lyrics: b[1] });
-	})
+	});
 	return result;
-}
+};

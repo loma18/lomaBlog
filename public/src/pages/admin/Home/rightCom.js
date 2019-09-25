@@ -5,7 +5,7 @@ import ArticleManage from './articleManage';
 import Comment from './comment';
 import Catalogue from './catalogue';
 
-export default (props) => {
+export default props => {
 	const { selectedKeys } = props;
 	switch (selectedKeys) {
 		case 'edit':

@@ -25,7 +25,13 @@ const AsyncComponent = importComponent => {
 
 		render() {
 			const C = this.state.component;
-			return C ? <C {...this.props} /> : <div  className={'globalLoading'}><Spin size="large"/></div>;
+			return C ? (
+				<C {...this.props} />
+			) : (
+				<div className={'globalLoading'}>
+					<Spin size='large' />
+				</div>
+			);
 		}
 	};
 };

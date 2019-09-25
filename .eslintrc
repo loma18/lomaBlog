@@ -99,7 +99,7 @@
 		], //数组的元素之间要以空格隔开
 		"jsx-quotes": [
 			2,
-			"prefer-double"
+			"prefer-single"
 		], //强制在JSX属性（jsx-quotes）中一致使用双引号
 		"max-depth": [
 			1,

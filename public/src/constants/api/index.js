@@ -1,7 +1,6 @@
 // 登陆
 export const USER_LOGIN = '/login';
 
-
 /** ****************************************后台管理 ***************************************************/
 /**
  * 博客增删改查
@@ -29,8 +28,6 @@ export const GET_ARTICLE_TYPE_COUNT = '/blog/getArticleTypeCount'; // 获取文�
 export const GET_ATTACHMENT_LIST = '/blog/attachment/getList'; // 获取博客附件列表
 
 export const DOWNLOAD_ATTACHMENT_BY_ID = '/blog/attachment/download'; // 下载博客附件
-
-
 
 /**
  * 后台接口
@@ -65,8 +62,6 @@ export const GET_COMMENT_LIST = '/comment/getList'; //获取全部评论
 
 export const DELETE_COMMENT_BY_ID = '/comment/deleteById'; //删除评论
 
-
-
 /**
  * 获取酷狗音乐列表
  * */
@@ -83,5 +78,3 @@ export const SEARCH_SONGS_LIST = '/source/searchSongsList'; //搜索歌曲
 export const GET_SONGS_ACCESS_KEY = '/source/getSongsAccessKey'; //获取歌词所需id及accesskey
 
 export const GET_SONGS_LYRICS = '/source/getSongsLyrics'; //获取歌词
-
-

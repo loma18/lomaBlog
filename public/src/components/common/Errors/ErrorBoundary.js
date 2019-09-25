@@ -19,12 +19,18 @@ export default class ErrorBoundary extends React.Component {
 		const { error, errorInfo } = this.state;
 		let resultProps = {
 			title: '程序发生错误了',
-			subTitle: 'Please check and modify the left information before resubmitting.',
+			subTitle:
+				'Please check and modify the left information before resubmitting.',
 			extra: [
 				<a href={'/'} key={'id'}>
 					<Button
-						style={{ width: 180, height: 40, marginTop: 40, marginLeft: 140 }}
-						type="primary"
+						style={{
+							width: 180,
+							height: 40,
+							marginTop: 40,
+							marginLeft: 140
+						}}
+						type='primary'
 					>
 						<span>返回首页</span>
 					</Button>

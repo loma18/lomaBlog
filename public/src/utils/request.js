@@ -4,7 +4,6 @@ import axios from 'axios';
 // axios.defaults.baseURL = '/hxAuth'; //增加代理路径
 // axios.defaults.withCredentials = true;
 
-
 /**
  * 如果登录了，就把token写入header
  * */

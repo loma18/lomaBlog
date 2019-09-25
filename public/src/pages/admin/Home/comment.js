@@ -3,12 +3,8 @@ import { Row, Col, Icon, Table, Popconfirm } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import { formatMomentToString } from 'utils';
 import { fireGetRequest, firePostRequest } from 'service/app';
-import {
-	GET_COMMENT_LIST,
-	DELETE_COMMENT_BY_ID
-} from 'constants/api';
+import { GET_COMMENT_LIST, DELETE_COMMENT_BY_ID } from 'constants/api';
 import { openNotification, showSuccessMsg } from '../../../utils';
-
 
 // @withRouter
 class AdminHomeComment extends Component {
@@ -32,7 +28,11 @@ class AdminHomeComment extends Component {
 				title: '序号',
 				dataIndex: 'NO',
 				render: (txt, item, index) => {
-					return (pagination.current - 1) * pagination.pageSize + index + 1;
+					return (
+						(pagination.current - 1) * pagination.pageSize +
+						index +
+						1
+					);
 				}
 			},
 			{
@@ -63,33 +63,35 @@ class AdminHomeComment extends Component {
 				render: (txt, item) => {
 					return (
 						<Popconfirm
-							title="是否确认删除?"
+							title='是否确认删除?'
 							onConfirm={() => this.handleDelete(item)}
-							okText="是"
-							cancelText="否"
+							okText='是'
+							cancelText='否'
 						>
 							<span className={'delete dangerColor'}>删除</span>
 						</Popconfirm>
-					)
+					);
 				}
-			},
-		]
+			}
+		];
 		return columns;
-	}
+	};
 
 	//删除评论
-	handleDelete = (item) => {
+	handleDelete = item => {
 		this.setState({ loading: true });
-		fireGetRequest(DELETE_COMMENT_BY_ID, { id: item.id }).then(res => {
-			if (res.code === 200) {
-				showSuccessMsg('删除成功');
-				this.fetchData();
-			} else {
-				openNotification('error', '删除失败', res.msg);
-			}
-			this.setState({ loading: false });
-		}).catch(err => console.log(err))
-	}
+		fireGetRequest(DELETE_COMMENT_BY_ID, { id: item.id })
+			.then(res => {
+				if (res.code === 200) {
+					showSuccessMsg('删除成功');
+					this.fetchData();
+				} else {
+					openNotification('error', '删除失败', res.msg);
+				}
+				this.setState({ loading: false });
+			})
+			.catch(err => console.log(err));
+	};
 
 	handleTableChange = (pagination, filters, sorter) => {
 		const pager = { ...this.state.pagination };
@@ -102,16 +104,18 @@ class AdminHomeComment extends Component {
 	fetchData = () => {
 		this.setState({ loading: true });
 		const { pagination } = this.state;
-		fireGetRequest(GET_COMMENT_LIST, { page: pagination.current }).then(res => {
-			if (res.code === 200) {
-				pagination.total = res.total;
-				this.setState({ tableData: res.data, pagination });
-			} else {
-				openNotification('error', '获取评论列表失败', res.msg);
-			}
-			this.setState({ loading: false });
-		}).catch(err => console.log(err))
-	}
+		fireGetRequest(GET_COMMENT_LIST, { page: pagination.current })
+			.then(res => {
+				if (res.code === 200) {
+					pagination.total = res.total;
+					this.setState({ tableData: res.data, pagination });
+				} else {
+					openNotification('error', '获取评论列表失败', res.msg);
+				}
+				this.setState({ loading: false });
+			})
+			.catch(err => console.log(err));
+	};
 
 	componentDidMount() {
 		this.fetchData();
@@ -130,7 +134,7 @@ class AdminHomeComment extends Component {
 					dataSource={tableData}
 					pagination={pagination}
 					onChange={this.handleTableChange}
-					size="small"
+					size='small'
 				/>
 			</div>
 		);

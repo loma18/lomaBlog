@@ -319,7 +319,7 @@ class AdminHomeEdit extends Component {
 			<div className={'adminHomeEdit'}>
 				<Spin spinning={spinLoading}>
 					<Form>
-						<FormItem label="">
+						<FormItem label=''>
 							{getFieldDecorator('title', {
 								rules: [
 									{
@@ -330,7 +330,7 @@ class AdminHomeEdit extends Component {
 								initialValue: resData.title || ''
 							})(<Input placeholder={'请输入文章标题'} />)}
 						</FormItem>
-						<FormItem label="">
+						<FormItem label=''>
 							{getFieldDecorator('content', {
 								rules: [
 									{
@@ -347,7 +347,7 @@ class AdminHomeEdit extends Component {
 								/>
 							)}
 						</FormItem>
-						<FormItem label="文章标签">
+						<FormItem label='文章标签'>
 							<LomaBlogTag
 								tags={article}
 								handleInputConfirm={this.handleInputConfirm}
@@ -355,7 +355,7 @@ class AdminHomeEdit extends Component {
 								handleClose={this.handleClose}
 							/>
 						</FormItem>
-						<FormItem label="个人分类" className={'catalogue'}>
+						<FormItem label='个人分类' className={'catalogue'}>
 							<LomaBlogTag
 								tags={catalogue}
 								handleInputConfirm={this.handleInputConfirm}
@@ -371,7 +371,7 @@ class AdminHomeEdit extends Component {
 								/>
 							</Row>
 						</FormItem>
-						<FormItem label="文章类型" className={'article'}>
+						<FormItem label='文章类型' className={'article'}>
 							{getFieldDecorator('articleType', {
 								rules: [
 									{
@@ -397,25 +397,25 @@ class AdminHomeEdit extends Component {
 								</Select>
 							)}
 						</FormItem>
-						<FormItem label="附件" className={'attachment'}>
+						<FormItem label='附件' className={'attachment'}>
 							<Upload
 								onChange={this.onChangeCallBack}
 								fileList={fileList}
 								onRemove={this.afterRemoveFile}
 								beforeUpload={this.beforeUpload}
 								multiple
-								action=""
+								action=''
 								isDragger={false}
 							>
 								<Button>
-									<Icon type="upload" /> 上传文件
+									<Icon type='upload' /> 上传文件
 								</Button>
 							</Upload>
 						</FormItem>
-						<Row type="flex" gutter={10}>
+						<Row type='flex' gutter={10}>
 							<Col>
 								<Button
-									type="primary"
+									type='primary'
 									onClick={() => this.handlePublish(true)}
 								>
 									发布

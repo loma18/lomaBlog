@@ -5,7 +5,7 @@ import request from 'utils/request';
  * 通用 get 请求
  * toggleLoading 是否启动全局 loading
  * */
-export const fireGetRequest = async(api, values = {}, config = {}) => {
+export const fireGetRequest = async (api, values = {}, config = {}) => {
 	if (config && config.toggleLoading) {
 		appStore.showLoading();
 	}
@@ -19,7 +19,7 @@ export const fireGetRequest = async(api, values = {}, config = {}) => {
  * 通用 post 请求
  * toggleLoading 是否启动全局 loading
  * */
-export const firePostRequest = async(api, values, config) => {
+export const firePostRequest = async (api, values, config) => {
 	if (config && config.toggleLoading) {
 		appStore.showLoading();
 	}

@@ -20,21 +20,21 @@ class Header extends Component {
 		};
 	}
 
-	handleSearch = (value) => {
+	handleSearch = value => {
 		if (typeof this.props.handleSearch == 'function') {
 			this.props.handleSearch(value);
 		}
-	}
+	};
 
 	onSelect = ({ item, key, keyPath, selectedKeys, domEvent }) => {
 		this.setState({ selectedKeys });
-	}
+	};
 
 	// 进入后台/前台
 	handleClick = () => {
 		window.localStorage.setItem(USER_INFO.IS_LOGIN, '');
 		window.location.href = '/login';
-	}
+	};
 
 	getDefaultSelKey = () => {
 		let pathname = window.location.pathname.split('/');
@@ -61,7 +61,7 @@ class Header extends Component {
 		}
 		this.props.appStore.setDocumentTitle(docTitle[pathname[1]]);
 		this.setState({ selectedKeys: key });
-	}
+	};
 
 	UNSAFE_componentWillReceiveProps(props) {
 		this.getDefaultSelKey();
@@ -81,30 +81,46 @@ class Header extends Component {
 		}
 		return (
 			<div id={'lomaBlog-header'}>
-				<Row type="flex" justify="space-between" gutter={20} className={'nav'}>
+				<Row
+					type='flex'
+					justify='space-between'
+					gutter={20}
+					className={'nav'}
+				>
 					<Col className={'header-logo'}>
-						<img src={require('assets/logo.jpg')} alt={'xiangeLogo'} title={'xiangeLogo'} />
+						<img
+							src={require('assets/logo.jpg')}
+							alt={'xiangeLogo'}
+							title={'xiangeLogo'}
+						/>
 					</Col>
 					<Col className={'header-menu'}>
-						<Menu mode="horizontal" selectedKeys={selectedKeys} onSelect={this.onSelect}>
-							{
-								menuList.map((item) => (
-									<Menu.Item key={item.key}>
-										<Link to={pathObj[item.key]}> {item.title}</Link>
-									</Menu.Item>
-								))
-							}
+						<Menu
+							mode='horizontal'
+							selectedKeys={selectedKeys}
+							onSelect={this.onSelect}
+						>
+							{menuList.map(item => (
+								<Menu.Item key={item.key}>
+									<Link to={pathObj[item.key]}>
+										{' '}
+										{item.title}
+									</Link>
+								</Menu.Item>
+							))}
 						</Menu>
 					</Col>
 					<Col className={'header-right'}>
 						{path[1] == 'admin' ? (
 							<Button onClick={() => this.handleClick()}>
 								退出登陆
-    						</Button>
-						) : (<Search
-							placeholder="search..."
-							onSearch={this.handleSearch}
-						     />)}
+							</Button>
+						) : (
+							<Search
+								placeholder='search...'
+								onSearch={this.handleSearch}
+							/>
+						)}
 					</Col>
 				</Row>
 			</div>

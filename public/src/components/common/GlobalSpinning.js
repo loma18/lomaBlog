@@ -8,9 +8,6 @@ import React, { Component } from 'react';
 export default class GlobalSpin extends Component {
 	render() {
 		const { appStore } = this.props;
-		return (
-			<Spin spinning={appStore.loading} size="large">
-			</Spin>
-		);
+		return <Spin spinning={appStore.loading} size='large'></Spin>;
 	}
 }

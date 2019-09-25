@@ -3,11 +3,7 @@ import { Row, Col, Form, Button, Spin, Input, Popconfirm } from 'antd';
 import { formatMomentToString, openNotification, showSuccessMsg } from 'utils';
 import './style.less';
 import { fireGetRequest, firePostRequest } from 'service/app';
-import {
-	SAVE_WHISPER,
-	DELETE_WHISPER,
-	GET_WHISPER_LIST
-} from 'constants/api';
+import { SAVE_WHISPER, DELETE_WHISPER, GET_WHISPER_LIST } from 'constants/api';
 
 const FormItem = Form.Item;
 const form = Form.create();
@@ -20,7 +16,7 @@ class Whisper extends Component {
 			spinLoading: false,
 			page: 1,
 			total: 0
-		}
+		};
 	}
 
 	handleAdd = () => {
@@ -28,38 +24,42 @@ class Whisper extends Component {
 			if (err) {
 				return;
 			}
-			firePostRequest(SAVE_WHISPER, { ...values }).then(res => {
+			firePostRequest(SAVE_WHISPER, { ...values })
+				.then(res => {
+					if (res.code === 200) {
+						showSuccessMsg('添加成功');
+						this.props.form.resetFields();
+						this.setState({ page: 1 }, () => {
+							this.fetchData();
+						});
+					} else {
+						openNotification('error', '新增微语失败', res.msg);
+					}
+				})
+				.catch(err => console.log(err));
+		});
+	};
+
+	handleDelete = item => {
+		fireGetRequest(DELETE_WHISPER, { id: item.id })
+			.then(res => {
 				if (res.code === 200) {
-					showSuccessMsg('添加成功');
-					this.props.form.resetFields();
+					showSuccessMsg('删除成功');
 					this.setState({ page: 1 }, () => {
 						this.fetchData();
-					})
+					});
 				} else {
-					openNotification('error', '新增微语失败', res.msg);
+					openNotification('error', '删除失败', res.msg);
 				}
-			}).catch(err => console.log(err))
-		})
-	}
-
-	handleDelete = (item) => {
-		fireGetRequest(DELETE_WHISPER, { id: item.id }).then(res => {
-			if (res.code === 200) {
-				showSuccessMsg('删除成功');
-				this.setState({ page: 1 }, () => {
-					this.fetchData();
-				})
-			} else {
-				openNotification('error', '删除失败', res.msg);
-			}
-		}).catch(err => console.log(err))
-	}
+			})
+			.catch(err => console.log(err));
+	};
 
 	loadMore = () => {
 		this.setState({ page: this.state.page + 1 }, () => {
 			this.fetchData('', true);
-		})
-	}
+		});
+	};
 
 	fetchData = (searchValue = '', isLoadMore = false) => {
 		let { page, data } = this.state;
@@ -67,21 +67,23 @@ class Whisper extends Component {
 			this.setState({ page: 1 });
 			page = 1;
 		}
-		this.setState({ spinLoading: true })
-		fireGetRequest(GET_WHISPER_LIST, { page, searchValue }).then(res => {
-			if (res.code === 200) {
-				if (isLoadMore) {
-					data = data.concat(res.data);
+		this.setState({ spinLoading: true });
+		fireGetRequest(GET_WHISPER_LIST, { page, searchValue })
+			.then(res => {
+				if (res.code === 200) {
+					if (isLoadMore) {
+						data = data.concat(res.data);
+					} else {
+						data = res.data;
+					}
+					this.setState({ data, total: res.total });
 				} else {
-					data = res.data;
+					openNotification('error', '获取微语列表失败', res.msg);
 				}
-				this.setState({ data, total: res.total });
-			} else {
-				openNotification('error', '获取微语列表失败', res.msg);
-			}
-			this.setState({ spinLoading: false })
-		}).catch(err => console.log(err))
-	}
+				this.setState({ spinLoading: false });
+			})
+			.catch(err => console.log(err));
+	};
 
 	componentDidMount() {
 		this.fetchData();
@@ -96,52 +98,64 @@ class Whisper extends Component {
 		const pathname = window.location.pathname.split('/')[1];
 		return (
 			<div id={'lomaBlog-whisper'}>
-				{pathname == 'admin' && <Form>
-					<FormItem>
-						{getFieldDecorator('description', {
-							rules: [{ required: true, message: '请输入内容!' }]
-						})(
-							<Input
-								placeholder="description"
-							/>,
-						)}
-					</FormItem>
-					<Button type="primary" onClick={this.handleAdd} className="login-form-button">
-						新增
-    					</Button>
-				</Form>
-				}
+				{pathname == 'admin' && (
+					<Form>
+						<FormItem>
+							{getFieldDecorator('description', {
+								rules: [
+									{ required: true, message: '请输入内容!' }
+								]
+							})(<Input placeholder='description' />)}
+						</FormItem>
+						<Button
+							type='primary'
+							onClick={this.handleAdd}
+							className='login-form-button'
+						>
+							新增
+						</Button>
+					</Form>
+				)}
 				<Spin spinning={spinLoading}>
 					<ul className={'whisperContainer'}>
 						{data.map(item => {
 							return (
 								<li key={item.id}>
-									<Row type="flex" gutter={30}>
+									<Row type='flex' gutter={30}>
 										<Col className={'description'}>
 											{item.description}
 										</Col>
 										<Col className={'date'}>
-											{formatMomentToString(item.createAt, 'YYYY-MM-DD HH:mm:ss')}
+											{formatMomentToString(
+												item.createAt,
+												'YYYY-MM-DD HH:mm:ss'
+											)}
 										</Col>
-										{pathname == 'admin' && <Col>
-											<Popconfirm
-												title="是否确认删除?"
-												onConfirm={() => this.handleDelete(item)}
-												okText="是"
-												cancelText="否"
-											>
-												<Button> 删除</Button>
-											</Popconfirm>
-										</Col>}
+										{pathname == 'admin' && (
+											<Col>
+												<Popconfirm
+													title='是否确认删除?'
+													onConfirm={() =>
+														this.handleDelete(item)
+													}
+													okText='是'
+													cancelText='否'
+												>
+													<Button> 删除</Button>
+												</Popconfirm>
+											</Col>
+										)}
 									</Row>
 								</li>
-							)
+							);
 						})}
 					</ul>
 					<p className={'loadMore'}>
-						{
-							page * 20 < total ? <span onClick={this.loadMore}>加载更多</span> : '到底啦~'
-						}
+						{page * 20 < total ? (
+							<span onClick={this.loadMore}>加载更多</span>
+						) : (
+							'到底啦~'
+						)}
 					</p>
 				</Spin>
 			</div>

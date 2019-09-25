@@ -6,7 +6,7 @@ export const docTitle = {
 	original: '原创',
 	reprint: '转载',
 	code: '代码'
-}
+};
 
 export const breadcrumbItem = {
 	original: { value: 'original', title: '原创' },
@@ -27,11 +27,9 @@ export const articleTypeObj = {
 	original: { key: 'original', name: '原创', id: 1 },
 	reprint: { key: 'reprint', name: '转载', id: 2 },
 	secret: { key: 'secret', name: '私人', id: 3 }
-}
+};
 
-export const articleTypeList = [
-	...Object.values(articleTypeObj)
-]; // 文章类型
+export const articleTypeList = [...Object.values(articleTypeObj)]; // 文章类型
 
 //通用分页设置
 export const hxPaginationSetup = {
@@ -48,12 +46,39 @@ export const hxPaginationSetup = {
 };
 
 export const braftControls = [
-	'undo', 'redo', 'separator',
-    'font-size', 'line-height', 'letter-spacing', 'separator',
-    'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
-    'superscript', 'subscript', 'remove-styles', 'emoji',  'separator', 'text-indent', 'text-align', 'separator',
-    'headings', 'list-ul', 'list-ol', 'blockquote', 'code', 'separator',
-    'link', 'separator', 'hr', 'separator',
-    'media', 'separator',
-    'clear', 'fullscreen'
-]
+	'undo',
+	'redo',
+	'separator',
+	'font-size',
+	'line-height',
+	'letter-spacing',
+	'separator',
+	'text-color',
+	'bold',
+	'italic',
+	'underline',
+	'strike-through',
+	'separator',
+	'superscript',
+	'subscript',
+	'remove-styles',
+	'emoji',
+	'separator',
+	'text-indent',
+	'text-align',
+	'separator',
+	'headings',
+	'list-ul',
+	'list-ol',
+	'blockquote',
+	'code',
+	'separator',
+	'link',
+	'separator',
+	'hr',
+	'separator',
+	'media',
+	'separator',
+	'clear',
+	'fullscreen'
+];

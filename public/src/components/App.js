@@ -9,15 +9,17 @@ export default () => {
 	let Comp = <Main />;
 	const pathname = window.location.pathname.split('/');
 	if (!isLogin && pathname[1] == 'admin') {
-		setTimeout(function () {
+		setTimeout(function() {
 			window.location.href = '/login';
-		}, 500)
+		}, 500);
 	}
 	if (pathname[1] == 'login') {
 		Comp = <Login />;
 	}
-	return <div>
-		<GlobalLoading />
-		{Comp}
-	</div>;
+	return (
+		<div>
+			<GlobalLoading />
+			{Comp}
+		</div>
+	);
 };

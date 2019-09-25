@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Calendar, Select, Radio, Menu } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import { fireGetRequest } from 'service/app';
-import {
-	GET_FILTER_LIST,
-	GET_ARTICLE_TYPE_COUNT
-} from 'constants/api';
+import { GET_FILTER_LIST, GET_ARTICLE_TYPE_COUNT } from 'constants/api';
 import { openNotification } from 'utils';
 import { articleTypeObj } from 'constants';
 import Routers from './router';
@@ -19,16 +16,16 @@ class Home extends Component {
 		this.state = {
 			hotArticleList: [],
 			articleList: []
-		}
+		};
 	}
 
 	onPanelChange = (date, mode) => {
 		console.log(date, mode);
-	}
+	};
 
-	onSelect = (date) => {
+	onSelect = date => {
 		console.log(date.valueOf());
-	}
+	};
 
 	// 日历头部自定义
 	headerRender = ({ value, type, onChange, onTypeChange }) => {
@@ -46,9 +43,9 @@ class Home extends Component {
 
 		for (let index = start; index < end; index++) {
 			monthOptions.push(
-				<Select.Option className="month-item" key={`${index}`}>
+				<Select.Option className='month-item' key={`${index}`}>
 					{months[index]}
-				</Select.Option>,
+				</Select.Option>
 			);
 		}
 		const month = value.month();
@@ -57,26 +54,30 @@ class Home extends Component {
 		const options = [];
 		for (let i = year - 10; i < year + 10; i += 1) {
 			options.push(
-				<Select.Option key={i} value={i} className="year-item">
+				<Select.Option key={i} value={i} className='year-item'>
 					{i}
-				</Select.Option>,
+				</Select.Option>
 			);
 		}
 		return (
 			<div style={{ padding: 10 }}>
-				<Row type="flex" justify="space-between">
+				<Row type='flex' justify='space-between'>
 					<Col>
-						<Group size="small" onChange={(e) => onTypeChange(e.target.value)} value={type}>
-							<Button value="month">Month</Button>
-							<Button value="year">Year</Button>
+						<Group
+							size='small'
+							onChange={e => onTypeChange(e.target.value)}
+							value={type}
+						>
+							<Button value='month'>Month</Button>
+							<Button value='year'>Year</Button>
 						</Group>
 					</Col>
 					<Col>
 						<Select
-							size="small"
+							size='small'
 							dropdownMatchSelectWidth={false}
-							className="my-year-select"
-							onChange={(newYear) => {
+							className='my-year-select'
+							onChange={newYear => {
 								const now = value.clone().year(newYear);
 								onChange(now);
 							}}
@@ -87,10 +88,10 @@ class Home extends Component {
 					</Col>
 					<Col>
 						<Select
-							size="small"
+							size='small'
 							dropdownMatchSelectWidth={false}
 							value={String(month)}
-							onChange={(selectedMonth) => {
+							onChange={selectedMonth => {
 								const newValue = value.clone();
 								newValue.month(parseInt(selectedMonth, 10));
 								onChange(newValue);
@@ -102,27 +103,29 @@ class Home extends Component {
 				</Row>
 			</div>
 		);
-	}
+	};
 
-	handleJump = (typeKey) => {
+	handleJump = typeKey => {
 		this.props.history.push('/' + typeKey);
-	}
+	};
 
 	fetchData = () => {
 		let p1 = fireGetRequest(GET_FILTER_LIST, { hotArticle: true }),
 			p2 = fireGetRequest(GET_ARTICLE_TYPE_COUNT);
-		Promise.all([p1, p2]).then(res => {
-			if (res[0].code === 200) {
-				this.setState({ hotArticleList: res[0].data });
-			} else {
-				openNotification('error', '获取热门文章列表失败', res.msg);
-			}
-			if (res[1].code === 200) {
-				this.setState({ articleList: res[1].data });
-			} else {
-				openNotification('error', '获取文章分类失败', res.msg);
-			}
-		}).catch((err) => console.log(err));
+		Promise.all([p1, p2])
+			.then(res => {
+				if (res[0].code === 200) {
+					this.setState({ hotArticleList: res[0].data });
+				} else {
+					openNotification('error', '获取热门文章列表失败', res.msg);
+				}
+				if (res[1].code === 200) {
+					this.setState({ articleList: res[1].data });
+				} else {
+					openNotification('error', '获取文章分类失败', res.msg);
+				}
+			})
+			.catch(err => console.log(err));
 		// fireGetRequest(GET_FILTER_LIST, { hotArticle: true }).then((res) => {
 		// 	if (res.code === 200) {
 		// 		this.setState({ hotArticleList: res.data });
@@ -130,7 +133,7 @@ class Home extends Component {
 		// 		openNotification('error', '获取热门文章列表失败', res.msg);
 		// 	}
 		// }).catch((err) => console.log(err));
-	}
+	};
 
 	componentDidMount() {
 		this.fetchData();
@@ -140,7 +143,7 @@ class Home extends Component {
 		const { hotArticleList, articleList } = this.state;
 		return (
 			<div id={'lomaBlog-home'}>
-				<Row type="flex" justify="space-between" gutter={20}>
+				<Row type='flex' justify='space-between' gutter={20}>
 					<Col className={'left'}>
 						<Routers bindChild={this.props.bindChild} />
 					</Col>
@@ -155,17 +158,24 @@ class Home extends Component {
 						</div>
 						<div className={'article'}>
 							<h3>文章分类</h3>
-							<Menu mode="vertical">
-								{
-									articleList.map((item) => (
-										<Menu.Item key={item.articleType}>
-											<div onClick={() => this.handleJump(item.articleType)}>
-												{articleTypeObj[item.articleType].name}
-												<span>({item.total})</span>
-											</div>
-										</Menu.Item>
-									))
-								}
+							<Menu mode='vertical'>
+								{articleList.map(item => (
+									<Menu.Item key={item.articleType}>
+										<div
+											onClick={() =>
+												this.handleJump(
+													item.articleType
+												)
+											}
+										>
+											{
+												articleTypeObj[item.articleType]
+													.name
+											}
+											<span>({item.total})</span>
+										</div>
+									</Menu.Item>
+								))}
 							</Menu>
 						</div>
 						<div className={'hot-article'}>
@@ -173,18 +183,25 @@ class Home extends Component {
 							{hotArticleList.map(item => {
 								return (
 									<div className={'hot-item'} key={item.aid}>
-										<h4 title={item.title}><Link to={`/home/detail?articleType=${item.articleType}&status=${item.status}&articleId=${item.aid}`}>{item.title}</Link></h4>
+										<h4 title={item.title}>
+											<Link
+												to={`/home/detail?articleType=${item.articleType}&status=${item.status}&articleId=${item.aid}`}
+											>
+												{item.title}
+											</Link>
+										</h4>
 										<p>
-											标签：{
-												item.tags.split(',').map((tag, key) => {
+											标签：
+											{item.tags
+												.split(',')
+												.map((tag, key) => {
 													return (
 														<b key={key}>{tag}</b>
-													)
-												})
-											}
+													);
+												})}
 										</p>
 									</div>
-								)
+								);
 							})}
 						</div>
 					</Col>

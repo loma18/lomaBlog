@@ -23,9 +23,9 @@ class AdminHomeCatalogue extends Component {
 		};
 	}
 
-	onChange = (val) => {
+	onChange = val => {
 		this.setState({ countInput: val });
-	}
+	};
 
 	// 新增模块
 	handleAdd = (id, key) => {
@@ -37,29 +37,30 @@ class AdminHomeCatalogue extends Component {
 			}
 			params.id = id;
 			params.name = id ? values['module_' + key] : values.moduleType;
-			firePostRequest(SAVE_CATALOGUE, { ...params }).then((res) => {
-				if (res.code === 200) {
-					showSuccessMsg('保存个人分类成功');
-					if (!id) {
-						resetFields();
-						this.fetchData();
+			firePostRequest(SAVE_CATALOGUE, { ...params })
+				.then(res => {
+					if (res.code === 200) {
+						showSuccessMsg('保存个人分类成功');
+						if (!id) {
+							resetFields();
+							this.fetchData();
+						} else {
+							this.setState({ selKey: undefined });
+						}
 					} else {
-						this.setState({ selKey: undefined });
+						openNotification('error', '保存模块失败', res.msg);
 					}
-				} else {
-					openNotification('error', '保存模块失败', res.msg);
-				}
-			})
-				.catch((err) => console.log(err));
+				})
+				.catch(err => console.log(err));
 		});
-	}
+	};
 
-	handleEdit = (key) => {
+	handleEdit = key => {
 		this.setState({ selKey: key });
-	}
+	};
 
 	// 确认更改
-	handleConfirm = (key) => {
+	handleConfirm = key => {
 		let { catalogueList } = this.state;
 		const { getFieldsValue } = this.props.form;
 		let values = getFieldsValue(['module_' + key]);
@@ -67,37 +68,42 @@ class AdminHomeCatalogue extends Component {
 		this.setState({ catalogueList }, () => {
 			this.handleAdd(catalogueList[key].id, key);
 		});
-	}
+	};
 
 	// 删除模块
-	handleConfirmDel = (key) => {
+	handleConfirmDel = key => {
 		let { catalogueList } = this.state;
-		fireGetRequest(DELETE_CATALOGUE, { id: catalogueList[key].id }).then((res) => {
-			if (res.code === 200) {
-				showSuccessMsg('删除成功');
-				this.fetchData();
-			} else {
-				openNotification('error', '删除失败', res.msg);
-			}
-		})
-			.catch((err) => console.log(err));
-	}
+		fireGetRequest(DELETE_CATALOGUE, { id: catalogueList[key].id })
+			.then(res => {
+				if (res.code === 200) {
+					showSuccessMsg('删除成功');
+					this.fetchData();
+				} else {
+					openNotification('error', '删除失败', res.msg);
+				}
+			})
+			.catch(err => console.log(err));
+	};
 
 	// 取消更改
 	handleCancel = () => {
 		this.setState({ selKey: undefined });
-	}
+	};
 
 	fetchData = () => {
-		fireGetRequest(GET_CATALOGUE_LIST).then((res) => {
-			if (res.code === 200) {
-				this.setState({ catalogueList: res.data, selKey: undefined });
-			} else {
-				openNotification('error', '获取接口模块失败', res.msg);
-			}
-		})
-			.catch((err) => console.log(err));
-	}
+		fireGetRequest(GET_CATALOGUE_LIST)
+			.then(res => {
+				if (res.code === 200) {
+					this.setState({
+						catalogueList: res.data,
+						selKey: undefined
+					});
+				} else {
+					openNotification('error', '获取接口模块失败', res.msg);
+				}
+			})
+			.catch(err => console.log(err));
+	};
 
 	componentDidMount() {
 		this.fetchData();
@@ -110,56 +116,95 @@ class AdminHomeCatalogue extends Component {
 		return (
 			<div className={'adminHomeCatalogue'}>
 				<Form>
-					<Row type="flex" gutter={20} className={'columnHeader'}>
+					<Row type='flex' gutter={20} className={'columnHeader'}>
 						<Col className={'col40'}>模块名称</Col>
 						<Col className={'col35'}>操作</Col>
 					</Row>
-					<Row type="flex" gutter={20} className={'columnBody'}>
+					<Row type='flex' gutter={20} className={'columnBody'}>
 						<Col className={'col40'}>
-							<FormItem label="" className={'moduleType'}>
+							<FormItem label='' className={'moduleType'}>
 								{getFieldDecorator('moduleType', {
 									initialValue: ''
-								})(
-									<Input />
-								)}
+								})(<Input />)}
 							</FormItem>
 						</Col>
 						<Col className={'col35'}>
-							<Button onClick={() => this.handleAdd()} disabled={!val.moduleType}>新增</Button>
+							<Button
+								onClick={() => this.handleAdd()}
+								disabled={!val.moduleType}
+							>
+								新增
+							</Button>
 						</Col>
 					</Row>
-					{catalogueList.map((item, key) => <Row type="flex" gutter={20} className={'columnBody'} key={key}>
-						<Col className={'col40'}>
-							<FormItem label="">
-								{selKey == key ? getFieldDecorator('module_' + key, {
-									rules: [{ required: true, message: '请输入个人分类名称!' }],
-									initialValue: item.name
-								})(
-									<Input />
-								) : item.name}
-							</FormItem>
-						</Col>
-						<Col className={'col35'}>
-							<Row type="flex">
-								<Col>
-									{selKey == key ? <Button onClick={() => this.handleConfirm(key)}>确认</Button>
-										: <Button onClick={() => this.handleEdit(key)}>编辑</Button>}
-								</Col>
-								<Col>
-									{selKey == key ? <Button onClick={this.handleCancel}>取消</Button> : <Popconfirm
-										title="是否确认删除?"
-										onConfirm={() => this.handleConfirmDel(key)}
-										okText="是"
-										cancelText="否"
-									                                                                   >
-										<Button>删除</Button>
-									</Popconfirm>}
-								</Col>
-							</Row>
-						</Col>
-					</Row>)}
+					{catalogueList.map((item, key) => (
+						<Row
+							type='flex'
+							gutter={20}
+							className={'columnBody'}
+							key={key}
+						>
+							<Col className={'col40'}>
+								<FormItem label=''>
+									{selKey == key
+										? getFieldDecorator('module_' + key, {
+												rules: [
+													{
+														required: true,
+														message:
+															'请输入个人分类名称!'
+													}
+												],
+												initialValue: item.name
+										  })(<Input />)
+										: item.name}
+								</FormItem>
+							</Col>
+							<Col className={'col35'}>
+								<Row type='flex'>
+									<Col>
+										{selKey == key ? (
+											<Button
+												onClick={() =>
+													this.handleConfirm(key)
+												}
+											>
+												确认
+											</Button>
+										) : (
+											<Button
+												onClick={() =>
+													this.handleEdit(key)
+												}
+											>
+												编辑
+											</Button>
+										)}
+									</Col>
+									<Col>
+										{selKey == key ? (
+											<Button onClick={this.handleCancel}>
+												取消
+											</Button>
+										) : (
+											<Popconfirm
+												title='是否确认删除?'
+												onConfirm={() =>
+													this.handleConfirmDel(key)
+												}
+												okText='是'
+												cancelText='否'
+											>
+												<Button>删除</Button>
+											</Popconfirm>
+										)}
+									</Col>
+								</Row>
+							</Col>
+						</Row>
+					))}
 				</Form>
-			</div >
+			</div>
 		);
 	}
 }

@@ -3,10 +3,13 @@ import { Row, Col, Icon, Menu } from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import RightCom from './rightCom';
 import { fireGetRequest, firePostRequest } from 'service/app';
+import { GET_INTERFACE_LIST } from 'constants/api';
 import {
-	GET_INTERFACE_LIST
-} from 'constants/api';
-import { openNotification, showSuccessMsg, GetQueryString, getPathnameByIndex } from 'utils';
+	openNotification,
+	showSuccessMsg,
+	GetQueryString,
+	getPathnameByIndex
+} from 'utils';
 
 const { SubMenu } = Menu;
 
@@ -35,7 +38,7 @@ class AdminInterface extends Component {
 			]
 		};
 	}
-	handleClick = (e) => {
+	handleClick = e => {
 		let type = '';
 		if (e.key == 'create' || e.key == 'groupManager') {
 			type = e.key;
@@ -58,41 +61,39 @@ class AdminInterface extends Component {
 	//     this.setCurrent();
 	// }
 
-	getMenuList = (data) => data.map((item) => (<SubMenu
-		key={item.id + ''}
-		title={
-			<span>{item.title}</span>
-		}
-	                                            >
-		{
-			item.children.map((list) => (
-				<Menu.Item key={list.id + ''}>
-					<Row type="flex">
-						<Col>
-							<h4>
-								{list.title}<br />
-								{list.routePath}
-							</h4>
-						</Col>
-						<Col>
-							<span className={'edit'}>编辑</span>
-						</Col>
-					</Row>
-				</Menu.Item>
-			))
-		}
-	</SubMenu>))
+	getMenuList = data =>
+		data.map(item => (
+			<SubMenu key={item.id + ''} title={<span>{item.title}</span>}>
+				{item.children.map(list => (
+					<Menu.Item key={list.id + ''}>
+						<Row type='flex'>
+							<Col>
+								<h4>
+									{list.title}
+									<br />
+									{list.routePath}
+								</h4>
+							</Col>
+							<Col>
+								<span className={'edit'}>编辑</span>
+							</Col>
+						</Row>
+					</Menu.Item>
+				))}
+			</SubMenu>
+		));
 
 	fetchData = () => {
-		fireGetRequest(GET_INTERFACE_LIST).then((res) => {
-			if (res.code === 200) {
-				this.setState({ apiList: res.data, current: '', type: '' });
-			} else {
-				openNotification('error', '获取接口列表失败', res.msg);
-			}
-		})
-			.catch((err) => console.log(err));
-	}
+		fireGetRequest(GET_INTERFACE_LIST)
+			.then(res => {
+				if (res.code === 200) {
+					this.setState({ apiList: res.data, current: '', type: '' });
+				} else {
+					openNotification('error', '获取接口列表失败', res.msg);
+				}
+			})
+			.catch(err => console.log(err));
+	};
 
 	componentDidMount() {
 		this.fetchData();
@@ -102,34 +103,44 @@ class AdminInterface extends Component {
 		const { current, apiList, type } = this.state;
 		return (
 			<div className={'adminInterface'}>
-				<Row type="flex" justify="start">
+				<Row type='flex' justify='start'>
 					<Col className={'left'}>
 						<Menu
 							onClick={this.handleClick}
 							style={{ width: 256 }}
 							selectedKeys={[this.state.current]}
-							mode="inline"
+							mode='inline'
 						>
-							<Menu.Item key="create"><Icon type="edit" />新增</Menu.Item>
+							<Menu.Item key='create'>
+								<Icon type='edit' />
+								新增
+							</Menu.Item>
 							<SubMenu
-								key="interface"
-								title={<span><Icon type="api" /><span>接口</span></span>}
-							>
-								{
-									this.getMenuList(apiList)
+								key='interface'
+								title={
+									<span>
+										<Icon type='api' />
+										<span>接口</span>
+									</span>
 								}
+							>
+								{this.getMenuList(apiList)}
 							</SubMenu>
-							<Menu.Item key="groupManager">接口分组管理</Menu.Item>
+							<Menu.Item key='groupManager'>
+								接口分组管理
+							</Menu.Item>
 						</Menu>
 					</Col>
 					<Col className={'right'}>
-						{current ? <RightCom
-							selectedKeys={current}
-							type={type}
-							fetchData={this.fetchData}
-						           /> : (
-								<p>请选择查看或编辑接口</p>
-							)}
+						{current ? (
+							<RightCom
+								selectedKeys={current}
+								type={type}
+								fetchData={this.fetchData}
+							/>
+						) : (
+							<p>请选择查看或编辑接口</p>
+						)}
 					</Col>
 				</Row>
 			</div>

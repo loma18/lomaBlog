@@ -32,29 +32,33 @@ class Main extends Component {
 			];
 		}
 		return list;
-	}
+	};
 
-	componentDidUpdate() {
-	}
+	componentDidUpdate() {}
 
-	bindChild = (_this) => {
+	bindChild = _this => {
 		this.setState({ handleSearch: _this.fetchData });
-	}
+	};
 
 	render() {
 		let menuList = this.getMenuList();
-		return (<div id={'lomaBlog-main'}>
-			<div className={'lomaBlog-header'}>
-				<Header menuList={menuList} handleSearch={this.state.handleSearch} />
-				<LomaBreadcrumb />
+		return (
+			<div id={'lomaBlog-main'}>
+				<div className={'lomaBlog-header'}>
+					<Header
+						menuList={menuList}
+						handleSearch={this.state.handleSearch}
+					/>
+					<LomaBreadcrumb />
+				</div>
+				<div className={'lomaBlog-body'}>
+					<Routers bindChild={this.bindChild} />
+				</div>
+				<Footer />
+				<BackTop />
+				<LomaAudio />
 			</div>
-			<div className={'lomaBlog-body'}>
-				<Routers bindChild={this.bindChild} />
-			</div>
-			<Footer />
-			<BackTop />
-			<LomaAudio />
-		</div>);
+		);
 	}
 }
 export default Main;

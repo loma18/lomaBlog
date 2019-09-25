@@ -10,13 +10,13 @@ export default (params = {}) => {
 		params.handleSelectChange(val, type);
 	};
 
-	const getItems = (type) => {
+	const getItems = type => {
 		let resultList = [];
 		if (type == 'years') {
 			resultList.push({
 				id: 0,
 				name: '请选择年份'
-			})
+			});
 			let currentYear = new Date().getFullYear();
 			let num = 3;
 			for (let i = 0; i < num; i++) {
@@ -46,16 +46,16 @@ export default (params = {}) => {
 		return resultList;
 	};
 
-	const getSelectItem = (type) => {
+	const getSelectItem = type => {
 		let items = getItems(type);
 		return (
 			<Select
 				placeholder={type == 'years' ? '年' : '月'}
 				value={params[type]}
-				onChange={(val) => handleSelectChange(val, type)}
+				onChange={val => handleSelectChange(val, type)}
 				className={'lomaBlog-select select-' + type}
 			>
-				{items.map((item) => (
+				{items.map(item => (
 					<Option key={item.id} value={item.name}>
 						{item.name}
 					</Option>
@@ -64,7 +64,7 @@ export default (params = {}) => {
 		);
 	};
 	return (
-		<div className="dateSelect">
+		<div className='dateSelect'>
 			{getSelectItem('years')}
 			{getSelectItem('months')}
 		</div>

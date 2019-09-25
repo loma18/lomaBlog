@@ -1,4 +1,3 @@
-
 export const ROUTE_PATH = {
 	home: '/home',
 	original: '/original',

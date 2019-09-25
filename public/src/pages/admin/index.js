@@ -16,53 +16,62 @@ class AdminHome extends Component {
 			current: leftKey || 'articleManage'
 		};
 	}
-	handleClick = (e) => {
-		this.setState({
-			current: e.key
-		}, () => {
-			this.props.history.push('/admin/home/' + e.key);
-		});
+	handleClick = e => {
+		this.setState(
+			{
+				current: e.key
+			},
+			() => {
+				this.props.history.push('/admin/home/' + e.key);
+			}
+		);
 	};
 
 	setCurrent = () => {
 		let leftKey = getPathnameByIndex(3);
 		leftKey = leftKey ? leftKey : 'articleManage';
 		this.setState({ current: leftKey });
-	}
+	};
 
 	UNSAFE_componentWillReceiveProps() {
 		this.setCurrent();
 	}
 
-	componentDidMount() {
-	}
+	componentDidMount() {}
 
 	render() {
 		const { current } = this.state;
 		return (
 			<div className={'adminHome'}>
-				<Row type="flex" justify="start">
+				<Row type='flex' justify='start'>
 					<Col className={'left'}>
 						<Menu
 							onClick={this.handleClick}
 							style={{ width: 256 }}
 							defaultOpenKeys={['sub1']}
 							selectedKeys={[this.state.current]}
-							mode="inline"
+							mode='inline'
 						>
-							<Menu.Item key="edit"><Icon type="edit" />写博客</Menu.Item>
+							<Menu.Item key='edit'>
+								<Icon type='edit' />
+								写博客
+							</Menu.Item>
 							<SubMenu
-								key="sub1"
+								key='sub1'
 								title={
 									<span>
-										<Icon type="mail" />
+										<Icon type='mail' />
 										<span>博客管理</span>
 									</span>
 								}
 							>
-								<Menu.Item key="articleManage">文章管理</Menu.Item>
-								<Menu.Item key="comment">评论管理</Menu.Item>
-								<Menu.Item key="catalogue">个人分类管理</Menu.Item>
+								<Menu.Item key='articleManage'>
+									文章管理
+								</Menu.Item>
+								<Menu.Item key='comment'>评论管理</Menu.Item>
+								<Menu.Item key='catalogue'>
+									个人分类管理
+								</Menu.Item>
 							</SubMenu>
 						</Menu>
 					</Col>
