@@ -7,10 +7,7 @@
     "start": "webpack-dev-server --progress --config ./webpackConfigjs/dev.config.js --inline",
     "dev": "webpack --watch --config ./webpackConfigjs/dev.config.js --progress --colors --hot",
     "build": "webpack --progress --config ./webpackConfigjs/prod.config.js",
-    "build:dll": "webpack --config ./webpackConfigjs/webpack.dll.config.js",
-    "lint": "npm run lint:es && npm run lint:style",
-    "lint:es": "eslint -c .eslintrc src/**/*.js --fix",
-    "lint:style": "stylelint \"src/**/*.less\" --syntax less --fix"
+    "build:dll": "webpack --config ./webpackConfigjs/webpack.dll.config.js"
   },
   "author": "Loma",
   "license": "ISC",
@@ -43,8 +40,6 @@
     "babel-runtime": "^6.26.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.0.0",
-    "eslint": "^6.0.1",
-    "eslint-plugin-react": "^7.14.2",
     "file-loader": "^4.0.0",
     "html-webpack-include-assets-plugin": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",

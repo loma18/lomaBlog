@@ -6,7 +6,27 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "protect": "node ./utils/auto.js"
+    "protect": "node ./utils/auto.js",
+    "lint": "npm run lint:es && npm run lint:style",
+    "lint:es": "eslint -c .eslintrc --fix",
+    "lint:style": "stylelint --syntax less --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "public/src/**/*.less": [
+      "npm run format",
+      "npm run lint:style",
+      "git add"
+    ],
+    "public/src/**/*.{js,jsx}": [
+      "npm run format",
+      "npm run lint:es",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -37,6 +57,11 @@
   },
   "homepage": "https://github.com/loma18/lomaBlog#readme",
   "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.4.0",
+    "eslint-plugin-react": "^7.14.3",
+    "husky": "^3.0.5",
+    "lint-staged": "^9.3.0",
     "nodemon": "^1.19.1",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7"
