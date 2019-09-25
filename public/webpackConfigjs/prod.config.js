@@ -3,7 +3,7 @@ const commonConfig = require('./common.config');
 
 const prodConfig = {
     mode: 'production',
-    devtool: 'source-map',
+    devtool: 'cheap-module-source-map',
 };
 
 const prodWebpackConfig = merge(commonConfig, prodConfig);
