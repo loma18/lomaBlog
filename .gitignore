@@ -1,0 +1,4 @@
+node_modules/
+attachment/
+public/build
+public/node_modules
