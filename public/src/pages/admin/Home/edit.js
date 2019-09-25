@@ -1,5 +1,18 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Form, Input, Spin, Tooltip, Checkbox, Select, Button, message, Upload } from 'antd';
+import {
+	Row,
+	Col,
+	Icon,
+	Form,
+	Input,
+	Spin,
+	Tooltip,
+	Checkbox,
+	Select,
+	Button,
+	message,
+	Upload
+} from 'antd';
 import { Router, withRouter, Link } from 'react-router-dom';
 import { fireGetRequest, firePostRequest } from 'service/app';
 import {
@@ -46,7 +59,7 @@ class AdminHomeEdit extends Component {
 			}
 		}
 		this.setState({ [type]: tags, hasSelCatalogue: tempList });
-	}
+	};
 
 	handleClose = (tags, type, removedTag) => {
 		let { hasSelCatalogue } = this.state;
@@ -59,25 +72,27 @@ class AdminHomeEdit extends Component {
 			}
 		}
 		this.setState({ [type]: tags, hasSelCatalogue: tempList });
-	}
+	};
 
 	// 修改个人分类选取
-	onChange = (val) => {
+	onChange = val => {
 		let { catalogue, compareList } = this.state;
-		catalogue = catalogue.filter((item) => !(val.indexOf(item) < 0 && compareList.indexOf(item) > -1));
+		catalogue = catalogue.filter(
+			item => !(val.indexOf(item) < 0 && compareList.indexOf(item) > -1)
+		);
 		if (catalogue.length <= 4) {
-			val.map((item) => {
+			val.map(item => {
 				if (catalogue.indexOf(item) < 0 && catalogue.length <= 4) {
 					catalogue.push(item);
 				}
 			});
 		}
 		this.setState({ hasSelCatalogue: val, catalogue });
-	}
+	};
 
 	getTransData = () => {
 		const { catalogue, catalogueList, compareList } = this.state;
-		let list = catalogue.map((item) => {
+		let list = catalogue.map(item => {
 			if (compareList.indexOf(item) > -1) {
 				for (let i = 0; i < catalogueList.length; i++) {
 					if (item == catalogueList[i].label) {
@@ -89,18 +104,24 @@ class AdminHomeEdit extends Component {
 			}
 		});
 		return list;
-	}
+	};
 
 	// 发布博客
 	handlePublish = (isPublish = true) => {
-		const { article, resData, catalogue, backFileList, fileList } = this.state;
+		const {
+			article,
+			resData,
+			catalogue,
+			backFileList,
+			fileList
+		} = this.state;
 		let backFileIds = this.getID(backFileList),
 			upLoadfileList = [];
 		let formData = new FormData();
 		fileList.map((val, index) => {
 			if (!val.id) {
 				upLoadfileList.push(val.originFileObj);
-				formData.append('file', val.originFileObj)
+				formData.append('file', val.originFileObj);
 			}
 		});
 		this.props.form.validateFieldsAndScroll((err, values) => {
@@ -112,12 +133,22 @@ class AdminHomeEdit extends Component {
 				return;
 			}
 			values.id = resData.aid;
-			values.status = resData.status != undefined && resData.status != 0 ? resData.status : (isPublish ? 1 : 0);
+			values.status =
+				resData.status != undefined && resData.status != 0
+					? resData.status
+					: isPublish
+					? 1
+					: 0;
 			values.catalogue = this.getTransData();
 			values.catalogue = JSON.stringify(values.catalogue);
 			values.article = JSON.stringify(article);
 			// values.content = values.content.toHTML();
-			values.description = encodeURIComponent(values.content.toHTML().replace(/<(\S|\s)*?>/g, '').slice(0, 300));
+			values.description = encodeURIComponent(
+				values.content
+					.toHTML()
+					.replace(/<(\S|\s)*?>/g, '')
+					.slice(0, 300)
+			);
 			values.content = encodeURIComponent(values.content.toRAW());
 			values.attachmentIds = JSON.stringify(backFileIds);
 			for (var key in values) {
@@ -125,16 +156,17 @@ class AdminHomeEdit extends Component {
 			}
 			// values.files = upLoadfileList;
 			this.setState({ spinLoading: true });
-			firePostRequest(SAVE_BLOG, formData).then((res) => {
-				if (res.code === 200) {
-					showSuccessMsg('保存成功');
-					this.props.history.push('/admin/home/articleManage');
-				}
-				this.setState({ spinLoading: false });
-			})
-				.catch((err) => console.log(err));
+			firePostRequest(SAVE_BLOG, formData)
+				.then(res => {
+					if (res.code === 200) {
+						showSuccessMsg('保存成功');
+						this.props.history.push('/admin/home/articleManage');
+					}
+					this.setState({ spinLoading: false });
+				})
+				.catch(err => console.log(err));
 		});
-	}
+	};
 
 	getID = lists => {
 		return lists.map(list => {
@@ -145,23 +177,27 @@ class AdminHomeEdit extends Component {
 	// 获取个人分类列表
 	getCatalogueList = () => {
 		let compareList = [];
-		fireGetRequest(GET_CATALOGUE_LIST).then((res) => {
-			if (res.code === 200) {
-				res.data = res.data.map((item) => {
-					item.value = item.name;
-					item.label = item.name;
-					compareList.push(item.name);
-					return item;
-				});
-				this.setState({ catalogueList: res.data, compareList }, () => {
-					this.fetchData();
-				});
-			} else {
-				openNotification('error', '获取个人分类列表失败', res.msg);
-			}
-		})
-			.catch((err) => console.log(err));
-	}
+		fireGetRequest(GET_CATALOGUE_LIST)
+			.then(res => {
+				if (res.code === 200) {
+					res.data = res.data.map(item => {
+						item.value = item.name;
+						item.label = item.name;
+						compareList.push(item.name);
+						return item;
+					});
+					this.setState(
+						{ catalogueList: res.data, compareList },
+						() => {
+							this.fetchData();
+						}
+					);
+				} else {
+					openNotification('error', '获取个人分类列表失败', res.msg);
+				}
+			})
+			.catch(err => console.log(err));
+	};
 
 	getCatalogue = () => {
 		const { resData, catalogueList } = this.state;
@@ -177,12 +213,12 @@ class AdminHomeEdit extends Component {
 					return catalogueList[i].name;
 				}
 			}
-		})
+		});
 		if (resData.tags) {
 			article = resData.tags.split(',');
 		}
 		this.setState({ catalogue, hasSelCatalogue: catalogue, article });
-	}
+	};
 
 	beforeUpload = (file, fileList) => {
 		if (file.size > 1000000) {
@@ -228,32 +264,40 @@ class AdminHomeEdit extends Component {
 	getAttachmentList = () => {
 		let articleId = GetQueryString('articleId'),
 			backFileList = [];
-		fireGetRequest(GET_ATTACHMENT_LIST, { articleId }).then(res => {
-			if (res.code === 200) {
-				backFileList = this.transData(res.data);
-				this.setState({ fileList: backFileList, backFileList });
-			} else {
-				openNotification('error', '获取附件列表失败', res.msg);
-			}
-		}).catch(err => console.log(err))
-	}
+		fireGetRequest(GET_ATTACHMENT_LIST, { articleId })
+			.then(res => {
+				if (res.code === 200) {
+					backFileList = this.transData(res.data);
+					this.setState({ fileList: backFileList, backFileList });
+				} else {
+					openNotification('error', '获取附件列表失败', res.msg);
+				}
+			})
+			.catch(err => console.log(err));
+	};
 
 	fetchData = () => {
 		let articleId = GetQueryString('articleId');
 		if (!articleId) {
 			return;
 		}
-		fireGetRequest(GET_ARTICLE_BY_ID, { id: articleId, showAll: true }).then(res => {
-			if (res.code === 200) {
-				this.setState({ resData: res.data }, () => {
-					this.getCatalogue();
-				});
-				this.editorInstance.setValue(BraftEditor.createEditorState(decodeURIComponent(res.data.content)));
-			} else {
-				openNotification('error', '获取文章失败', res.msg);
-			}
-		}).catch(err => console.log(err))
-	}
+		fireGetRequest(GET_ARTICLE_BY_ID, { id: articleId, showAll: true })
+			.then(res => {
+				if (res.code === 200) {
+					this.setState({ resData: res.data }, () => {
+						this.getCatalogue();
+					});
+					this.editorInstance.setValue(
+						BraftEditor.createEditorState(
+							decodeURIComponent(res.data.content)
+						)
+					);
+				} else {
+					openNotification('error', '获取文章失败', res.msg);
+				}
+			})
+			.catch(err => console.log(err));
+	};
 
 	componentDidMount() {
 		this.getCatalogueList();
@@ -261,7 +305,15 @@ class AdminHomeEdit extends Component {
 	}
 
 	render() {
-		const { resData, article, catalogue, hasSelCatalogue, catalogueList, spinLoading, fileList } = this.state;
+		const {
+			resData,
+			article,
+			catalogue,
+			hasSelCatalogue,
+			catalogueList,
+			spinLoading,
+			fileList
+		} = this.state;
 		const { getFieldDecorator } = this.props.form;
 		return (
 			<div className={'adminHomeEdit'}>
@@ -269,16 +321,28 @@ class AdminHomeEdit extends Component {
 					<Form>
 						<FormItem label="">
 							{getFieldDecorator('title', {
-								rules: [{ required: true, message: '请输入文章标题！' }],
+								rules: [
+									{
+										required: true,
+										message: '请输入文章标题！'
+									}
+								],
 								initialValue: resData.title || ''
 							})(<Input placeholder={'请输入文章标题'} />)}
 						</FormItem>
 						<FormItem label="">
 							{getFieldDecorator('content', {
-								rules: [{ required: true, message: '请输入文章内容！' }]
+								rules: [
+									{
+										required: true,
+										message: '请输入文章内容！'
+									}
+								]
 							})(
 								<BraftEditor
-									ref={(instance) => (this.editorInstance = instance)}
+									ref={instance =>
+										(this.editorInstance = instance)
+									}
 									controls={braftControls}
 								/>
 							)}
@@ -309,13 +373,23 @@ class AdminHomeEdit extends Component {
 						</FormItem>
 						<FormItem label="文章类型" className={'article'}>
 							{getFieldDecorator('articleType', {
-								rules: [{ required: true, message: '请选择文章类型！' }],
-								initialValue: resData.articleType || articleTypeList[0] && articleTypeList[0].key
+								rules: [
+									{
+										required: true,
+										message: '请选择文章类型！'
+									}
+								],
+								initialValue:
+									resData.articleType ||
+									(articleTypeList[0] &&
+										articleTypeList[0].key)
 							})(
 								<Select
-									className={'lomaBlog-select select-articleType'}
+									className={
+										'lomaBlog-select select-articleType'
+									}
 								>
-									{articleTypeList.map((item) => (
+									{articleTypeList.map(item => (
 										<Option key={item.id} value={item.key}>
 											{item.name}
 										</Option>
@@ -335,15 +409,24 @@ class AdminHomeEdit extends Component {
 							>
 								<Button>
 									<Icon type="upload" /> 上传文件
-    							</Button>
+								</Button>
 							</Upload>
 						</FormItem>
 						<Row type="flex" gutter={10}>
 							<Col>
-								<Button type="primary" onClick={() => this.handlePublish(true)}>发布</Button>
+								<Button
+									type="primary"
+									onClick={() => this.handlePublish(true)}
+								>
+									发布
+								</Button>
 							</Col>
 							<Col>
-								<Button onClick={() => this.handlePublish(false)}>存草稿</Button>
+								<Button
+									onClick={() => this.handlePublish(false)}
+								>
+									存草稿
+								</Button>
 							</Col>
 						</Row>
 					</Form>
