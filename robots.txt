@@ -1,0 +1,3 @@
+Disallow: /public/src/admin/
+Disallow: /sqlData/
+Disallow: /router/
