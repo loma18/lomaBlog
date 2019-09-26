@@ -11,7 +11,7 @@
     "lint:es": "eslint public/src/**/*.js -c .eslintrc --fix",
     "lint:style": "stylelint \"public/src/**/*.less\" --syntax less --fix",
     "format": "prettier --write public/src/**/*.js",
-    "pre-commit": "lint-staged"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "public/src/**/*.less": [
