@@ -49,4 +49,49 @@
             }
         }
     }
+
+    @media screen and (max-width: 768px) {
+        .header-logo {
+            width: auto;
+        }
+
+        .header-menu {
+			position: absolute;
+			top: 53px;
+			left: 0;
+			width: 100%;
+			display: none;
+        }
+
+        .webTitle {
+            flex: 1;
+            padding-left: 2rem;
+            font-size: 1.5rem;
+
+            span {
+				position: relative;
+				top: -3px;
+                display: inline-block;
+				width: 20px;
+				height: 20px;
+                border: 3px solid @mainColor;
+                border-right-color: transparent;
+				border-top-color: transparent;
+				margin-left: 20px;
+				transform: rotate(-45deg);
+				transition: transform 0.1s;
+				&.isOpen{
+					top: 6px;
+					transform: rotate(135deg);
+				}
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #lomaBlog-header {
+        min-width: auto;
+        padding: 0 1rem;
+    }
 }

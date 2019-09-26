@@ -6,6 +6,7 @@ import { GET_FILTER_LIST, GET_ARTICLE_TYPE_COUNT } from 'constants/api';
 import { openNotification } from 'utils';
 import { articleTypeObj } from 'constants';
 import Routers from './router';
+import { isApp } from 'utils/functions';
 import './style.less';
 
 const { Group, Button } = Radio;
@@ -147,7 +148,7 @@ class Home extends Component {
 					<Col className={'left'}>
 						<Routers bindChild={this.props.bindChild} />
 					</Col>
-					<Col className={'right'}>
+					{!isApp() && <Col className={'right'}>
 						<div className={'calendar'}>
 							<Calendar
 								fullscreen={false}
@@ -204,7 +205,7 @@ class Home extends Component {
 								);
 							})}
 						</div>
-					</Col>
+					</Col>}
 				</Row>
 			</div>
 		);

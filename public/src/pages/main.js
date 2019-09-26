@@ -34,7 +34,7 @@ class Main extends Component {
 		return list;
 	};
 
-	componentDidUpdate() {}
+	componentDidUpdate() { }
 
 	bindChild = _this => {
 		this.setState({ handleSearch: _this.fetchData });
@@ -57,7 +57,7 @@ class Main extends Component {
 				<Footer />
 				<BackTop />
 				<LomaAudio />
-			</div>
+			</div >
 		);
 	}
 }

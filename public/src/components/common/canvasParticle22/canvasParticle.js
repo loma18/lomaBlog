@@ -3,7 +3,7 @@
 // 	https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API
 // 	**大神教程
 // 1、http://www.cnblogs.com/axes/p/4960171.html
-(function(window) {
+(function (window) {
 	function Dotline(option) {
 		this.opt = this.extend(
 			{
@@ -33,30 +33,30 @@
 			window.mozRequestAnimationFrame ||
 			window.oRequestAnimationFrame ||
 			window.msRequestAnimationFrame ||
-			function(callback) {
+			function (callback) {
 				window.setTimeout(callback, 1000 / 60);
 			};
 		var _self = this;
 		//增加鼠标效果
 		var mousedot = { x: null, y: null, label: "mouse" };
-		document.body.onmousemove = function(e) {
+		document.body.onmousemove = function (e) {
 			var evt = e || window.event;
 			mousedot.x = evt.clientX - _self.c.offsetLeft;
 			mousedot.y = evt.clientY - _self.c.offsetTop;
 		};
-		document.body.onmouseout = function(e) {
+		document.body.onmouseout = function (e) {
 			mousedot.x = null;
 			mousedot.y = null;
 		};
 		//控制动画
-		this.animate = function() {
+		this.animate = function () {
 			_self.ctx.clearRect(0, 0, _self.c.width, _self.c.height);
 			_self.drawLine([mousedot].concat(_self.dots));
 			RAF(_self.animate);
 		};
 	}
 	//合并配置项，es6直接使用obj.assign();
-	Dotline.prototype.extend = function(o, e) {
+	Dotline.prototype.extend = function (o, e) {
 		for (var key in e) {
 			if (e[key]) {
 				o[key] = e[key];
@@ -65,7 +65,7 @@
 		return o;
 	};
 	//设置线条颜色(参考{抄袭}张鑫旭大大，http://www.zhangxinxu.com/wordpress/2010/03/javascript-hex-rgb-hsl-color-convert/)
-	Dotline.prototype.color2rgb = function(colorStr) {
+	Dotline.prototype.color2rgb = function (colorStr) {
 		var red = null,
 			green = null,
 			blue = null;
@@ -88,7 +88,7 @@
 		return red + "," + green + "," + blue;
 	};
 	//画点
-	Dotline.prototype.addDots = function() {
+	Dotline.prototype.addDots = function () {
 		var dot;
 		for (var i = 0; i < this.dotSum; i++) {
 			//参数
@@ -102,7 +102,7 @@
 		}
 	};
 	//点运动
-	Dotline.prototype.move = function(dot) {
+	Dotline.prototype.move = function (dot) {
 		dot.x += dot.ax;
 		dot.y += dot.ay;
 		//点碰到边缘返回
@@ -116,11 +116,11 @@
 		this.ctx.stroke();
 	};
 	//点之间画线
-	Dotline.prototype.drawLine = function(dots) {
+	Dotline.prototype.drawLine = function (dots) {
 		var nowDot;
 		var _that = this;
 		//自己的思路：遍历两次所有的点，比较点之间的距离，函数的触发放在animate里
-		this.dots.forEach(function(dot) {
+		this.dots.forEach(function (dot) {
 			_that.move(dot);
 			for (var j = 0; j < dots.length; j++) {
 				nowDot = dots[j];
@@ -157,22 +157,24 @@
 		});
 	};
 	//开始动画
-	Dotline.prototype.start = function() {
+	Dotline.prototype.start = function () {
 		var _that = this;
 		this.addDots();
-		setTimeout(function() {
+		setTimeout(function () {
 			_that.animate();
 		}, 100);
 	};
 	window.Dotline = Dotline;
 })(window);
 //调用
-window.onload = function() {
+window.onload = function () {
+	let w = document.documentElement.offsetWidth,
+		h = document.documentElement.offsetHeight;
 	new Dotline({
 		dom: "J_dotLine", //画布id
-		cw: 1920, //画布宽
-		ch: 1080, //画布高
-		ds: 100, //点的个数
+		cw: w, //画布宽
+		ch: h, //画布高
+		ds: w * h / 10000, //点的个数
 		r: 0.5, //圆点半径0.5
 		cl: "#12FC41", //粒子线颜色
 		dis: 100 //触发连线的距离

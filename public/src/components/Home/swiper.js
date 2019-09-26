@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactSwipe from 'react-swipe';
+import { isApp } from 'utils/functions';
 import './swiper.less';
 
 class Category extends React.Component {
@@ -13,7 +14,7 @@ class Category extends React.Component {
 		const { index } = this.state;
 		let opt = {
 			auto: 3000,
-			callback: function(index) {
+			callback: function (index) {
 				this.setState({ index: Number(index) });
 			}.bind(this)
 		};
@@ -40,7 +41,7 @@ class Category extends React.Component {
 						</div>
 					))}
 				</ReactSwipe>
-				<div className='index-container'>
+				{!isApp() && <div className='index-container'>
 					<ul>
 						{imgList.map((item, key) => (
 							<li
@@ -49,7 +50,7 @@ class Category extends React.Component {
 							></li>
 						))}
 					</ul>
-				</div>
+				</div>}
 			</div>
 		);
 	}

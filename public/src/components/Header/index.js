@@ -5,6 +5,7 @@ import { ROUTE_PATH, ROUTE_ADMIN_PATH } from 'constants/route';
 import { inject, observer } from 'mobx-react';
 import { USER_INFO } from 'constants/user';
 import { docTitle } from 'constants';
+import { isApp } from 'utils/functions';
 import './style.less';
 
 const Search = Input.Search;
@@ -16,8 +17,14 @@ class Header extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedKeys: []
+			selectedKeys: [],
+			isOpen: false
 		};
+	}
+
+	handleMenu = () => {
+		let { isOpen } = this.state;
+		this.setState({ isOpen: !isOpen })
 	}
 
 	handleSearch = value => {
@@ -71,7 +78,7 @@ class Header extends Component {
 	}
 
 	render() {
-		const { selectedKeys } = this.state;
+		const { selectedKeys, isOpen } = this.state;
 		const { menuList } = this.props;
 
 		let pathObj = ROUTE_PATH;
@@ -94,9 +101,9 @@ class Header extends Component {
 							title={'xiangeLogo'}
 						/>
 					</Col>
-					<Col className={'header-menu'}>
+					<Col className={'header-menu'} style={{ display: (!isApp() ? 'block' : isOpen ? 'block' : 'none') }}>
 						<Menu
-							mode='horizontal'
+							mode={isApp() ? 'vertical' : 'horizontal'}
 							selectedKeys={selectedKeys}
 							onSelect={this.onSelect}
 						>
@@ -110,18 +117,20 @@ class Header extends Component {
 							))}
 						</Menu>
 					</Col>
-					<Col className={'header-right'}>
-						{path[1] == 'admin' ? (
-							<Button onClick={() => this.handleClick()}>
-								退出登陆
+					{isApp() ? (
+						<Col className={'webTitle'}>xiange的博客<span className={isOpen ? 'isOpen' : ''} onClick={this.handleMenu}></span></Col>
+					) : <Col className={'header-right'}>
+							{path[1] == 'admin' ? (
+								<Button onClick={() => this.handleClick()}>
+									退出登陆
 							</Button>
-						) : (
-							<Search
-								placeholder='search...'
-								onSearch={this.handleSearch}
-							/>
-						)}
-					</Col>
+							) : (
+									<Search
+										placeholder='search...'
+										onSearch={this.handleSearch}
+									/>
+								)}
+						</Col>}
 				</Row>
 			</div>
 		);

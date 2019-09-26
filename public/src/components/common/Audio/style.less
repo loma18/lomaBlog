@@ -310,3 +310,36 @@
         z-index: 99;
     }
 }
+
+@media screen and (max-width: 768px) {
+    #lomaBlog-audio {
+        .operatePanel {
+			left: calc(~'30px - 100vw');
+			width: calc(~'100vw - 30px');
+			div.songPanel{
+				width: calc(~'100vw - 30px');
+				height: 250px;
+				.searchSongs{
+					flex: 1;
+				}
+				.songsList{
+					height: 250px;
+				}
+				.songsList li span{
+					display: none !important;
+					&:nth-child(2){
+						display: inline-block !important;
+						width: 200px !important;
+					}
+					&:first-child{
+						display: inline-block !important;
+						width: 30px !important;
+					}
+				}
+			}
+			.right{
+				flex: 1;
+			}
+        }
+    }
+}
