@@ -160,11 +160,14 @@ class AdminHomeEdit extends Component {
 				.then(res => {
 					if (res.code === 200) {
 						showSuccessMsg('保存成功');
-						this.props.history.push('/admin/home/articleManage');
+						// this.props.history.push('/admin/home/articleManage');
 					}
 					this.setState({ spinLoading: false });
 				})
-				.catch(err => console.log(err));
+				.catch(err => {
+					this.setState({ spinLoading: false });
+					console.log(err);
+				});
 		});
 	};
 
@@ -344,6 +347,7 @@ class AdminHomeEdit extends Component {
 										(this.editorInstance = instance)
 									}
 									controls={braftControls}
+									onSave={() => this.handlePublish(false)}
 								/>
 							)}
 						</FormItem>
