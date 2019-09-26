@@ -5,6 +5,7 @@ import Loadable from 'components/Loadable';
 const Home = Loadable(() => import('pages/home'));
 const Whisper = Loadable(() => import('pages/whisper'));
 const AdminRouter = Loadable(() => import('pages/admin/router'));
+const ErrorPage = Loadable(() => import('components/common/404'));
 
 export default props => (
 	<Switch>
@@ -36,6 +37,7 @@ export default props => (
 			)}
 		/>
 		<Route path={ROUTE_ADMIN_PATH.admin} component={AdminRouter} />
+		<Route component={ErrorPage} />
 		{/* <Redirect from={props.location} to={'/'} /> */}
 	</Switch>
 );
