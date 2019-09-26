@@ -1,3 +1,4 @@
+/* eslint-disable */
 const mysql = require("mysql");
 
 let pool = mysql.createPool({
@@ -9,7 +10,7 @@ let pool = mysql.createPool({
     connectionLimit: 10
 });
 
-query=(sql, sqlParams, callback)=> {
+const query = (sql, sqlParams, callback) => {
     pool.getConnection(function (err, conn) {
         if (err) {
             callback(err, null, null);
