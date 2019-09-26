@@ -76,7 +76,7 @@ class AdminHomeEdit extends Component {
 
 	// 修改个人分类选取
 	onChange = val => {
-		let { catalogue, compareList } = this.state;
+			let { catalogue, compareList } = this.state;
 		catalogue = catalogue.filter(
 			item => !(val.indexOf(item) < 0 && compareList.indexOf(item) > -1)
 		);

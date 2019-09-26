@@ -10,12 +10,8 @@
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint public/src/**/*.js -c .eslintrc --fix",
     "lint:style": "stylelint \"public/src/**/*.less\" --syntax less --fix",
-    "format": "prettier --write public/src/**/*.js"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "format": "prettier --write public/src/**/*.js",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "public/src/**/*.less": [
