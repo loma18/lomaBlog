@@ -126,10 +126,12 @@ class Whisper extends Component {
 											{item.description}
 										</Col>
 										<Col className={'date'}>
-											{formatMomentToString(
-												item.createAt,
-												'YYYY-MM-DD HH:mm:ss'
-											)}
+											<span>
+												{formatMomentToString(
+													item.createAt,
+													'YYYY-MM-DD HH:mm:ss'
+												)}
+											</span>
 										</Col>
 										{pathname == 'admin' && (
 											<Col>
