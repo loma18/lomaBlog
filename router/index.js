@@ -5,6 +5,8 @@ const qs = require("querystring");
 const sqlConnect = require('../sqlConnect');
 const path = require('path');
 const sendEmail = require('./sendEmail.js');
+const request = require('request');
+let fs = require('fs-extra');
 
 router.get('/baidu_verify_fdB5I1FLUq.html', (req, res) => {
     res.sendFile(path.join(__dirname, '/../baidu_verify_fdB5I1FLUq.html'));
@@ -37,11 +39,28 @@ router.post("/login", (req, res) => {
     })
 });
 
+/*获取用户登陆信息*/
+router.get('/getClientInfo', (req, res) => {
+    let ip = req.ip.split(':');
+    ip = ip[ip.length - 1];
+    let url = `https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=${ip}&resource_id=6006&oe=utf8&ie=utf8`;
+    request(url, (err, req, res) => {
+        if (err) {
+            res.end();
+        }
+        let data = JSON.parse(res).data,
+            date = new Date();
+        let msg = `ip:${data.OriginQuery}所在地址为${data.location},于${date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}访问了您的网址\n`;
+        fs.appendFileSync('./ipLog.txt', msg);
+        console.log('msg', msg);
+    });
+})
+
 router.post('/sendMsg', (req, res) => {
     req.on("data", (data) => {
         let str = data.toString(),
             obj = JSON.parse(str);
-        sendEmail.send(obj,res);
+        sendEmail.send(obj, res);
     })
 })
 

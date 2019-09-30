@@ -14,7 +14,7 @@ class Category extends React.Component {
 		const { index } = this.state;
 		let opt = {
 			auto: 3000,
-			callback: function (index) {
+			callback: function(index) {
 				this.setState({ index: Number(index) });
 			}.bind(this)
 		};
@@ -41,16 +41,18 @@ class Category extends React.Component {
 						</div>
 					))}
 				</ReactSwipe>
-				{!isApp() && <div className='index-container'>
-					<ul>
-						{imgList.map((item, key) => (
-							<li
-								key={key}
-								className={index === key ? 'selected' : ''}
-							></li>
-						))}
-					</ul>
-				</div>}
+				{!isApp() && (
+					<div className='index-container'>
+						<ul>
+							{imgList.map((item, key) => (
+								<li
+									key={key}
+									className={index === key ? 'selected' : ''}
+								></li>
+							))}
+						</ul>
+					</div>
+				)}
 			</div>
 		);
 	}

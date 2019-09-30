@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { fireGetRequest } from 'service/app';
+import { GET_CLIENT_INFO } from 'constants/api';
 import { BackTop } from 'antd';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
@@ -34,11 +36,19 @@ class Main extends Component {
 		return list;
 	};
 
-	componentDidUpdate() { }
+	componentDidUpdate() {}
 
 	bindChild = _this => {
 		this.setState({ handleSearch: _this.fetchData });
 	};
+
+	getClient = () => {
+		fireGetRequest(GET_CLIENT_INFO);
+	};
+
+	componentDidMount() {
+		this.getClient();
+	}
 
 	render() {
 		let menuList = this.getMenuList();
@@ -57,7 +67,7 @@ class Main extends Component {
 				<Footer />
 				<BackTop />
 				<LomaAudio />
-			</div >
+			</div>
 		);
 	}
 }

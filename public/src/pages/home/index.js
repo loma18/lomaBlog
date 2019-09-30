@@ -148,64 +148,72 @@ class Home extends Component {
 					<Col className={'left'}>
 						<Routers bindChild={this.props.bindChild} />
 					</Col>
-					{!isApp() && <Col className={'right'}>
-						<div className={'calendar'}>
-							<Calendar
-								fullscreen={false}
-								onPanelChange={this.onPanelChange}
-								onSelect={this.onSelect}
-								headerRender={this.headerRender}
-							/>
-						</div>
-						<div className={'article'}>
-							<h3>文章分类</h3>
-							<Menu mode='vertical'>
-								{articleList.map(item => (
-									<Menu.Item key={item.articleType}>
-										<div
-											onClick={() =>
-												this.handleJump(
-													item.articleType
-												)
-											}
-										>
-											{
-												articleTypeObj[item.articleType]
-													.name
-											}
-											<span>({item.total})</span>
-										</div>
-									</Menu.Item>
-								))}
-							</Menu>
-						</div>
-						<div className={'hot-article'}>
-							<h3>热门文章</h3>
-							{hotArticleList.map(item => {
-								return (
-									<div className={'hot-item'} key={item.aid}>
-										<h4 title={item.title}>
-											<Link
-												to={`/home/detail?articleType=${item.articleType}&status=${item.status}&articleId=${item.aid}`}
+					{!isApp() && (
+						<Col className={'right'}>
+							<div className={'calendar'}>
+								<Calendar
+									fullscreen={false}
+									onPanelChange={this.onPanelChange}
+									onSelect={this.onSelect}
+									headerRender={this.headerRender}
+								/>
+							</div>
+							<div className={'article'}>
+								<h3>文章分类</h3>
+								<Menu mode='vertical'>
+									{articleList.map(item => (
+										<Menu.Item key={item.articleType}>
+											<div
+												onClick={() =>
+													this.handleJump(
+														item.articleType
+													)
+												}
 											>
-												{item.title}
-											</Link>
-										</h4>
-										<p>
-											标签：
-											{item.tags
-												.split(',')
-												.map((tag, key) => {
-													return (
-														<b key={key}>{tag}</b>
-													);
-												})}
-										</p>
-									</div>
-								);
-							})}
-						</div>
-					</Col>}
+												{
+													articleTypeObj[
+														item.articleType
+													].name
+												}
+												<span>({item.total})</span>
+											</div>
+										</Menu.Item>
+									))}
+								</Menu>
+							</div>
+							<div className={'hot-article'}>
+								<h3>热门文章</h3>
+								{hotArticleList.map(item => {
+									return (
+										<div
+											className={'hot-item'}
+											key={item.aid}
+										>
+											<h4 title={item.title}>
+												<Link
+													to={`/home/detail?articleType=${item.articleType}&status=${item.status}&articleId=${item.aid}`}
+												>
+													{item.title}
+												</Link>
+											</h4>
+											<p>
+												标签：
+												{item.tags
+													.split(',')
+													.map((tag, key) => {
+														return (
+															<b key={key}>
+																{tag}
+															</b>
+														);
+													})}
+											</p>
+										</div>
+									);
+								})}
+							</div>
+						</Col>
+					)}
 				</Row>
 			</div>
 		);

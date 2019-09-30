@@ -75,13 +75,13 @@ class Audio extends Component {
 			this.frame = 0;
 		}
 
-		Visualizer.prototype.init = function () {
+		Visualizer.prototype.init = function() {
 			this.audioContext = null;
 			this.analyser = null;
 			this.source = null;
 		};
 
-		Visualizer.prototype.render = function (
+		Visualizer.prototype.render = function(
 			data,
 			len,
 			context,
@@ -135,7 +135,7 @@ class Audio extends Component {
 			}
 		};
 
-		Visualizer.prototype.draw = function () {
+		Visualizer.prototype.draw = function() {
 			if (!this.audio.paused) {
 				this.lyrics = _this.getCurLyrics(this.audio.currentTime);
 				// console.log('dataArray', this.dataArray);
@@ -158,7 +158,7 @@ class Audio extends Component {
 			}
 
 			let self = this; // requestAnimationFrame binds global this
-			this.frame = requestAnimationFrame(function () {
+			this.frame = requestAnimationFrame(function() {
 				self.draw();
 			});
 		};
@@ -235,8 +235,8 @@ class Audio extends Component {
 				specialKey == '-1'
 					? GET_HOT_SONGS
 					: GET_OTHER_SONGS +
-					'/' +
-					categorizeList[specialKey].specialid;
+					  '/' +
+					  categorizeList[specialKey].specialid;
 			fireGetRequest(url, { json: true })
 				.then(res => {
 					if (specialKey == '-1') {
@@ -597,23 +597,29 @@ class Audio extends Component {
 							style={{
 								backgroundImage: imgUrl
 									? `url(/source/getImage/${imgUrl.replace(
-										'http://imge.kugou.com/',
-										''
-									)})`
+											'http://imge.kugou.com/',
+											''
+									  )})`
 									: `url(${require('../../../assets/logo.jpg')})`,
 								transform: `rotate(${rotates}deg)`
 							}}
 						></Col>
-						{!isApp() && <Col className={'center'}>
-							<h3 className={'songName'}>{songData.songName}</h3>
-							<p className={'singer'}>{songData.singerName}</p>
-							{/* <p className={'songType'}>{}</p> */}
-							<p>
-								<span onClick={this.handleCloseLyrics}>
-									{lyricsShow ? '关闭歌词' : '显示歌词'}
-								</span>
-							</p>
-						</Col>}
+						{!isApp() && (
+							<Col className={'center'}>
+								<h3 className={'songName'}>
+									{songData.songName}
+								</h3>
+								<p className={'singer'}>
+									{songData.singerName}
+								</p>
+								{/* <p className={'songType'}>{}</p> */}
+								<p>
+									<span onClick={this.handleCloseLyrics}>
+										{lyricsShow ? '关闭歌词' : '显示歌词'}
+									</span>
+								</p>
+							</Col>
+						)}
 						<Col className={'right'}>
 							<Row type='flex' justify='space-between'>
 								<Col

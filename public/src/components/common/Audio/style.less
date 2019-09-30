@@ -1,345 +1,345 @@
-@import '../../../themes/base.less';
+@import "../../../themes/base.less";
 
 #lomaBlog-audio {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 0;
-    z-index: 9;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 0;
+	z-index: 9;
 
-    &.containerUnfold {
-        width: 100vw;
-    }
+	&.containerUnfold {
+		width: 100vw;
+	}
 
-    .operatePanel {
-        position: fixed;
-        left: -540px;
-        bottom: 100px;
-        z-index: 99;
-        width: 540px;
-        height: 100px;
-        background: #000 url('../../../assets/panelBg.gif') repeat;
-        padding: 10px 20px;
-        transition: all 0.2s;
+	.operatePanel {
+		position: fixed;
+		left: -540px;
+		bottom: 100px;
+		z-index: 99;
+		width: 540px;
+		height: 100px;
+		background: #000 url("../../../assets/panelBg.gif") repeat;
+		padding: 10px 20px;
+		transition: all 0.2s;
 
-        div.songPanel {
-            position: absolute;
-            bottom: 100px;
-            left: 0;
-            width: 540px;
-            height: 350px;
-            border: 1px solid @lineColor;
-            background: #c8dcd3;
+		div.songPanel {
+			position: absolute;
+			bottom: 100px;
+			left: 0;
+			width: 540px;
+			height: 350px;
+			border: 1px solid @lineColor;
+			background: #c8dcd3;
 
-            .panelHeader {
-                height: 25px;
-                line-height: 25px;
+			.panelHeader {
+				height: 25px;
+				line-height: 25px;
 
-                .curType {
-                    background: @mainColor1;
-                    border-radius: 0 0 10px 0;
-                    max-width: 100px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
+				.curType {
+					background: @mainColor1;
+					border-radius: 0 0 10px 0;
+					max-width: 100px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 
-                .categorySel {
-                    cursor: pointer;
-                }
+				.categorySel {
+					cursor: pointer;
+				}
 
-                input {
-                    height: 25px;
-                }
-            }
+				input {
+					height: 25px;
+				}
+			}
 
-            ul {
-                height: 325px;
-                overflow: auto;
-                padding: 10px 0;
+			ul {
+				height: 325px;
+				overflow: auto;
+				padding: 10px 0;
 
-                &::-webkit-scrollbar {
-                    /* 滚动条整体样式 */
-                    width: 4px;
-                    /* 高宽分别对应横竖滚动条的尺寸 */
-                    height: 1px;
-                }
+				&::-webkit-scrollbar {
+					/* 滚动条整体样式 */
+					width: 4px;
+					/* 高宽分别对应横竖滚动条的尺寸 */
+					height: 1px;
+				}
 
-                &::-webkit-scrollbar-thumb {
-                    /* 滚动条里面小方块 */
-                    border-radius: 10px;
-                    background: @mainColor1;
-                }
-            }
+				&::-webkit-scrollbar-thumb {
+					/* 滚动条里面小方块 */
+					border-radius: 10px;
+					background: @mainColor1;
+				}
+			}
 
-            ul.songsList li {
-                padding: 0 10px;
-                height: 25px;
-                line-height: 25px;
-                cursor: pointer;
+			ul.songsList li {
+				padding: 0 10px;
+				height: 25px;
+				line-height: 25px;
+				cursor: pointer;
 
-                &:hover,
-                &.activeSong {
-                    background: @mainColor1;
-                }
+				&:hover,
+				&.activeSong {
+					background: @mainColor1;
+				}
 
-                span {
-                    display: inline-block;
-                    line-height: 25px;
-                    padding: 0 2px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
+				span {
+					display: inline-block;
+					line-height: 25px;
+					padding: 0 2px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
 
-                    &:first-child {
-                        width: 40px;
-                    }
+					&:first-child {
+						width: 40px;
+					}
 
-                    &:nth-child(2) {
-                        width: 250px;
-                    }
+					&:nth-child(2) {
+						width: 250px;
+					}
 
-                    &:nth-child(3) {
-                        width: 60px;
-                    }
+					&:nth-child(3) {
+						width: 60px;
+					}
 
-                    &:nth-child(4) {
-                        width: 150px;
-                    }
-                }
-            }
+					&:nth-child(4) {
+						width: 150px;
+					}
+				}
+			}
 
-            ul.categorizeList {
-                display: flex;
-                flex-wrap: wrap;
-                padding: 20px 0 0 20px;
+			ul.categorizeList {
+				display: flex;
+				flex-wrap: wrap;
+				padding: 20px 0 0 20px;
 
-                li {
-                    width: 108px;
-                    height: 130px;
-                    margin-right: 20px;
-                    margin-bottom: 20px;
-                    cursor: pointer;
+				li {
+					width: 108px;
+					height: 130px;
+					margin-right: 20px;
+					margin-bottom: 20px;
+					cursor: pointer;
 
-                    &.active {
-                        border: 1px solid @lineColor;
-                    }
+					&.active {
+						border: 1px solid @lineColor;
+					}
 
-                    img {
-                        width: 108px;
-                        height: 108px;
-                    }
+					img {
+						width: 108px;
+						height: 108px;
+					}
 
-                    p {
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        text-align: center;
-                    }
-                }
-            }
-        }
+					p {
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						text-align: center;
+					}
+				}
+			}
+		}
 
-        &.unfold {
-            left: 0;
-        }
+		&.unfold {
+			left: 0;
+		}
 
-        p.arrow {
-            position: absolute;
-            right: -30px;
-            top: 0;
-            width: 30px;
-            height: 100px;
-            line-height: 100px;
-            background: rgba(0, 0, 0, .5);
-            border-radius: 0 5px 5px 0;
-            font-size: 30px;
-            cursor: pointer;
-        }
+		p.arrow {
+			position: absolute;
+			right: -30px;
+			top: 0;
+			width: 30px;
+			height: 100px;
+			line-height: 100px;
+			background: rgba(0, 0, 0, 0.5);
+			border-radius: 0 5px 5px 0;
+			font-size: 30px;
+			cursor: pointer;
+		}
 
-        .left {
-            width: 80px;
-            height: 80px;
-            background: url('../../../assets/logo.jpg') no-repeat;
-            background-size: contain;
-            border-radius: 50%;
+		.left {
+			width: 80px;
+			height: 80px;
+			background: url("../../../assets/logo.jpg") no-repeat;
+			background-size: contain;
+			border-radius: 50%;
 
-            &::after,
-            &::before {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                content: '';
-                width: 13px;
-                height: 13px;
-                border: 1px solid #3b423d;
-                border-radius: 50%;
-                transform: translate(-50%, -50%);
-            }
+			&::after,
+			&::before {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				content: "";
+				width: 13px;
+				height: 13px;
+				border: 1px solid #3b423d;
+				border-radius: 50%;
+				transform: translate(-50%, -50%);
+			}
 
-            &::after {
-                width: 20px;
-                height: 20px;
-            }
-        }
+			&::after {
+				width: 20px;
+				height: 20px;
+			}
+		}
 
-        .center {
-            position: relative;
-            width: 100px;
-            padding: 0 5px;
+		.center {
+			position: relative;
+			width: 100px;
+			padding: 0 5px;
 
-            .songName {
-                width: 100%;
-                color: #fff;
-                font-size: @mFont;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
+			.songName {
+				width: 100%;
+				color: #fff;
+				font-size: @mFont;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
 
-            .singer,
-            .songType,
-            p {
-                color: #ccc;
-                font-size: @sfont;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
+			.singer,
+			.songType,
+			p {
+				color: #ccc;
+				font-size: @sfont;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
 
-            p:last-child {
-                position: absolute;
-                bottom: 15px;
-                cursor: pointer;
-            }
-        }
+			p:last-child {
+				position: absolute;
+				bottom: 15px;
+				cursor: pointer;
+			}
+		}
 
-        .right {
-            width: 320px;
-            height: 80px;
-            background: #fff;
-            border-radius: 15px;
-            padding: 5px 10px;
+		.right {
+			width: 320px;
+			height: 80px;
+			background: #fff;
+			border-radius: 15px;
+			padding: 5px 10px;
 
-            .anticon {
-                font-size: 18px;
-                cursor: pointer;
-                color: rgba(0, 0, 0, 0.65);
+			.anticon {
+				font-size: 18px;
+				cursor: pointer;
+				color: rgba(0, 0, 0, 0.65);
 
-                &:hover {
-                    color: hsl(80, 50%, 50%);
-                }
-            }
+				&:hover {
+					color: hsl(80, 50%, 50%);
+				}
+			}
 
-            >div:nth-child(2) {
-                height: 25px;
-                line-height: 25px;
+			> div:nth-child(2) {
+				height: 25px;
+				line-height: 25px;
 
-                .anticon {
-                    font-size: 28px;
-                }
-            }
+				.anticon {
+					font-size: 28px;
+				}
+			}
 
-            .topLeft.muted {
-                .anticon {
-                    color: @dangerColor;
-                }
-            }
+			.topLeft.muted {
+				.anticon {
+					color: @dangerColor;
+				}
+			}
 
-            .volumnSlider {
-                display: none;
-                // position: absolute;
-                // bottom  : 0;
-                // left    : 15px;
-                width: 100px;
-                margin: 0 0 0 5px;
-                padding: 0;
+			.volumnSlider {
+				display: none;
+				// position: absolute;
+				// bottom  : 0;
+				// left    : 15px;
+				width: 100px;
+				margin: 0 0 0 5px;
+				padding: 0;
 
-                .ant-slider-rail {
-                    height: 10px;
-                    background: @lineColor;
-                }
+				.ant-slider-rail {
+					height: 10px;
+					background: @lineColor;
+				}
 
-                .ant-slider-track {
-                    height: 10px;
-                }
+				.ant-slider-track {
+					height: 10px;
+				}
 
-                .ant-slider-handle {
-                    display: none;
-                }
-            }
+				.ant-slider-handle {
+					display: none;
+				}
+			}
 
-            .topLeft:hover .volumnSlider {
-                display: inline-block;
-            }
+			.topLeft:hover .volumnSlider {
+				display: inline-block;
+			}
 
-            .turnOff i {
-                display: inline-block;
-                width: 15px;
-                height: 20px;
-                border: 3px solid #4c4545;
-                border-top: none;
-                border-bottom: none;
-                margin-top: 4px;
-                cursor: pointer;
+			.turnOff i {
+				display: inline-block;
+				width: 15px;
+				height: 20px;
+				border: 3px solid #4c4545;
+				border-top: none;
+				border-bottom: none;
+				margin-top: 4px;
+				cursor: pointer;
 
-                &:hover {
-                    border-color: hsl(80, 50%, 50%);
-                }
-            }
-        }
-    }
+				&:hover {
+					border-color: hsl(80, 50%, 50%);
+				}
+			}
+		}
+	}
 
-    .canvasCover {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 50px;
-        background: rgba(0, 0, 0, .1);
-        z-index: 99;
-    }
+	.canvasCover {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 50px;
+		background: rgba(0, 0, 0, 0.1);
+		z-index: 99;
+	}
 
-    #canvasContainer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        background: transparent;
-        text-align: center;
-        z-index: 99;
-    }
+	#canvasContainer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		background: transparent;
+		text-align: center;
+		z-index: 99;
+	}
 }
 
 @media screen and (max-width: 768px) {
-    #lomaBlog-audio {
-        .operatePanel {
-			left: calc(~'30px - 100vw');
-			width: calc(~'100vw - 30px');
-			div.songPanel{
-				width: calc(~'100vw - 30px');
+	#lomaBlog-audio {
+		.operatePanel {
+			left: calc(~"30px - 100vw");
+			width: calc(~"100vw - 30px");
+			div.songPanel {
+				width: calc(~"100vw - 30px");
 				height: 250px;
-				.searchSongs{
+				.searchSongs {
 					flex: 1;
 				}
-				.songsList{
+				.songsList {
 					height: 250px;
 				}
-				.songsList li span{
+				.songsList li span {
 					display: none !important;
-					&:nth-child(2){
+					&:nth-child(2) {
 						display: inline-block !important;
 						width: 200px !important;
 					}
-					&:first-child{
+					&:first-child {
 						display: inline-block !important;
 						width: 30px !important;
 					}
 				}
 			}
-			.right{
+			.right {
 				flex: 1;
 			}
-        }
-    }
+		}
+	}
 }

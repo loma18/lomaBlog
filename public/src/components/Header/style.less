@@ -1,97 +1,97 @@
-@import '../../themes/base.less';
+@import "../../themes/base.less";
 
 #lomaBlog-header {
-    width: 100vw;
-    min-width: @AppMinWidth;
-    border-bottom: 1px solid @lineColor;
-    background: @bgColor;
-    line-height: 50px;
-    padding: 0 60px;
-    transition: all 0.1s;
+	width: 100vw;
+	min-width: @AppMinWidth;
+	border-bottom: 1px solid @lineColor;
+	background: @bgColor;
+	line-height: 50px;
+	padding: 0 60px;
+	transition: all 0.1s;
 
-    .header-logo {
-        width: 150px;
-        text-align: center;
+	.header-logo {
+		width: 150px;
+		text-align: center;
 
-        img {
-            height: 50px;
-        }
-    }
+		img {
+			height: 50px;
+		}
+	}
 
-    .header-menu {
-        background: @bgColor;
-        flex: 1;
+	.header-menu {
+		background: @bgColor;
+		flex: 1;
 
-        .ant-menu {
-            background: @bgColor;
-            border: none;
+		.ant-menu {
+			background: @bgColor;
+			border: none;
 
-            .ant-menu-item {
-                &:hover {
-                    border-color: @color2;
+			.ant-menu-item {
+				&:hover {
+					border-color: @color2;
 
-                    >a {
-                        color: @color2;
-                    }
-                }
+					> a {
+						color: @color2;
+					}
+				}
 
-                >a {
-                    color: @color;
-                }
-            }
+				> a {
+					color: @color;
+				}
+			}
 
-            li.ant-menu-item-selected {
-                border-bottom: 2px solid @color2;
+			li.ant-menu-item-selected {
+				border-bottom: 2px solid @color2;
 
-                >a {
-                    color: @color2;
-                }
-            }
-        }
-    }
+				> a {
+					color: @color2;
+				}
+			}
+		}
+	}
 
-    @media screen and (max-width: 768px) {
-        .header-logo {
-            width: auto;
-        }
+	@media screen and (max-width: 768px) {
+		.header-logo {
+			width: auto;
+		}
 
-        .header-menu {
+		.header-menu {
 			position: absolute;
 			top: 53px;
 			left: 0;
 			width: 100%;
 			display: none;
-        }
+		}
 
-        .webTitle {
-            flex: 1;
-            padding-left: 2rem;
-            font-size: 1.5rem;
+		.webTitle {
+			flex: 1;
+			padding-left: 2rem;
+			font-size: 1.5rem;
 
-            span {
+			span {
 				position: relative;
 				top: -3px;
-                display: inline-block;
+				display: inline-block;
 				width: 20px;
 				height: 20px;
-                border: 3px solid @mainColor;
-                border-right-color: transparent;
+				border: 3px solid @mainColor;
+				border-right-color: transparent;
 				border-top-color: transparent;
 				margin-left: 20px;
 				transform: rotate(-45deg);
 				transition: transform 0.1s;
-				&.isOpen{
+				&.isOpen {
 					top: 6px;
 					transform: rotate(135deg);
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 }
 
 @media screen and (max-width: 768px) {
-    #lomaBlog-header {
-        min-width: auto;
-        padding: 0 1rem;
-    }
+	#lomaBlog-header {
+		min-width: auto;
+		padding: 0 1rem;
+	}
 }

@@ -1,6 +1,8 @@
 // 登陆
 export const USER_LOGIN = '/login';
 
+export const GET_CLIENT_INFO = '/getClientInfo';
+
 /** ****************************************后台管理 ***************************************************/
 /**
  * 博客增删改查

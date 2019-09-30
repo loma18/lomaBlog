@@ -24,8 +24,8 @@ class Header extends Component {
 
 	handleMenu = () => {
 		let { isOpen } = this.state;
-		this.setState({ isOpen: !isOpen })
-	}
+		this.setState({ isOpen: !isOpen });
+	};
 
 	handleSearch = value => {
 		if (typeof this.props.handleSearch == 'function') {
@@ -101,7 +101,16 @@ class Header extends Component {
 							title={'xiangeLogo'}
 						/>
 					</Col>
-					<Col className={'header-menu'} style={{ display: (!isApp() ? 'block' : isOpen ? 'block' : 'none') }}>
+					<Col
+						className={'header-menu'}
+						style={{
+							display: !isApp()
+								? 'block'
+								: isOpen
+								? 'block'
+								: 'none'
+						}}
+					>
 						<Menu
 							mode={isApp() ? 'vertical' : 'horizontal'}
 							selectedKeys={selectedKeys}
@@ -118,19 +127,27 @@ class Header extends Component {
 						</Menu>
 					</Col>
 					{isApp() ? (
-						<Col className={'webTitle'}>xiange的博客<span className={isOpen ? 'isOpen' : ''} onClick={this.handleMenu}></span></Col>
-					) : <Col className={'header-right'}>
+						<Col className={'webTitle'}>
+							xiange的博客
+							<span
+								className={isOpen ? 'isOpen' : ''}
+								onClick={this.handleMenu}
+							></span>
+						</Col>
+					) : (
+						<Col className={'header-right'}>
 							{path[1] == 'admin' ? (
 								<Button onClick={() => this.handleClick()}>
 									退出登陆
-							</Button>
+								</Button>
 							) : (
-									<Search
-										placeholder='search...'
-										onSearch={this.handleSearch}
-									/>
-								)}
-						</Col>}
+								<Search
+									placeholder='search...'
+									onSearch={this.handleSearch}
+								/>
+							)}
+						</Col>
+					)}
 				</Row>
 			</div>
 		);
