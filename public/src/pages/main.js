@@ -30,6 +30,7 @@ class Main extends Component {
 				{ title: '微语', key: 'whisper' },
 				{ title: '个人中心', key: 'mine' },
 				{ title: '后台接口', key: 'interface' },
+				{ title: '我的相册', key: 'photos' },
 				{ title: '其他', key: 'others' }
 			];
 		}

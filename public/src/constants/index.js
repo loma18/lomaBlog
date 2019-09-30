@@ -20,6 +20,7 @@ export const breadcrumbItem = {
 	whisper: { value: 'whisper', title: '微语' },
 	mine: { value: 'mine', title: '个人中心' },
 	interface: { value: 'interface', title: '后台接口' },
+	photos: { value: 'photos', title: '我的相册' },
 	others: { value: 'others', title: '其他' }
 };
 

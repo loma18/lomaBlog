@@ -80,3 +80,12 @@ export const SEARCH_SONGS_LIST = '/source/searchSongsList'; //搜索歌曲
 export const GET_SONGS_ACCESS_KEY = '/source/getSongsAccessKey'; //获取歌词所需id及accesskey
 
 export const GET_SONGS_LYRICS = '/source/getSongsLyrics'; //获取歌词
+
+/**
+ * 上传照片
+ */
+export const UPLOAD_PHOTOS = '/uploadPhotos'; //上传
+
+export const GET_PHOTOS = '/getPhotosList'; //获取照片列表
+
+export const DELETE_PHOTOS = '/photos/delete'; //删除照片

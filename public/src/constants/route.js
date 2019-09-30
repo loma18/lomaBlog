@@ -13,5 +13,6 @@ export const ROUTE_ADMIN_PATH = {
 	adminHomeModule: '/admin/home/:module',
 	mine: '/admin/mine',
 	interface: '/admin/interface',
+	photos: '/admin/photos',
 	others: '/admin/others'
 };

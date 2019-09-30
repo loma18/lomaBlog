@@ -9,14 +9,17 @@ app.use(source);
 
 const router = require("./router");
 const adminHome = require('./router/admin/home');
+const adminPhotos = require('./router/admin/photos');
 const home = require('./router/home');
 const interfaces = require('./router/admin/interface');
 const whisper = require('./router/admin/whispepr');
 app.use(router);
 app.use(adminHome);
+app.use(adminPhotos);
 app.use(home);
 app.use(interfaces);
 app.use(whisper);
+app.use('/attachment', express.static(path.join(__dirname, './attachment')));
 app.use('/introduce', express.static(path.join(__dirname, './introduce-webPage')));
 app.use(express.static(path.join(__dirname, './public/build')));
 app.use(/(\/.*)?/, express.static(path.join(__dirname, './public/build')));
