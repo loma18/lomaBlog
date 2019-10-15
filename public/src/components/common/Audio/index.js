@@ -270,10 +270,12 @@ class Audio extends Component {
 					this.setState({ songData: res, play: true }, () => {
 						this.audioNode.src =
 							'/source/getMp3/' +
-							this.state.songData.url.replace(
-								'http://fs.open.kugou.com/',
-								''
-							);
+							this.state.songData.url
+								// .replace(
+								// 	'http://fs.open.kugou.com/',
+								// 	''
+								// )
+								.replace('https://sharefs.yun.kugou.com/', '');
 						this.audioNode.play();
 					});
 				} else {

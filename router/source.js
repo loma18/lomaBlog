@@ -54,7 +54,8 @@ router.get(/\/source\/getImage\/*/, (req, res) => {
 
 //获取mp3资源
 router.get(/\/source\/getMp3\/*/, (req, res) => {
-    let url = 'http://fs.open.kugou.com/' + req.originalUrl.replace(/source\/getMp3\//, '');
+    // let url = 'http://fs.open.kugou.com/' + req.originalUrl.replace(/source\/getMp3\//, '');
+    let url = 'https://sharefs.yun.kugou.com/' + req.originalUrl.replace(/source\/getMp3\//, '');
     req.pipe(request(url)).pipe(res);
 });
 // router.get(/\/source\/*/, (req, res) => {
