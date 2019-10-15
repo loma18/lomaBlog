@@ -474,9 +474,7 @@ class Audio extends Component {
 			lyricsShow
 		} = this.state;
 		let fileInfo = [],
-			imgUrl =
-				songData.album_img &&
-				songData.album_img.replace(/\/\{size\}/, ''),
+			imgUrl = songData.album_img && replaceUrlPrefix(songData.album_img),
 			duration = songs[selSongKey] ? songs[selSongKey].duration : 0;
 		return (
 			<div
@@ -597,12 +595,13 @@ class Audio extends Component {
 						<Col
 							className={'left'}
 							style={{
-								backgroundImage: imgUrl
-									? `url(/source/getImage/${imgUrl.replace(
-											'http://imge.kugou.com/',
-											''
-									  )})`
-									: `url(${require('../../../assets/logo.jpg')})`,
+								backgroundImage:
+									imgUrl && imgUrl.afterClearPrefix
+										? `url(/source/getImage/${imgUrl.afterClearPrefix.replace(
+												/\/\{size\}/,
+												''
+										  )}?originDomain=${imgUrl.prefix})`
+										: `url(${require('../../../assets/logo.jpg')})`,
 								transform: `rotate(${rotates}deg)`
 							}}
 						></Col>
