@@ -48,16 +48,20 @@ router.get("/source/getSongsLyrics", (req, res) => {
 
 //获取图片资源
 router.get(/\/source\/getImage\/*/, (req, res) => {
-    let url = 'http://imge.kugou.com/' + req.originalUrl.replace(/source\/getImage\//, '');
-    req.pipe(request(url)).pipe(res);
+    getSource(req, res, /source\/getImage\//);
 });
 
 //获取mp3资源
 router.get(/\/source\/getMp3\/*/, (req, res) => {
-    // let url = 'http://fs.open.kugou.com/' + req.originalUrl.replace(/source\/getMp3\//, '');
-    let url = 'https://sharefs.yun.kugou.com/' + req.originalUrl.replace(/source\/getMp3\//, '');
-    req.pipe(request(url)).pipe(res);
+    getSource(req, res, /source\/getMp3\//);
 });
+
+function getSource(req, res, regStr) {
+    let reg = /(https?:\/\/)+(\s|\S)*?\//;
+    let domain = req.originalUrl.match(reg)[0];
+    let url = domain + req.originalUrl.replace(regStr, '');
+    req.pipe(request(url)).pipe(res);
+}
 // router.get(/\/source\/*/, (req, res) => {
 //     let url = req.originalUrl.replace(/\/source\//, '');
 //     req.pipe(request(url)).pipe(res);

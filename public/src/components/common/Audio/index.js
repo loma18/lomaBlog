@@ -14,6 +14,7 @@ import { getMinute, openNotification, splitStr } from 'utils';
 import './style.less';
 import { isApp } from 'utils/functions';
 import { Base64 } from 'js-base64';
+import { replaceUrlPrefix } from 'utils';
 
 const Search = Input.Search;
 
@@ -268,14 +269,12 @@ class Audio extends Component {
 			.then(res => {
 				if (res && res.url) {
 					this.setState({ songData: res, play: true }, () => {
+						let src = replaceUrlPrefix(this.state.songData.url);
 						this.audioNode.src =
 							'/source/getMp3/' +
-							this.state.songData.url
-								// .replace(
-								// 	'http://fs.open.kugou.com/',
-								// 	''
-								// )
-								.replace('https://sharefs.yun.kugou.com/', '');
+							src.afterClearPrefix +
+							'?originDomain=' +
+							src.prefix;
 						this.audioNode.play();
 					});
 				} else {
@@ -530,6 +529,7 @@ class Audio extends Component {
 								<p title={'酷狗新歌榜'}>酷狗新歌榜</p>
 							</li>
 							{categorizeList.map((item, key) => {
+								let src = replaceUrlPrefix(item.imgurl);
 								return (
 									<li
 										key={key}
@@ -541,12 +541,12 @@ class Audio extends Component {
 										<img
 											src={
 												'/source/getImage/' +
-												item.imgurl
-													.replace(
-														'http://imge.kugou.com/',
-														''
-													)
-													.replace(/\/\{size\}/, '')
+												src.afterClearPrefix.replace(
+													/\/\{size\}/,
+													''
+												) +
+												'?originDomain=' +
+												src.prefix
 											}
 											alt={item.specialname}
 											title={item.specialname}

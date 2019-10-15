@@ -119,3 +119,18 @@ export const splitStr = str => {
 	});
 	return result;
 };
+
+export const replaceUrlPrefix = str => {
+	let result = {
+		prefix: '',
+		afterClearPrefix: ''
+	};
+	let reg = /^(https?:\/\/)?(\s|\S)*?\//;
+	let resultArr = str.match(reg);
+	if (!resultArr) {
+		return result;
+	}
+	result.prefix = resultArr[0];
+	result.afterClearPrefix = str.replace(reg, '');
+	return result;
+};
