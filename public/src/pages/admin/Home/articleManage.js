@@ -380,6 +380,7 @@ class AdminHomeArticleManage extends Component {
 							current={page}
 							onChange={this.onChange}
 							total={total}
+							defaultPageSize={20}
 						/>
 					)}
 				</div>

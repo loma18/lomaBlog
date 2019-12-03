@@ -34,8 +34,8 @@ export const articleTypeList = [...Object.values(articleTypeObj)]; // 文章类�
 
 //通用分页设置
 export const hxPaginationSetup = {
-	defaultPageSize: 10,
-	pageSize: 10,
+	defaultPageSize: 20,
+	pageSize: 20,
 	showQuickJumper: true,
 	showTotal: (total, range) => {
 		return (

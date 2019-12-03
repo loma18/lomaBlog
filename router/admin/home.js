@@ -331,7 +331,15 @@ router.get("/blog/getFilterList", (req, res) => {
         (obj.searchVal ? "title LIKE '%" + obj.searchVal + "%' AND " : '') +
         "t1.aid IN (SELECT aid FROM lomaBlog_article_catalogue " +
         (obj.catalogueType && obj.catalogueType != 'all' ? "WHERE cid = ?)" : ')') +
-        ' group by t1.aid ' + (obj.page ? " order by t1.updateAt desc limit " + (obj.page - 1) * 20 + ",20" : '');
+        ' group by t1.aid ' + (obj.page ? " order by t1.updateAt desc limit " + (obj.page - 1) * 20 + ",20" : ''),
+        sql2 = "SELECT count(*) as total FROM lomaBlog_article as t1 WHERE t1.status=? AND " +
+            (!obj.showSecret ? "t1.articleType!='secret' AND " : ' ') +
+            (obj.year ? "year(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
+            (obj.month ? "month(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
+            (obj.articleType && obj.articleType != 'all' ? "articleType=? AND " : '') +
+            (obj.searchVal ? "title LIKE '%" + obj.searchVal + "%' AND " : '') +
+            "t1.aid IN (SELECT aid FROM lomaBlog_article_catalogue " +
+            (obj.catalogueType && obj.catalogueType != 'all' ? "WHERE cid = ?)" : ')');
     let params = [obj.status];
     if (obj.year) {
         params.push(obj.year);
@@ -347,10 +355,12 @@ router.get("/blog/getFilterList", (req, res) => {
     }
     if (obj.status == 0) {
         sql = "SELECT * FROM lomaBlog_article WHERE status=0 " + (obj.page ? "order by updateAt desc limit " + (obj.page - 1) * 20 + ",20" : '');
+        sql2 = "SELECT count(*) as total FROM lomaBlog_article WHERE status=0";
         params = [];
     }
     if (obj.hotArticle) {
         sql = "SELECT * FROM lomaBlog_article WHERE status=1 AND articleType!='secret' ORDER BY views desc LIMIT 5 ";
+        sql2 = "SELECT count(*) as total FROM lomaBlog_article WHERE status=1 AND articleType!='secret' ";
         params = [];
     }
     sqlConnect.query(sql, params, (err, result, fields) => {
@@ -358,7 +368,13 @@ router.get("/blog/getFilterList", (req, res) => {
             res.json({ code: 500, msg: err });
             return;
         };
-        res.json({ code: 200, data: result, msg: "success", total: (obj.page - 1) * 20 + result.length });
+        sqlConnect.query(sql2, params, (err2, result2, fields2) => {
+            if (err2) {
+                res.json({ code: 500, msg: err2 });
+                return;
+            };
+            res.json({ code: 200, data: result, msg: "success", total: result2[0].total });
+        })
     })
 });
 
