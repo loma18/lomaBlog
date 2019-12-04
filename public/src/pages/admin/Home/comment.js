@@ -14,7 +14,7 @@ class AdminHomeComment extends Component {
 			loading: false,
 			pagination: {
 				current: 1,
-				pageSize: 20,
+				pageSize: 10,
 				showTotal: total => `共 ${total} 条`
 			},
 			tableData: []

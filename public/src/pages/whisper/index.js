@@ -168,7 +168,7 @@ class Whisper extends Component {
 						})}
 					</ul>
 					<p className={'loadMore'}>
-						{page * 20 < total ? (
+						{page * 10 < total ? (
 							<span onClick={this.loadMore}>加载更多</span>
 						) : (
 							'到底啦~'

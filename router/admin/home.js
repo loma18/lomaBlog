@@ -331,7 +331,7 @@ router.get("/blog/getFilterList", (req, res) => {
         (obj.searchVal ? "title LIKE '%" + obj.searchVal + "%' AND " : '') +
         "t1.aid IN (SELECT aid FROM lomaBlog_article_catalogue " +
         (obj.catalogueType && obj.catalogueType != 'all' ? "WHERE cid = ?)" : ')') +
-        ' group by t1.aid ' + (obj.page ? " order by t1.updateAt desc limit " + (obj.page - 1) * 20 + ",20" : ''),
+        ' group by t1.aid ' + (obj.page ? " order by t1.updateAt desc limit " + (obj.page - 1) * 10 + ",10" : ''),
         sql2 = "SELECT count(*) as total FROM lomaBlog_article as t1 WHERE t1.status=? AND " +
             (!obj.showSecret ? "t1.articleType!='secret' AND " : ' ') +
             (obj.year ? "year(FROM_UNIXTIME(createAt/1000))=? AND " : '') +
@@ -354,7 +354,7 @@ router.get("/blog/getFilterList", (req, res) => {
         params.push(obj.catalogueType);
     }
     if (obj.status == 0) {
-        sql = "SELECT * FROM lomaBlog_article WHERE status=0 " + (obj.page ? "order by updateAt desc limit " + (obj.page - 1) * 20 + ",20" : '');
+        sql = "SELECT * FROM lomaBlog_article WHERE status=0 " + (obj.page ? "order by updateAt desc limit " + (obj.page - 1) * 10 + ",10" : '');
         sql2 = "SELECT count(*) as total FROM lomaBlog_article WHERE status=0";
         params = [];
     }
@@ -453,7 +453,7 @@ router.get("/blog/deleteArticle", (req, res) => {
 router.get("/comment/getList", (req, res) => {
     let obj = req.query;
     let sql = `SELECT t1.id,t1.aid,t1.username,t1.QQ,t1.email,t1.content,t1.createAt,t1.parentId,t1.parentUsername,t2.title 
-    FROM lomaBlog_article_comment as t1 left join lomaBlog_article as t2 on t1.aid=t2.aid WHERE t1.status=0 limit ${(obj.page - 1) * 20},20`;
+    FROM lomaBlog_article_comment as t1 left join lomaBlog_article as t2 on t1.aid=t2.aid WHERE t1.status=0 limit ${(obj.page - 1) * 10},10`;
     sqlConnect.query(sql, [], (err, result1, fields) => {
         if (err) {
             res.json({ code: 500, msg: err });
