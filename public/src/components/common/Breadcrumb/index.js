@@ -29,6 +29,12 @@ class LomaBreadcrumb extends Component {
 					breadcrumbName: '微语'
 				});
 				break;
+			case 'laugh':
+				routes.push({
+					path: '/' + pathname[1],
+					breadcrumbName: '开心一刻'
+				});
+				break;
 			case 'original':
 				routes.push({
 					path: '/' + pathname[1],

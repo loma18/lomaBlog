@@ -85,7 +85,8 @@ CREATE TABLE lomaBlog_whisper(
 id          INT PRIMARY KEY AUTO_INCREMENT,
 description VARCHAR(3000) NOT NULL DEFAULT "",
 createAt    bigint,
-status      INT NOT NULL DEFAULT 0
+status      INT NOT NULL DEFAULT 0,
+type        VARCHAR(30) NOT NULL DEFAULT "whisper"
 );
 
 --创建访问文章记录表

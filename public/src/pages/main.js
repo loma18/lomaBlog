@@ -22,12 +22,14 @@ class Main extends Component {
 		let pathname = window.location.pathname.split('/');
 		let list = [
 			{ title: '首页', key: 'home' },
-			{ title: '微语', key: 'whisper' }
+			{ title: '微语', key: 'whisper' },
+			{ title: '开心一刻', key: 'laugh' }
 		];
 		if (pathname[1] == 'admin') {
 			list = [
 				{ title: '首页', key: 'admin' },
 				{ title: '微语', key: 'whisper' },
+				{ title: '开心一刻', key: 'laugh' },
 				{ title: '个人中心', key: 'mine' },
 				{ title: '后台接口', key: 'interface' },
 				{ title: '我的相册', key: 'photos' },

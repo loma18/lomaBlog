@@ -36,6 +36,12 @@ export default props => (
 				<Whisper {...propss} bindChild={props.bindChild} />
 			)}
 		/>
+		<Route
+			path={ROUTE_PATH.laugh}
+			render={propss => (
+				<Whisper {...propss} bindChild={props.bindChild} />
+			)}
+		/>
 		<Route path={ROUTE_ADMIN_PATH.admin} component={AdminRouter} />
 		<Route component={ErrorPage} />
 		{/* <Redirect from={props.location} to={'/'} /> */}

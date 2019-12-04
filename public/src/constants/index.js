@@ -5,7 +5,8 @@ export const docTitle = {
 	whisper: '微语',
 	original: '原创',
 	reprint: '转载',
-	code: '代码'
+	code: '代码',
+	laugh: '开心一刻'
 };
 
 export const breadcrumbItem = {
@@ -18,6 +19,7 @@ export const breadcrumbItem = {
 	comment: { value: 'comment', title: '评论管理' },
 	catalogue: { value: 'catalogue', title: '个人分类管理' },
 	whisper: { value: 'whisper', title: '微语' },
+	laugh: { value: 'laugh', title: '开心一刻' },
 	mine: { value: 'mine', title: '个人中心' },
 	interface: { value: 'interface', title: '后台接口' },
 	photos: { value: 'photos', title: '我的相册' },

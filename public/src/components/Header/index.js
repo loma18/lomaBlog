@@ -56,6 +56,9 @@ class Header extends Component {
 			case 'whisper':
 				key = ['whisper'];
 				break;
+			case 'laugh':
+				key = ['laugh'];
+				break;
 			case 'admin':
 				if (!pathname[2] || pathname[2] == 'home') {
 					key = ['admin'];

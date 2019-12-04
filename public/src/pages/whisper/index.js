@@ -20,11 +20,12 @@ class Whisper extends Component {
 	}
 
 	handleAdd = () => {
+		let pathname = window.location.pathname.split('/')[2];
 		this.props.form.validateFields((err, values) => {
 			if (err) {
 				return;
 			}
-			firePostRequest(SAVE_WHISPER, { ...values })
+			firePostRequest(SAVE_WHISPER, { ...values, type: pathname })
 				.then(res => {
 					if (res.code === 200) {
 						showSuccessMsg('添加成功');
@@ -68,7 +69,9 @@ class Whisper extends Component {
 			page = 1;
 		}
 		this.setState({ spinLoading: true });
-		fireGetRequest(GET_WHISPER_LIST, { page, searchValue })
+		let pathname = window.location.pathname.split('/');
+		pathname = pathname[1] == 'admin' ? pathname[2] : pathname[1];
+		fireGetRequest(GET_WHISPER_LIST, { page, searchValue, type: pathname })
 			.then(res => {
 				if (res.code === 200) {
 					if (isLoadMore) {
@@ -84,6 +87,10 @@ class Whisper extends Component {
 			})
 			.catch(err => console.log(err));
 	};
+
+	UNSAFE_componentWillReceiveProps(props) {
+		this.fetchData();
+	}
 
 	componentDidMount() {
 		this.fetchData();
@@ -105,7 +112,12 @@ class Whisper extends Component {
 								rules: [
 									{ required: true, message: '请输入内容!' }
 								]
-							})(<Input placeholder='description' />)}
+							})(
+								<Input.TextArea
+									placeholder='description'
+									rows={5}
+								/>
+							)}
 						</FormItem>
 						<Button
 							type='primary'
@@ -122,9 +134,12 @@ class Whisper extends Component {
 							return (
 								<li key={item.id}>
 									<Row type='flex' gutter={30}>
-										<Col className={'description'}>
-											{item.description}
-										</Col>
+										<Col
+											className={'description'}
+											dangerouslySetInnerHTML={{
+												__html: item.description
+											}}
+										></Col>
 										<Col className={'date'}>
 											<span>
 												{formatMomentToString(

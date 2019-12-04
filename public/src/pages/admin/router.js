@@ -15,6 +15,7 @@ export default () => (
 			<Route path={ROUTE_ADMIN_PATH.interface} component={Interface} />
 			<Route path={ROUTE_ADMIN_PATH.photos} component={Photos} />
 			<Route path={ROUTE_ADMIN_PATH.whisper} component={Whisper} />
+			<Route path={ROUTE_ADMIN_PATH.laugh} component={Whisper} />
 			{/* <Redirect from={props.location} to={'/'} /> */}
 		</Switch>
 	</div>
