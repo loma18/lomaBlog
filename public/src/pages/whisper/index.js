@@ -15,7 +15,11 @@ class Whisper extends Component {
 			data: [],
 			spinLoading: false,
 			page: 1,
-			total: 0
+			total: 0,
+			pathname:
+				props.location.pathname.indexOf('whisper') > -1
+					? 'whisper'
+					: 'laugh'
 		};
 	}
 
@@ -89,7 +93,15 @@ class Whisper extends Component {
 	};
 
 	UNSAFE_componentWillReceiveProps(props) {
-		this.fetchData();
+		const { pathname } = this.state;
+		if (props.location.pathname.indexOf(pathname) === -1) {
+			this.setState(
+				{ pathname: pathname == 'whisper' ? 'laugh' : 'whisper' },
+				() => {
+					this.fetchData();
+				}
+			);
+		}
 	}
 
 	componentDidMount() {

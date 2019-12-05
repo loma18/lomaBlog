@@ -50,7 +50,7 @@ router.get('/getClientInfo', (req, res) => {
         }
         let data = JSON.parse(res).data,
             date = new Date();
-        let msg = `ip:${data.OriginQuery}所在地址为${data.location},于${date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}访问了您的网址\n`;
+        let msg = `ip:${data[0] && data[0].OriginQuery}所在地址为${data[0] && data[0].location},于${date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}访问了您的网址\n`;
         fs.appendFileSync('./ipLog.txt', msg);
         console.log('msg', msg);
     });

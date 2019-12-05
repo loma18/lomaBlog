@@ -98,11 +98,13 @@ class Header extends Component {
 					className={'nav'}
 				>
 					<Col className={'header-logo'}>
-						<img
-							src={require('assets/logo.jpg')}
-							alt={'xiangeLogo'}
-							title={'xiangeLogo'}
-						/>
+						<Link to={'/'}>
+							<img
+								src={require('assets/logo.jpg')}
+								alt={'xiangeLogo'}
+								title={'xiangeLogo'}
+							/>
+						</Link>
 					</Col>
 					<Col
 						className={'header-menu'}
