@@ -13,7 +13,7 @@ class Category extends React.Component {
 	render() {
 		const { index } = this.state;
 		let opt = {
-			auto: 3000,
+			auto: 10000,
 			callback: function(index) {
 				this.setState({ index: Number(index) });
 			}.bind(this)

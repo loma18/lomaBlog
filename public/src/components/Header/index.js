@@ -99,6 +99,15 @@ class Header extends Component {
 				>
 					<Col className={'header-logo'}>
 						<Link to={'/'}>
+							<h3
+								title='xiange的博客'
+								style={{
+									display: isApp() ? 'none' : 'inline-block',
+									marginRight: 15
+								}}
+							>
+								xiange的博客
+							</h3>
 							<img
 								src={require('assets/logo.jpg')}
 								alt={'xiangeLogo'}
