@@ -22,10 +22,10 @@ class Footer extends Component {
 					<Col>
 						<p>
 							<a
-								href='http://icp.chinaz.com/loma18.com'
+								href='http://www.beian.miit.gov.cn'
 								target='_blank'
 							>
-								粤ICP备19110811号
+								粤ICP备19110811号-1
 							</a>
 						</p>
 					</Col>
