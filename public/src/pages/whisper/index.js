@@ -96,7 +96,10 @@ class Whisper extends Component {
 		const { pathname } = this.state;
 		if (props.location.pathname.indexOf(pathname) === -1) {
 			this.setState(
-				{ pathname: pathname == 'whisper' ? 'laugh' : 'whisper' },
+				{
+					pathname: pathname == 'whisper' ? 'laugh' : 'whisper',
+					page: 1
+				},
 				() => {
 					this.fetchData();
 				}

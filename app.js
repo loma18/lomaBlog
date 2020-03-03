@@ -38,7 +38,7 @@ app.use(/(\/.*)?/, express.static(path.join(__dirname, './public/build')));
 // }
 
 let server = http.createServer(app);
-server.listen(80);
+server.listen(8080);
 
 
 
