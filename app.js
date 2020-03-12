@@ -21,6 +21,7 @@ app.use(interfaces);
 app.use(whisper);
 app.use('/attachment', express.static(path.join(__dirname, './attachment')));
 app.use('/introduce', express.static(path.join(__dirname, './introduce-webPage')));
+app.use('/canvasDemo', express.static(path.join(__dirname, './canvasDemo')));
 app.use(express.static(path.join(__dirname, './public/build')));
 app.use(/(\/.*)?/, express.static(path.join(__dirname, './public/build')));
 

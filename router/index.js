@@ -16,6 +16,10 @@ router.get('/sitemap_loma18.txt', (req, res) => {
     res.sendFile(path.join(__dirname, '/../sitemap_loma18.txt'));
 })
 
+router.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, '/../robots.txt'));
+})
+
 /*用户登录*/
 router.post("/login", (req, res) => {
     req.on("data", (data) => {
