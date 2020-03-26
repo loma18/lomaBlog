@@ -10,11 +10,18 @@
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint public/src/**/*.js -c .eslintrc --fix",
     "lint:style": "stylelint \"public/src/**/*.less\" --syntax less --fix",
-    "format": "prettier --write public/src/**/*.js"
+    "format": "prettier --write public/src/**/*.js",
+    "commit": "git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -e $GIT_PARAMS"
     }
   },
   "lint-staged": {
@@ -59,6 +66,8 @@
   "homepage": "https://github.com/loma18/lomaBlog#readme",
   "devDependencies": {
     "babel-eslint": "^10.0.3",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.4.0",
     "eslint-plugin-react": "^7.14.3",
     "husky": "^3.0.5",
