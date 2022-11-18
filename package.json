@@ -66,6 +66,6 @@
     "stylelint": "^11.0.0",
     "stylelint-config-standard": "^19.0.0",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7"
+    "webpack-cli": "^3.3.12"
   }
 }
